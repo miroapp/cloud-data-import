@@ -52,5 +52,9 @@ export interface OutputSchema {
     },
     global: {
         resources: GlobalResources
+    },
+    job: {
+        startedAt: string,
+        finishedAt: string,
     }
 }

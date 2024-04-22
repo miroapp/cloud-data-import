@@ -20,7 +20,7 @@ async function getRegionalResources(region: string): Promise<RegionalResources> 
     getAutoScalingResources(),
     getDynamoDBResources(region),
     getEC2Resources(region),
-    getLambdaResources(),
+    getLambdaResources(region),
     getRDSResources(),
   ]);
 
@@ -50,6 +50,8 @@ async function getGlobalResources(): Promise<GlobalResources> {
 
 
 async function getOutput(): Promise<OutputSchema> {
+  const startedAt = new Date().toISOString();
+
   return {
     versionId: '0.0.1',
     regions: {
@@ -59,6 +61,10 @@ async function getOutput(): Promise<OutputSchema> {
     },
     global: {
       resources: await getGlobalResources(),
+    },
+    job: {
+      startedAt,
+      finishedAt: new Date().toISOString(),
     },
   }
 }
