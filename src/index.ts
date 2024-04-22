@@ -10,16 +10,34 @@ import { getLambdaResources } from "./resources/lambda";
 import { getS3Resources } from "./resources/s3";
 
 async function getOutput(): Promise<OutputSchema> {
+  const [
+    autoscaling,
+    cloudtrail,
+    dynamodb,
+    ec2,
+    lambda,
+    rds,
+    s3
+  ] = await Promise.all([
+    getAutoScalingResources(),
+    getCloudTrailResources(),
+    getDynamoDBResources(),
+    getEC2Resources(),
+    getLambdaResources(),
+    getRDSResources(),
+    getS3Resources()
+  ]);
+
   return {
     versionId: '0.0.1',
     resources: {
-      autoscaling: await getAutoScalingResources(),
-      cloudtrail: await getCloudTrailResources(),
-      dynamodb: await getDynamoDBResources(),
-      ec2: await getEC2Resources(),
-      lambda: await getLambdaResources(),
-      rds: await getRDSResources(),
-      s3: await getS3Resources()
+      autoscaling,
+      cloudtrail,
+      dynamodb,
+      ec2,
+      lambda,
+      rds,
+      s3
     }
   };
 }
