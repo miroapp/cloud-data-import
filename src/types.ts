@@ -44,7 +44,7 @@ export interface GlobalResources {
 }
 
 export interface OutputSchema {
-    versionId: '0.0.1',
+    docVersion: '0.0.1',
     regions: {
         [region: string]: {
             resources: RegionalResources

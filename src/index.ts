@@ -15,7 +15,7 @@ async function getOutput(): Promise<OutputSchema> {
   const finishedAt = new Date().toISOString();
 
   return {
-    versionId: '0.0.1',
+    docVersion: '0.0.1',
     regions: regionalResources,
     global: globalResources,
     job: {
