@@ -21,7 +21,7 @@ async function getRegionalResources(region: string): Promise<RegionalResources> 
     getDynamoDBResources(region),
     getEC2Resources(region),
     getLambdaResources(region),
-    getRDSResources(),
+    getRDSResources(region),
   ]);
 
   return {
