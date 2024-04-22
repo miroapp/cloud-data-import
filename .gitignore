@@ -37,3 +37,6 @@ coverage
 *.p12
 *.key
 *.crt
+
+# Output
+output.json
