@@ -1,23 +1,37 @@
-import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
+import { writeFileSync } from "fs";
+import { OutputSchema } from "./types";
 
-async function listEC2Instances() {
-  const client = new EC2Client({ region: "eu-west-1" });
+async function main() {
+  const output: OutputSchema = {
+    versionId: '0.0.1',
+    resources: {
+      autoscaling: {
+        groups: []
+      },
+      cloudtrail: {
+        trails: []
+      },
+      dynamodb: {
+        tables: []
+      },
+      ec2: {
+        instances: []
+      },
+      lambda: {
+        functions: []
+      },
+      rds: {
+        instances: [],
+        clusters: []
+      },
+      s3: {
+        buckets: []
+      }
+    }
+  };
 
-  const command = new DescribeInstancesCommand({});
-
-  try {
-    const response = await client.send(command);
-
-    response.Reservations?.forEach((reservation) => {
-      reservation.Instances?.forEach((instance) => {
-        console.log(`Instance ID: ${instance.InstanceId}`);
-        console.log(`Instance Type: ${instance.InstanceType}`);
-        console.log("--------------------");
-      });
-    });
-  } catch (error) {
-    console.error("Error fetching EC2 instances:", error);
-  }
+  // Write the output to a JSON file
+  writeFileSync('output.json', JSON.stringify(output, null, 2));
 }
 
-listEC2Instances();
+main();
