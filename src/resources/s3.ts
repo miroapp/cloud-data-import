@@ -1,6 +1,7 @@
 import { S3Client, ListBucketsCommand, Bucket } from "@aws-sdk/client-s3";
 import { S3Schema } from "../types";
 
+// @todo add more details to the bucket object
 async function getS3Buckets(): Promise<Bucket[]> {
   const client = new S3Client({});
 
