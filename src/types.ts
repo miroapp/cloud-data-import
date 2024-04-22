@@ -1,3 +1,5 @@
+import type * as EC2 from "@aws-sdk/client-ec2"
+
 export interface AutoScalingSchema {
     groups: object[]
 }
@@ -11,7 +13,7 @@ export interface DynamoDBSchema {
 }
 
 export interface EC2Schema {
-    instances: object[]
+    instances: EC2.Instance[]
 }
 
 export interface LambdaSchema {

@@ -19,7 +19,7 @@ async function getRegionalResources(region: string): Promise<RegionalResources> 
   ] = await Promise.all([
     getAutoScalingResources(),
     getDynamoDBResources(),
-    getEC2Resources(),
+    getEC2Resources(region),
     getLambdaResources(),
     getRDSResources(),
   ]);
@@ -53,8 +53,8 @@ async function getOutput(): Promise<OutputSchema> {
   return {
     versionId: '0.0.1',
     regions: {
-      'us-east-1': {
-        resources: await getRegionalResources('us-east-1'),
+      'eu-west-1': {
+        resources: await getRegionalResources('eu-west-1'),
       },
     },
     global: {
