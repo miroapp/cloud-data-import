@@ -27,15 +27,27 @@ export interface S3Schema {
     buckets: object[]
 }
 
+export interface RegionalResources {
+    autoscaling: AutoScalingSchema,
+    dynamodb: DynamoDBSchema,
+    ec2: EC2Schema,
+    lambda: LambdaSchema,
+    rds: RDSSchema,
+}
+
+export interface GlobalResources {
+    cloudtrail: CloudTrailSchema
+    s3: S3Schema
+}
+
 export interface OutputSchema {
     versionId: '0.0.1',
-    resources: {
-        autoscaling: AutoScalingSchema,
-        cloudtrail: CloudTrailSchema,
-        dynamodb: DynamoDBSchema,
-        ec2: EC2Schema,
-        lambda: LambdaSchema,
-        rds: RDSSchema,
-        s3: S3Schema
+    regions: {
+        [region: string]: {
+            resources: RegionalResources
+        }
+    },
+    global: {
+        resources: GlobalResources
     }
 }

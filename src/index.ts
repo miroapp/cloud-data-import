@@ -1,4 +1,4 @@
-import { OutputSchema } from "./types";
+import { GlobalResources, OutputSchema, RegionalResources } from "./types";
 import { saveAsJson } from "./utils/saveAsJson";
 
 import { getAutoScalingResources } from "./resources/autoscaling";
@@ -9,37 +9,58 @@ import { getRDSResources } from "./resources/rds";
 import { getLambdaResources } from "./resources/lambda";
 import { getS3Resources } from "./resources/s3";
 
-async function getOutput(): Promise<OutputSchema> {
+async function getRegionalResources(region: string): Promise<RegionalResources> {
   const [
     autoscaling,
-    cloudtrail,
     dynamodb,
     ec2,
     lambda,
     rds,
-    s3
   ] = await Promise.all([
     getAutoScalingResources(),
-    getCloudTrailResources(),
     getDynamoDBResources(),
     getEC2Resources(),
     getLambdaResources(),
     getRDSResources(),
-    getS3Resources()
   ]);
 
   return {
-    versionId: '0.0.1',
-    resources: {
-      autoscaling,
-      cloudtrail,
-      dynamodb,
-      ec2,
-      lambda,
-      rds,
-      s3
-    }
+    autoscaling,
+    dynamodb,
+    ec2,
+    lambda,
+    rds,
   };
+}
+
+async function getGlobalResources(): Promise<GlobalResources> {
+  const [
+    cloudtrail,
+    s3,
+  ] = await Promise.all([
+    getCloudTrailResources(),
+    getS3Resources(),
+  ]);
+
+  return {
+    cloudtrail,
+    s3,
+  };
+}
+
+
+async function getOutput(): Promise<OutputSchema> {
+  return {
+    versionId: '0.0.1',
+    regions: {
+      'us-east-1': {
+        resources: await getRegionalResources('us-east-1'),
+      },
+    },
+    global: {
+      resources: await getGlobalResources(),
+    },
+  }
 }
 
 async function main() {
