@@ -18,7 +18,7 @@ async function getRegionalResources(region: string): Promise<RegionalResources> 
     rds,
   ] = await Promise.all([
     getAutoScalingResources(),
-    getDynamoDBResources(),
+    getDynamoDBResources(region),
     getEC2Resources(region),
     getLambdaResources(),
     getRDSResources(),

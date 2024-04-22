@@ -1,3 +1,4 @@
+import type * as DynamoDB from "@aws-sdk/client-dynamodb"
 import type * as EC2 from "@aws-sdk/client-ec2"
 
 export interface AutoScalingSchema {
@@ -9,7 +10,7 @@ export interface CloudTrailSchema {
 }
 
 export interface DynamoDBSchema {
-    tables: object[]
+    tables: DynamoDB.TableDescription[]
 }
 
 export interface EC2Schema {
