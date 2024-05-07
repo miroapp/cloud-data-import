@@ -1,5 +1,5 @@
 import { S3Client, ListBucketsCommand, Bucket } from "@aws-sdk/client-s3";
-import { S3Schema } from "../types";
+import { Resources } from "../types";
 
 // @todo add more details to the bucket object
 async function getS3Buckets(): Promise<Bucket[]> {
@@ -11,8 +11,15 @@ async function getS3Buckets(): Promise<Bucket[]> {
   return listBucketsResponse.Buckets || [];
 }
 
-export async function getS3Resources(): Promise<S3Schema> {
-  return {
-    buckets: await getS3Buckets(),
-  };
+export async function getS3Resources(): Promise<Resources<Bucket>> {
+  const buckets = await getS3Buckets();
+
+  return buckets.reduce((acc, bucket) => {
+    if (!bucket.Name) {
+      throw new Error('Bucket Name is missing in the response');
+    }
+
+    acc[bucket.Name] = bucket;
+    return acc;
+  }, {} as Resources<Bucket>);
 }

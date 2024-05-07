@@ -1,5 +1,5 @@
 import { CloudTrailClient, ListTrailsCommand, Trail } from "@aws-sdk/client-cloudtrail";
-import { CloudTrailSchema } from "../types";
+import { Resources } from "../types";
 
 async function getCloudTrailTrails(): Promise<Trail[]> {
   const client = new CloudTrailClient({});
@@ -23,8 +23,15 @@ async function getCloudTrailTrails(): Promise<Trail[]> {
   return trails;
 }
 
-export async function getCloudTrailResources(): Promise<CloudTrailSchema> {
-  return {
-    trails: await getCloudTrailTrails(),
-  };
+export async function getCloudTrailResources(): Promise<Resources<Trail>> {
+  const trails = await getCloudTrailTrails();
+
+  return trails.reduce((acc, trail) => {
+    if (!trail.TrailARN) {
+      throw new Error('TrailARN is missing in the response');
+    }
+
+    acc[trail.TrailARN] = trail;
+    return acc;
+  }, {} as Resources<Trail>);
 }

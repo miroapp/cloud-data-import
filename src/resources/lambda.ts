@@ -1,5 +1,5 @@
 import { LambdaClient, ListFunctionsCommand, FunctionConfiguration } from "@aws-sdk/client-lambda";
-import { LambdaSchema } from "../types";
+import { Resources } from "../types";
 
 async function getLambdaFunctions(region: string): Promise<FunctionConfiguration[]> {
   const client = new LambdaClient({ region });
@@ -24,8 +24,15 @@ async function getLambdaFunctions(region: string): Promise<FunctionConfiguration
   return functionConfigurations;
 }
 
-export async function getLambdaResources(region: string): Promise<LambdaSchema> {
-  return {
-    functions: await getLambdaFunctions(region),
-  };
+export async function getLambdaResources(region: string): Promise<Resources<FunctionConfiguration>> {
+  const functions = await getLambdaFunctions(region);
+
+  return functions.reduce((acc, func) => {
+    if (!func.FunctionArn) {
+      throw new Error('FunctionArn is missing in the response');
+    }
+
+    acc[func.FunctionArn] = func;
+    return acc;
+  }, {} as Resources<FunctionConfiguration>);
 }

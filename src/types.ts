@@ -1,60 +1,37 @@
-import type * as DynamoDB from "@aws-sdk/client-dynamodb"
-import type * as EC2 from "@aws-sdk/client-ec2"
+import { AutoScalingGroup } from "@aws-sdk/client-auto-scaling"
+import { Trail } from "@aws-sdk/client-cloudtrail"
+import { TableDescription } from "@aws-sdk/client-dynamodb"
+import { Instance } from "@aws-sdk/client-ec2"
+import { FunctionConfiguration } from "@aws-sdk/client-lambda"
+import { DBCluster, DBInstance } from "@aws-sdk/client-rds"
+import { Bucket } from "@aws-sdk/client-s3"
 
-export interface AutoScalingSchema {
-    groups: object[]
+export type ResourceDescription =
+    | AutoScalingGroup
+    | Bucket
+    | DBInstance
+    | DBCluster
+    | FunctionConfiguration
+    | Instance
+    | Trail
+    | TableDescription
+
+export type Resources<T extends ResourceDescription = ResourceDescription> = {
+    [arn: string]: T
 }
 
-export interface CloudTrailSchema {
-    trails: object[]
-}
-
-export interface DynamoDBSchema {
-    tables: DynamoDB.TableDescription[]
-}
-
-export interface EC2Schema {
-    instances: EC2.Instance[]
-}
-
-export interface LambdaSchema {
-    functions: object[]
-}
-
-export interface RDSSchema {
-    instances: object[]
-    clusters: object[]
-}
-
-export interface S3Schema {
-    buckets: object[]
-}
-
-export interface RegionalResources {
-    autoscaling: AutoScalingSchema,
-    dynamodb: DynamoDBSchema,
-    ec2: EC2Schema,
-    lambda: LambdaSchema,
-    rds: RDSSchema,
-}
-
-export interface GlobalResources {
-    cloudtrail: CloudTrailSchema
-    s3: S3Schema
+export type ResourceDiscoveryError = {
+    sourceArn: string,
+    status: number,
+    message: string
 }
 
 export interface OutputSchema {
     docVersion: '0.0.1',
-    regions: {
-        [region: string]: {
-            resources: RegionalResources
-        }
-    },
-    global: {
-        resources: GlobalResources
-    },
-    job: {
+    resources: Resources,
+    metadata: {
+        errors: ResourceDiscoveryError[],
         startedAt: string,
-        finishedAt: string,
+        finishedAt: string
     }
 }

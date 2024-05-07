@@ -5,7 +5,7 @@ import {
     DescribeDBClustersCommand,
     DBCluster,
   } from "@aws-sdk/client-rds";
-  import { RDSSchema } from "../types";
+  import { Resources } from "../types";
   
   async function getRDSInstances(region: string): Promise<DBInstance[]> {
     const client = new RDSClient({ region });
@@ -53,15 +53,30 @@ import {
     return dbClusters;
   }
   
-  export async function getRDSResources(region: string): Promise<RDSSchema> {
+  export async function getRDSResources(region: string): Promise<Resources<DBInstance | DBCluster>> {
     const [instances, clusters] = await Promise.all([
       getRDSInstances(region),
       getRDSClusters(region),
     ]);
+    
+    const instanceResources = instances.reduce((acc, instance) => {
+      if (!instance.DBInstanceArn) {
+        throw new Error('DBInstanceArn is missing in the response');
+      }
   
-    return {
-      instances,
-      clusters,
-    };
+      acc[instance.DBInstanceArn] = instance;
+      return acc;
+    }, {} as Resources<DBInstance>);
+
+    const clusterResources = clusters.reduce((acc, cluster) => {
+      if (!cluster.DBClusterArn) {
+        throw new Error('DBClusterArn is missing in the response');
+      }
+  
+      acc[cluster.DBClusterArn] = cluster;
+      return acc;
+    }, {} as Resources<DBCluster>);
+
+    return { ...instanceResources, ...clusterResources };
   }
   

@@ -1,5 +1,5 @@
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription } from "@aws-sdk/client-dynamodb";
-import { DynamoDBSchema } from "../types";
+import { Resources } from "../types";
 
 async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
   const client = new DynamoDBClient({ region });
@@ -36,8 +36,15 @@ async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
 
 
 
-export async function getDynamoDBResources(region: string): Promise<DynamoDBSchema> {
-    return {
-        tables: await getDynamoDBTables(region),
+export async function getDynamoDBResources(region: string): Promise<Resources<TableDescription>> {
+  const tables = await getDynamoDBTables(region);
+
+  return tables.reduce((acc, table) => {
+    if (!table.TableArn) {
+      throw new Error('TableArn is missing in the response');
     }
+
+    acc[table.TableArn] = table;
+    return acc;
+  }, {} as Resources<TableDescription>);
 }

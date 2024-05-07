@@ -1,5 +1,5 @@
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup } from "@aws-sdk/client-auto-scaling";
-import { AutoScalingSchema } from "../types";
+import { Resources } from "../types";
 
 async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]> {
   const client = new AutoScalingClient({ region });
@@ -24,8 +24,15 @@ async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]>
   return autoScalingGroups;
 }
 
-export async function getAutoScalingResources(region: string): Promise<AutoScalingSchema> {
-  return {
-    groups: await getAutoScalingGroups(region),
-  };
+export async function getAutoScalingResources(region: string): Promise<Resources<AutoScalingGroup>> {
+  const autoScalingGroups = await getAutoScalingGroups(region);
+
+  return autoScalingGroups.reduce((acc, autoScalingGroup) => {
+    if (!autoScalingGroup.AutoScalingGroupARN) {
+      throw new Error('AutoScalingGroupARN is missing in the response');
+    }
+
+    acc[autoScalingGroup.AutoScalingGroupARN] = autoScalingGroup;
+    return acc;
+  }, {} as Resources<AutoScalingGroup>);
 }

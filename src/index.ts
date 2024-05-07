@@ -1,7 +1,7 @@
-import { OutputSchema } from './types';
-import { saveAsJson } from "./utils/saveAsJson";
 import { getGlobalResources } from './getGlobalResources';
 import { getRegionalResources } from './getRegionalResources';
+import { OutputSchema } from './types';
+import { saveAsJson } from "./utils/saveAsJson";
 
 
 async function getOutput(): Promise<OutputSchema> {
@@ -16,9 +16,12 @@ async function getOutput(): Promise<OutputSchema> {
 
   return {
     docVersion: '0.0.1',
-    regions: regionalResources,
-    global: globalResources,
-    job: {
+    resources: {
+      ...regionalResources,
+      ...globalResources,
+    },
+    metadata: {
+      errors: [],
       startedAt,
       finishedAt,
     },

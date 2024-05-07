@@ -1,20 +1,18 @@
 import { getCloudTrailResources } from "./resources/cloudtrail";
-import { getS3Resources } from "./resources/s3";
-import { OutputSchema } from "./types";
+// import { getS3Resources } from "./resources/s3";
+import { Resources } from "./types";
 
-export async function getGlobalResources(): Promise<OutputSchema['global']> {
+export async function getGlobalResources(): Promise<Resources> {
     const [
         cloudtrail,
-        s3,
+        // s3,
     ] = await Promise.all([
         getCloudTrailResources(),
-        getS3Resources(),
+        // getS3Resources(),
     ]);
-
+    
     return {
-        resources: {
-        cloudtrail,
-        s3,
-        }
+        ...cloudtrail,
+        // ...s3,
     };
 }
