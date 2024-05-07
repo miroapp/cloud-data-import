@@ -2,7 +2,7 @@ import { Resources } from "./types";
 
 import { getAutoScalingResources } from "./resources/autoscaling";
 import { getDynamoDBResources } from "./resources/dynamodb";
-// import { getEC2Resources } from "./resources/ec2";
+import { getEC2Resources } from "./resources/ec2";
 import { getRDSResources } from "./resources/rds";
 import { getLambdaResources } from "./resources/lambda";
 
@@ -10,13 +10,13 @@ async function getSingleRegionResources(region: string): Promise<Resources> {
   const [
     autoscaling,
     dynamodb,
-    // ec2,
+    ec2,
     lambda,
     rds,
   ] = await Promise.all([
     getAutoScalingResources(region),
     getDynamoDBResources(region),
-    // getEC2Resources(region),
+    getEC2Resources(region),
     getLambdaResources(region),
     getRDSResources(region),
   ]);
@@ -24,7 +24,7 @@ async function getSingleRegionResources(region: string): Promise<Resources> {
   return {
     ...autoscaling,
     ...dynamodb,
-    // ...ec2,
+    ...ec2,
     ...lambda,
     ...rds,
   };

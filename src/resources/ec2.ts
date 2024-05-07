@@ -1,5 +1,7 @@
 import { EC2Client, DescribeInstancesCommand, Instance } from "@aws-sdk/client-ec2";
 import { Resources } from "../types";
+import { buildARN } from "../utils/buildARN";
+import { getAccountId } from "../utils/getAccountId";
 
 async function getEC2Instances(region: string): Promise<Instance[]> {
   const client = new EC2Client({ region });
@@ -29,13 +31,21 @@ async function getEC2Instances(region: string): Promise<Instance[]> {
 
 export async function getEC2Resources(region: string): Promise<Resources<Instance>> {
   const instances = await getEC2Instances(region);
+  const accountId = await getAccountId();
 
   return instances.reduce((acc, instance) => {
     if (!instance.InstanceId) {
       throw new Error('InstanceId is missing in the response');
     }
 
-    acc[instance.InstanceId] = instance;
+    const arn = buildARN({
+      accountId,
+      region,
+      service: 'ec2',
+      resource: `instance/${instance.InstanceId}`,
+    })
+
+    acc[arn] = instance;
     return acc;
   }, {} as Resources<Instance>);
 }

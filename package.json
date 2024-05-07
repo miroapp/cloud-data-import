@@ -20,6 +20,7 @@
     "@aws-sdk/client-ec2": "^3.557.0",
     "@aws-sdk/client-lambda": "^3.556.0",
     "@aws-sdk/client-rds": "^3.556.0",
-    "@aws-sdk/client-s3": "^3.556.0"
+    "@aws-sdk/client-s3": "^3.556.0",
+    "@aws-sdk/util-arn-parser": "^3.568.0"
   }
 }
