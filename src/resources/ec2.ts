@@ -7,7 +7,7 @@ import {
   DescribeSecurityGroupsCommand,
 } from "@aws-sdk/client-ec2";
 import { ExtendedInstance, Resources } from "../types";
-import { buildARN } from "../utils/buildARN";
+import { buildARN } from "../utils/buildArn";
 import { getAccountId } from "../utils/getAccountId";
 
 async function getEC2Instances(region: string): Promise<ExtendedInstance[]> {

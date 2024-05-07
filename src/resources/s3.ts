@@ -1,6 +1,6 @@
 import { S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket, ServerSideEncryptionConfiguration, Tag, GetBucketPolicyCommand, GetBucketVersioningCommand, GetBucketEncryptionCommand, GetBucketTaggingCommand } from "@aws-sdk/client-s3";
 import { ExtendedBucket, Resources } from "../types";
-import { buildARN } from "../utils/buildARN";
+import { buildARN } from "../utils/buildArn";
 import { getAccountId } from "../utils/getAccountId";
 
 async function getBucketLocation(client: S3Client, bucketName: string): Promise<string> {
