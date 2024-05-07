@@ -10,11 +10,8 @@ import {
     MountTargetDescription,
   } from "@aws-sdk/client-efs";
   import { Resources } from "../types";
-  import { buildARN } from "../utils/buildARN";
-  import { getAccountId } from "../utils/getAccountId";
   
   interface ExtendedFileSystem extends FileSystemDescription {
-    ARN: string;
     Policy?: FileSystemPolicyDescription;
     LifecycleConfiguration?: LifecycleConfigurationDescription;
     MountTargets?: MountTargetDescription[];
@@ -22,20 +19,12 @@ import {
   
   async function getEFSFileSystems(region: string): Promise<ExtendedFileSystem[]> {
     const client = new EFSClient({ region });
-    const accountId = await getAccountId();
   
     const command = new DescribeFileSystemsCommand({});
     const response = await client.send(command);
   
     const enrichedFileSystems = await Promise.all(
       (response.FileSystems || []).map(async (fileSystem) => {
-        const arn = buildARN({
-            accountId,
-            region,
-            service: 'efs',
-            resource: `filesystem/${fileSystem.FileSystemId}`,
-        });
-
         const [
           fileSystemPolicy,
           LifecyclePolicies,
@@ -54,7 +43,6 @@ import {
   
         return {
           ...fileSystem,
-          ARN: arn,
           Policy: fileSystemPolicy,
           LifecycleConfiguration: {
             LifecyclePolicies,
@@ -71,8 +59,10 @@ import {
     const fileSystems = await getEFSFileSystems(region);
   
     return fileSystems.reduce((acc, fileSystem) => {
-      acc[fileSystem.ARN] = fileSystem
-      return acc;
+        if (!fileSystem.FileSystemArn) throw new Error('FileSystemArn is missing in the response');
+
+        acc[fileSystem.FileSystemArn] = fileSystem
+        return acc;
     }, {} as Resources<ExtendedFileSystem>);
   }
   
