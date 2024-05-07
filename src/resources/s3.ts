@@ -48,7 +48,7 @@ async function enrichBucketData(client: S3Client, bucket: Bucket, accountId: str
     ...bucket,
     LocationConstraint: region,
     ARN: arn,
-    Policy: bucketPolicy?.Policy,
+    Policy: bucketPolicy?.Policy && JSON.parse(bucketPolicy?.Policy),
     Versioning: bucketVersioning?.Status,
     Encryption: bucketEncryption?.ServerSideEncryptionConfiguration,
     Tagging: bucketTagging?.TagSet
