@@ -72,6 +72,13 @@ export type ResourceDiscoveryError = {
     message: string
 }
 
+export type ScannerResult<T extends ResourceDescription> = {
+    resources: Resources<T>,
+    errors: ResourceDiscoveryError[]
+}
+
+export type Scanner<T extends ResourceDescription> = () => Promise<ScannerResult<T>>
+
 export interface OutputSchema {
     docVersion: '0.0.1',
     resources: Resources,
