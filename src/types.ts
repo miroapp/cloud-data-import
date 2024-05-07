@@ -1,18 +1,36 @@
 import { AutoScalingGroup } from "@aws-sdk/client-auto-scaling"
 import { Trail } from "@aws-sdk/client-cloudtrail"
 import { TableDescription } from "@aws-sdk/client-dynamodb"
-import { Instance } from "@aws-sdk/client-ec2"
+import * as EC2 from "@aws-sdk/client-ec2"
 import { FunctionConfiguration } from "@aws-sdk/client-lambda"
 import { DBCluster, DBInstance } from "@aws-sdk/client-rds"
-import { Bucket } from "@aws-sdk/client-s3"
+import * as S3 from "@aws-sdk/client-s3"
+
+export interface ExtendedBucket extends S3.Bucket {
+    CreationDate?: Date;
+    LocationConstraint?: string;
+    ARN: string;
+    Policy?: string;
+    Versioning?: string;
+    Encryption?: S3.ServerSideEncryptionConfiguration;
+    Tagging?: S3.Tag[];
+}
+
+export interface ExtendedInstance extends EC2.Instance {
+    ARN: string;
+    Volumes?: EC2.Volume[];
+    Vpc?: EC2.Vpc;
+    Subnet?: EC2.Subnet;
+    SecurityGroups?: EC2.SecurityGroup[];
+}
 
 export type ResourceDescription =
     | AutoScalingGroup
-    | Bucket
+    | ExtendedBucket
     | DBInstance
     | DBCluster
     | FunctionConfiguration
-    | Instance
+    | ExtendedInstance
     | Trail
     | TableDescription
 
