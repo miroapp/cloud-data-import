@@ -77,13 +77,13 @@ export type ScannerResult<T extends ResourceDescription> = {
     errors: ScannerError[]
 }
 
-export type Scanner<T extends ResourceDescription> = () => Promise<ScannerResult<T>>
+export type Scanner<T extends ResourceDescription = ResourceDescription> = () => Promise<ScannerResult<T>>
 
 export interface OutputSchema {
     docVersion: '0.0.1',
     resources: Resources,
+    errors: ScannerError[],
     metadata: {
-        errors: ScannerError[],
         startedAt: string,
         finishedAt: string
     }

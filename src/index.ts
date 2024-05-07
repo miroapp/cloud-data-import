@@ -1,36 +1,9 @@
-import { getGlobalResources } from './getGlobalResources';
-import { getRegionalResources } from './getRegionalResources';
-import { OutputSchema } from './types';
-import { saveAsJson } from "./utils/saveAsJson";
-
-
-async function getOutput(): Promise<OutputSchema> {
-  const startedAt = new Date().toISOString();
-
-  const [regionalResources, globalResources] = await Promise.all([
-    getRegionalResources(['eu-west-1', 'us-east-1']),
-    getGlobalResources(),
-  ]);
-
-  const finishedAt = new Date().toISOString();
-
-  return {
-    docVersion: '0.0.1',
-    resources: {
-      ...regionalResources,
-      ...globalResources,
-    },
-    metadata: {
-      errors: [],
-      startedAt,
-      finishedAt,
-    },
-  }
-}
+import { scanAndSaveAsJson } from "./app/scan-and-save-as-json";
+import { getScanners } from "./scanners";
 
 async function main() {
-  const output = await getOutput();
-  saveAsJson('./output.json', output);
+  const scanners = getScanners(['eu-west-1', 'us-east-1'])
+  scanAndSaveAsJson(scanners, './output.json')
 }
 
 main();
