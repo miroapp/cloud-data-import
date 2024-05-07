@@ -5,6 +5,7 @@ import * as EC2 from "@aws-sdk/client-ec2"
 import { FunctionConfiguration } from "@aws-sdk/client-lambda"
 import { DBCluster, DBInstance } from "@aws-sdk/client-rds"
 import * as S3 from "@aws-sdk/client-s3"
+import * as ECS from "@aws-sdk/client-ecs"
 
 export interface ExtendedBucket extends S3.Bucket {
     CreationDate?: Date;
@@ -33,6 +34,7 @@ export type ResourceDescription =
     | ExtendedInstance
     | Trail
     | TableDescription
+    | ECS.Cluster | ECS.Service | ECS.Task
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {
     [arn: string]: T

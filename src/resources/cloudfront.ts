@@ -48,8 +48,6 @@ async function getCloudFrontDistributions(): Promise<ExtendedDistribution[]> {
 export async function getCloudFrontResources(): Promise<Resources<ExtendedDistribution>> {
     const distributions = await getCloudFrontDistributions();
 
-    console.log(distributions);
-
     return distributions.reduce((acc, distribution) => {
         if (!distribution.ARN) throw new Error('Distribution ARN is missing in the response');
 
