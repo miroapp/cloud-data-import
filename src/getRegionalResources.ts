@@ -7,6 +7,7 @@ import { getRDSResources } from "./resources/rds";
 import { getLambdaResources } from "./resources/lambda";
 import { getEFSResources } from "./resources/efs";
 import { getECSResources } from "./resources/ecs";
+import { getEKSResources } from "./resources/eks";
 
 async function getSingleRegionResources(region: string): Promise<Resources> {
   const [
@@ -14,6 +15,7 @@ async function getSingleRegionResources(region: string): Promise<Resources> {
     dynamodb,
     ec2,
     ecs,
+    eks,
     efs,
     lambda,
     rds,
@@ -22,6 +24,7 @@ async function getSingleRegionResources(region: string): Promise<Resources> {
     getDynamoDBResources(region),
     getEC2Resources(region),
     getECSResources(region),
+    getEKSResources(region),
     getEFSResources(region),
     getLambdaResources(region),
     getRDSResources(region),
@@ -32,6 +35,7 @@ async function getSingleRegionResources(region: string): Promise<Resources> {
     ...dynamodb,
     ...ec2,
     ...ecs,
+    ...eks,
     ...efs,
     ...lambda,
     ...rds,

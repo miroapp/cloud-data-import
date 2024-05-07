@@ -6,6 +6,7 @@ import { FunctionConfiguration } from "@aws-sdk/client-lambda"
 import { DBCluster, DBInstance } from "@aws-sdk/client-rds"
 import * as S3 from "@aws-sdk/client-s3"
 import * as ECS from "@aws-sdk/client-ecs"
+import * as EKS from "@aws-sdk/client-eks"
 import {
     FileSystemDescription,
     FileSystemPolicyDescription,
@@ -51,6 +52,7 @@ export type ResourceDescription =
     | AutoScalingGroup
     | ExtendedBucket
     | ExtendedCloudFrontDistribution
+    | EKS.Cluster
     | DBInstance
     | DBCluster
     | FunctionConfiguration
