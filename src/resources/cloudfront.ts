@@ -3,18 +3,10 @@ import {
     ListDistributionsCommand,
     GetDistributionConfigCommand,
     ListTagsForResourceCommand,
-    DistributionSummary,
-    DistributionConfig,
-    Tags
 } from "@aws-sdk/client-cloudfront";
-import { Resources } from "../types";
+import { ExtendedCloudFrontDistribution, Resources } from "../types";
 
-interface ExtendedDistribution extends DistributionSummary {
-    DistributionConfig?: DistributionConfig;
-    Tags?: Tags;
-}
-
-async function getCloudFrontDistributions(): Promise<ExtendedDistribution[]> {
+async function getCloudFrontDistributions(): Promise<ExtendedCloudFrontDistribution[]> {
     const client = new CloudFrontClient({});
 
     const command = new ListDistributionsCommand({});
@@ -45,7 +37,7 @@ async function getCloudFrontDistributions(): Promise<ExtendedDistribution[]> {
     return enrichedDistributions;
 }
 
-export async function getCloudFrontResources(): Promise<Resources<ExtendedDistribution>> {
+export async function getCloudFrontResources(): Promise<Resources<ExtendedCloudFrontDistribution>> {
     const distributions = await getCloudFrontDistributions();
 
     return distributions.reduce((acc, distribution) => {
@@ -53,5 +45,5 @@ export async function getCloudFrontResources(): Promise<Resources<ExtendedDistri
 
         acc[distribution.ARN] = distribution;
         return acc;
-    }, {} as Resources<ExtendedDistribution>);
+    }, {} as Resources<ExtendedCloudFrontDistribution>);
 }

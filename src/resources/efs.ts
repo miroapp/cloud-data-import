@@ -4,20 +4,11 @@ import {
     DescribeFileSystemPolicyCommand,
     DescribeLifecycleConfigurationCommand,
     DescribeMountTargetsCommand,
-    FileSystemDescription,
     FileSystemPolicyDescription,
-    LifecycleConfigurationDescription,
-    MountTargetDescription,
-  } from "@aws-sdk/client-efs";
-  import { Resources } from "../types";
+} from "@aws-sdk/client-efs";
+import { Resources, ExtendedFileSystem } from "../types";
   
-  interface ExtendedFileSystem extends FileSystemDescription {
-    Policy?: FileSystemPolicyDescription;
-    LifecycleConfiguration?: LifecycleConfigurationDescription;
-    MountTargets?: MountTargetDescription[];
-  }
-  
-  async function getEFSFileSystems(region: string): Promise<ExtendedFileSystem[]> {
+async function getEFSFileSystems(region: string): Promise<ExtendedFileSystem[]> {
     const client = new EFSClient({ region });
   
     const command = new DescribeFileSystemsCommand({});
@@ -53,9 +44,9 @@ import {
     );
   
     return enrichedFileSystems;
-  }
+}
   
-  export async function getEFSResources(region: string): Promise<Resources<ExtendedFileSystem>> {
+export async function getEFSResources(region: string): Promise<Resources<ExtendedFileSystem>> {
     const fileSystems = await getEFSFileSystems(region);
   
     return fileSystems.reduce((acc, fileSystem) => {
@@ -64,5 +55,5 @@ import {
         acc[fileSystem.FileSystemArn] = fileSystem
         return acc;
     }, {} as Resources<ExtendedFileSystem>);
-  }
+}
   

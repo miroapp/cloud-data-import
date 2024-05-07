@@ -6,6 +6,28 @@ import { FunctionConfiguration } from "@aws-sdk/client-lambda"
 import { DBCluster, DBInstance } from "@aws-sdk/client-rds"
 import * as S3 from "@aws-sdk/client-s3"
 import * as ECS from "@aws-sdk/client-ecs"
+import {
+    FileSystemDescription,
+    FileSystemPolicyDescription,
+    LifecycleConfigurationDescription,
+    MountTargetDescription,
+} from "@aws-sdk/client-efs";
+import {
+    DistributionSummary,
+    DistributionConfig,
+    Tags
+} from "@aws-sdk/client-cloudfront";
+
+export interface ExtendedCloudFrontDistribution extends DistributionSummary {
+    DistributionConfig?: DistributionConfig;
+    Tags?: Tags;
+}
+
+export interface ExtendedFileSystem extends FileSystemDescription {
+    Policy?: FileSystemPolicyDescription;
+    LifecycleConfiguration?: LifecycleConfigurationDescription;
+    MountTargets?: MountTargetDescription[];
+}
 
 export interface ExtendedBucket extends S3.Bucket {
     CreationDate?: Date;
@@ -28,9 +50,11 @@ export interface ExtendedInstance extends EC2.Instance {
 export type ResourceDescription =
     | AutoScalingGroup
     | ExtendedBucket
+    | ExtendedCloudFrontDistribution
     | DBInstance
     | DBCluster
     | FunctionConfiguration
+    | ExtendedFileSystem
     | ExtendedInstance
     | Trail
     | TableDescription
