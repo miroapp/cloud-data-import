@@ -79,7 +79,8 @@ export type ScannerResult<T extends ResourceDescription> = {
 
 export type Scanner<T extends ResourceDescription = ResourceDescription> = () => Promise<ScannerResult<T>>
 
-export interface OutputSchema {
+export interface StandardOutputSchema {
+    provider: 'aws',
     docVersion: '0.0.1',
     resources: Resources,
     errors: ScannerError[],

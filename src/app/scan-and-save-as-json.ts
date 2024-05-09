@@ -1,4 +1,4 @@
-import { OutputSchema, Scanner, ScannerError } from "../types"
+import { StandardOutputSchema, Scanner, ScannerError } from "../types"
 import { saveAsJson } from "../utils/saveAsJson"
 
 export const scanAndSaveAsJson = async (scanners: Scanner[], path: string) => {
@@ -17,7 +17,8 @@ export const scanAndSaveAsJson = async (scanners: Scanner[], path: string) => {
     }, [] as ScannerError[])
 
     // create output
-    const output: OutputSchema = {
+    const output: StandardOutputSchema = {
+        provider: 'aws',
         docVersion: '0.0.1',
         resources,
         errors,
