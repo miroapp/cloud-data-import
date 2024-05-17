@@ -1,4 +1,4 @@
-import { ResourceDescription, Scanner } from "./types";
+import { Scanner } from "./types";
 import { createGlobalScanner, createRegionalScanner } from "./utils/scanner";
 
 import { getAutoScalingResources } from "./resources/autoscaling";

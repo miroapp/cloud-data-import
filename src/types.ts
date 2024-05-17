@@ -79,6 +79,13 @@ export type ScannerResult<T extends ResourceDescription> = {
 
 export type Scanner<T extends ResourceDescription = ResourceDescription> = () => Promise<ScannerResult<T>>
 
+export interface Config {
+    regions: string[];
+    output: string;
+    compressed: boolean;
+    'regional-only': boolean;
+}
+
 export interface StandardOutputSchema {
     provider: 'aws',
     docVersion: '0.0.1',
