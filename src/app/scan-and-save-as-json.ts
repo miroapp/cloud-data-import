@@ -1,7 +1,7 @@
 import { StandardOutputSchema, Scanner, ScannerError } from "../types"
 import { saveAsJson } from "../utils/saveAsJson"
 
-export const scanAndSaveAsJson = async (scanners: Scanner[], path: string) => {
+export const scanAndSaveAsJson = async (scanners: Scanner[], path: string, compressed: boolean) => {
     const startedAt = new Date().toISOString()
     const result = await Promise.all(scanners.map(scanner => scanner()))
     const finishedAt = new Date().toISOString()
@@ -28,5 +28,5 @@ export const scanAndSaveAsJson = async (scanners: Scanner[], path: string) => {
         },
     }
 
-    saveAsJson(path, output);
+    saveAsJson(path, output, compressed)
 }

@@ -13,11 +13,9 @@ import { getLambdaResources } from "./resources/lambda";
 import { getRDSResources } from "./resources/rds";
 import { getS3Resources } from "./resources/s3";
 
-export const getScanners = (regions: string[]): Scanner<ResourceDescription>[] => {
-    return [
+export const getScanners = (regions: string[], shouldIncludeGlobalServices: boolean): Scanner[] => {
+    const scanners: Scanner[] = [
         createRegionalScanner('autoscaling', getAutoScalingResources, regions),
-        createGlobalScanner('cloudfront', getCloudFrontResources),
-        createGlobalScanner('cloudtrail', getCloudTrailResources),
         createRegionalScanner('dynamodb', getDynamoDBResources, regions),
         createRegionalScanner('ec2', getEC2Resources, regions),
         createRegionalScanner('ecs', getECSResources, regions),
@@ -25,6 +23,15 @@ export const getScanners = (regions: string[]): Scanner<ResourceDescription>[] =
         createRegionalScanner('eks', getEKSResources, regions),
         createRegionalScanner('lambda', getLambdaResources, regions),
         createRegionalScanner('rds', getRDSResources, regions),
-        createGlobalScanner('s3', getS3Resources),
-    ]
-}
+    ];
+
+    if (shouldIncludeGlobalServices) {
+        scanners.push(
+            createGlobalScanner('cloudfront', getCloudFrontResources),
+            createGlobalScanner('cloudtrail', getCloudTrailResources),
+            createGlobalScanner('s3', getS3Resources)
+        );
+    }
+
+    return scanners;
+};
