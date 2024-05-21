@@ -1,8 +1,11 @@
 import { LambdaClient, ListFunctionsCommand, FunctionConfiguration } from "@aws-sdk/client-lambda";
 import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
 
 async function getLambdaFunctions(region: string): Promise<FunctionConfiguration[]> {
   const client = new LambdaClient({ region });
+  const rateLimiter = new RateLimiter(10, 1000);
+
   const functionConfigurations: FunctionConfiguration[] = [];
 
   let marker: string | undefined;
@@ -12,7 +15,7 @@ async function getLambdaFunctions(region: string): Promise<FunctionConfiguration
       Marker: marker,
     });
 
-    const listFunctionsResponse = await client.send(listFunctionsCommand);
+    const listFunctionsResponse = await rateLimiter.throttle(() => client.send(listFunctionsCommand));
 
     if (listFunctionsResponse.Functions) {
       functionConfigurations.push(...listFunctionsResponse.Functions);

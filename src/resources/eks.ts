@@ -5,16 +5,17 @@ import {
     Cluster
 } from "@aws-sdk/client-eks";
 import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
   
-async function getEKSClusters(client: EKSClient): Promise<Cluster[]> {
+async function getEKSClusters(client: EKSClient, rateLimiter: RateLimiter): Promise<Cluster[]> {
     const listClustersCommand = new ListClustersCommand({});
-    const listClustersResponse = await client.send(listClustersCommand);
+    const listClustersResponse = await rateLimiter.throttle(() => client.send(listClustersCommand));
   
     const clusters: Cluster[] = [];
   
     for (const clusterName of listClustersResponse.clusters || []) {
       const describeClusterCommand = new DescribeClusterCommand({ name: clusterName });
-      const describeClusterResponse = await client.send(describeClusterCommand);
+      const describeClusterResponse = await rateLimiter.throttle(() => client.send(describeClusterCommand));
   
       if (describeClusterResponse.cluster) {
         clusters.push(describeClusterResponse.cluster as Cluster);
@@ -26,7 +27,9 @@ async function getEKSClusters(client: EKSClient): Promise<Cluster[]> {
   
 export async function getEKSResources(region: string): Promise<Resources<Cluster>> {
     const client = new EKSClient({ region });
-    const clusters = await getEKSClusters(client);
+    const rateLimiter = new RateLimiter(10, 1000);
+
+    const clusters = await getEKSClusters(client, rateLimiter);
   
     const resources: Resources<Cluster> = {};
   

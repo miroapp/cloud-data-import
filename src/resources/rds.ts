@@ -6,8 +6,9 @@ import {
     DBCluster,
   } from "@aws-sdk/client-rds";
   import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
   
-  async function getRDSInstances(region: string): Promise<DBInstance[]> {
+  async function getRDSInstances(region: string, rateLimiter: RateLimiter): Promise<DBInstance[]> {
     const client = new RDSClient({ region });
     const dbInstances: DBInstance[] = [];
   
@@ -18,7 +19,7 @@ import {
         Marker: marker,
       });
   
-      const describeDBInstancesResponse = await client.send(describeDBInstancesCommand);
+      const describeDBInstancesResponse = await rateLimiter.throttle(() => client.send(describeDBInstancesCommand));
   
       if (describeDBInstancesResponse.DBInstances) {
         dbInstances.push(...describeDBInstancesResponse.DBInstances);
@@ -30,7 +31,7 @@ import {
     return dbInstances;
   }
   
-  async function getRDSClusters(region: string): Promise<DBCluster[]> {
+  async function getRDSClusters(region: string, rateLimiter: RateLimiter): Promise<DBCluster[]> {
     const client = new RDSClient({ region });
     const dbClusters: DBCluster[] = [];
   
@@ -41,7 +42,7 @@ import {
         Marker: marker,
       });
   
-      const describeDBClustersResponse = await client.send(describeDBClustersCommand);
+      const describeDBClustersResponse = await rateLimiter.throttle(() => client.send(describeDBClustersCommand));
   
       if (describeDBClustersResponse.DBClusters) {
         dbClusters.push(...describeDBClustersResponse.DBClusters);
@@ -54,9 +55,10 @@ import {
   }
   
   export async function getRDSResources(region: string): Promise<Resources<DBInstance | DBCluster>> {
+    const rateLimiter = new RateLimiter(10, 1000);
     const [instances, clusters] = await Promise.all([
-      getRDSInstances(region),
-      getRDSClusters(region),
+      getRDSInstances(region, rateLimiter),
+      getRDSClusters(region, rateLimiter),
     ]);
     
     const instanceResources = instances.reduce((acc, instance) => {

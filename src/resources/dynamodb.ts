@@ -1,8 +1,11 @@
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription } from "@aws-sdk/client-dynamodb";
 import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
 
 async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
   const client = new DynamoDBClient({ region });
+  const rateLimiter = new RateLimiter(10, 1000);
+
   const tableDescriptions: TableDescription[] = [];
 
   let exclusiveStartTableName: string | undefined;
@@ -12,7 +15,7 @@ async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
       ExclusiveStartTableName: exclusiveStartTableName,
     });
 
-    const listTablesResponse = await client.send(listTablesCommand);
+    const listTablesResponse = await rateLimiter.throttle(() => client.send(listTablesCommand));
 
     if (listTablesResponse.TableNames) {
       for (const tableName of listTablesResponse.TableNames) {
@@ -20,7 +23,7 @@ async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
           TableName: tableName,
         });
 
-        const describeTableResponse = await client.send(describeTableCommand);
+        const describeTableResponse = await rateLimiter.throttle(() => client.send(describeTableCommand));
 
         if (describeTableResponse.Table) {
           tableDescriptions.push(describeTableResponse.Table);

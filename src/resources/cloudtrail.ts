@@ -1,8 +1,11 @@
 import { CloudTrailClient, ListTrailsCommand, Trail } from "@aws-sdk/client-cloudtrail";
 import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
 
 async function getCloudTrailTrails(): Promise<Trail[]> {
   const client = new CloudTrailClient({});
+  const rateLimiter = new RateLimiter(10, 1000)
+  
   const trails: Trail[] = [];
 
   let nextToken: string | undefined;
@@ -11,7 +14,7 @@ async function getCloudTrailTrails(): Promise<Trail[]> {
       NextToken: nextToken,
     });
 
-    const listTrailsResponse = await client.send(listTrailsCommand);
+    const listTrailsResponse = await rateLimiter.throttle(() => client.send(listTrailsCommand));
 
     if (listTrailsResponse.Trails) {
       trails.push(...listTrailsResponse.Trails);
