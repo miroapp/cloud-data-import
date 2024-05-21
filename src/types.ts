@@ -42,10 +42,6 @@ export interface ExtendedBucket extends S3.Bucket {
 
 export interface ExtendedInstance extends EC2.Instance {
     ARN: string;
-    Volumes?: EC2.Volume[];
-    Vpc?: EC2.Vpc;
-    Subnet?: EC2.Subnet;
-    SecurityGroups?: EC2.SecurityGroup[];
 }
 
 export type ResourceDescription =
