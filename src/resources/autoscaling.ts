@@ -1,8 +1,11 @@
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup } from "@aws-sdk/client-auto-scaling";
 import { Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
 
 async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]> {
-  const client = new AutoScalingClient({ region });
+  const client = new AutoScalingClient({ region })
+  const rateLimiter = new RateLimiter(10, 1000)
+
   const autoScalingGroups: AutoScalingGroup[] = [];
 
   let nextToken: string | undefined;
@@ -12,8 +15,8 @@ async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]>
       NextToken: nextToken,
     });
 
-    const describeAutoScalingGroupsResponse = await client.send(describeAutoScalingGroupsCommand);
-
+    const describeAutoScalingGroupsResponse = await rateLimiter.throttle(() => client.send(describeAutoScalingGroupsCommand));
+    
     if (describeAutoScalingGroupsResponse.AutoScalingGroups) {
       autoScalingGroups.push(...describeAutoScalingGroupsResponse.AutoScalingGroups);
     }

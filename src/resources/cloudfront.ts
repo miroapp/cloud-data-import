@@ -5,12 +5,14 @@ import {
     ListTagsForResourceCommand,
 } from "@aws-sdk/client-cloudfront";
 import { ExtendedCloudFrontDistribution, Resources } from "../types";
+import { RateLimiter } from "../utils/RateLimiter";
 
 async function getCloudFrontDistributions(): Promise<ExtendedCloudFrontDistribution[]> {
     const client = new CloudFrontClient({});
+    const rateLimiter = new RateLimiter(10, 1000)
 
     const command = new ListDistributionsCommand({});
-    const response = await client.send(command);
+    const response = await rateLimiter.throttle(() => client.send(command));
 
     const enrichedDistributions = await Promise.all(
         (response.DistributionList?.Items || []).map(async (distribution) => {
@@ -18,12 +20,12 @@ async function getCloudFrontDistributions(): Promise<ExtendedCloudFrontDistribut
                 distributionConfig,
                 tags
             ] = await Promise.all([
-                client.send(new GetDistributionConfigCommand({ Id: distribution.Id }))
+                rateLimiter.throttle(() => client.send(new GetDistributionConfigCommand({ Id: distribution.Id }))
                     .then(res => res.DistributionConfig)
-                    .catch(() => undefined),
-                client.send(new ListTagsForResourceCommand({ Resource: distribution.ARN }))
+                    .catch(() => undefined)),
+                rateLimiter.throttle(() => client.send(new ListTagsForResourceCommand({ Resource: distribution.ARN }))
                     .then(res => res.Tags)
-                    .catch(() => undefined)
+                    .catch(() => undefined))
             ]);
 
             return {
