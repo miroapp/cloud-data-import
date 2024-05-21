@@ -1,5 +1,6 @@
 const BASE_RETRY_DELAY = 1000; // 1 second
 const MAX_RETRIES = 6; // last attempt will take 64 seconds (2^6 = 64 * base retry delay) and overall will take 127 seconds for all retries to complete
+const CAPACITY_USAGE_PERCENTAGE = 0.6;
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -10,9 +11,9 @@ export class RateLimiter {
   private maxUsage: number;
   private queue: (() => void)[];
 
-  constructor(rate: number, per: number, usagePercentage: number = 0.6) {
+  constructor(rate: number, per: number) {
     this.per = per;
-    this.maxUsage = rate * usagePercentage;
+    this.maxUsage = rate * CAPACITY_USAGE_PERCENTAGE;
     this.allowance = this.maxUsage;
     this.lastCheck = Date.now();
     this.queue = [];
