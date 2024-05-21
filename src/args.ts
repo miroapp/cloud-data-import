@@ -22,7 +22,10 @@ export const config = yargs(hideBin(process.argv))
         type: 'string',
         description: 'Output file path (must be .json)',
         demandOption: true,
-        coerce: (arg: string) => {
+        coerce: (arg: string | string[]) => {
+            if (Array.isArray(arg)) {
+                arg = arg.filter(Boolean)[0] || '';
+            }
             if (!arg.endsWith('.json')) {
                 throw new Error('Output file must have a .json extension');
             }
