@@ -1,5 +1,5 @@
 import { Resources, ResourceDescription, ScannerError } from "../../types";
-import { scannerLogError, scannerLogSuccess } from "./logger";
+import { scannerLogger } from "./logger";
 
 type GlobalScanResult<T extends ResourceDescription> = {
   resources: Resources<T>;
@@ -12,12 +12,12 @@ async function performGlobalScan<T extends ResourceDescription>(
 ): Promise<GlobalScanResult<T>> {
   try {
     // Scan the service globally
-    scannerLogSuccess(service, `Scanning started`);
+    scannerLogger.success(service, `Scanning started`);
     const resources = await scanFunction();
-    scannerLogSuccess(service, `Discovered ${Object.keys(resources).length} resources globally`);
+    scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources globally`);
     return { resources, error: null };
   } catch (error) {
-    scannerLogError(service, error as Error);
+    scannerLogger.error(service, error as Error);
     return { resources: {} as Resources<never>, error: error as Error };
   }
 }

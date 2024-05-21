@@ -1,5 +1,5 @@
 import { Resources, ResourceDescription, ScannerError } from "../../types";
-import { scannerLogError, scannerLogInfo, scannerLogSuccess } from "./logger";
+import { scannerLogger } from "./logger";
 import { CreateRegionalScannerFunction } from "./types";
 
 type RegionScanResult<T extends ResourceDescription> = {
@@ -15,12 +15,12 @@ async function scanRegion<T extends ResourceDescription>(
 ): Promise<RegionScanResult<T>> {
   try {
     // Scan the region
-    scannerLogInfo(service, `Scanning started`, region);
+    scannerLogger.info(service, `Scanning started`, region);
     const resources = await scanFunction(region);
-    scannerLogSuccess(service, `Discovered ${Object.keys(resources).length} resources`, region);
+    scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources`, region);
     return { region, resources, error: null };
   } catch (error) {
-    scannerLogError(service, error as Error, region);
+    scannerLogger.error(service, error as Error, region);
     return { region, resources: null, error: error as Error };
   }
 }

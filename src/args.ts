@@ -5,17 +5,17 @@ import { awsRegionIds } from './constants';
 
 export const config = yargs(hideBin(process.argv))
     .option('regions', {
-    alias: 'r',
-    type: 'array',
-    description: 'List of regions to scan',
-    demandOption: true,
-    coerce: (arg: string[]) => {
-        const invalidRegions = arg.filter(region => !awsRegionIds.includes(region));
-        if (invalidRegions.length > 0) {
-            throw new Error(`Invalid region(s): ${invalidRegions.join(', ')}. Valid regions are: ${awsRegionIds.join(', ')}`);
+        alias: 'r',
+        type: 'array',
+        description: 'List of regions to scan',
+        demandOption: true,
+        coerce: (arg: string[]) => {
+            const invalidRegions = arg.filter(region => !awsRegionIds.includes(region));
+            if (invalidRegions.length > 0) {
+                throw new Error(`Invalid region(s): ${invalidRegions.join(', ')}. Valid regions are: ${awsRegionIds.join(', ')}`);
+            }
+            return arg;
         }
-        return arg;
-    }
     })
     .option('output', {
         alias: 'o',
