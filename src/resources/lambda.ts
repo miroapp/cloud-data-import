@@ -1,10 +1,9 @@
 import { LambdaClient, ListFunctionsCommand, FunctionConfiguration } from "@aws-sdk/client-lambda";
-import { Resources } from "../types";
+import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getLambdaFunctions(region: string): Promise<FunctionConfiguration[]> {
+async function getLambdaFunctions(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<FunctionConfiguration[]> {
   const client = new LambdaClient({ region });
-  const rateLimiter = new RateLimiter(10, 1000);
 
   const functionConfigurations: FunctionConfiguration[] = [];
 
@@ -27,8 +26,8 @@ async function getLambdaFunctions(region: string): Promise<FunctionConfiguration
   return functionConfigurations;
 }
 
-export async function getLambdaResources(region: string): Promise<Resources<FunctionConfiguration>> {
-  const functions = await getLambdaFunctions(region);
+export async function getLambdaResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<FunctionConfiguration>> {
+  const functions = await getLambdaFunctions(credentials, rateLimiter, region);
 
   return functions.reduce((acc, func) => {
     if (!func.FunctionArn) {

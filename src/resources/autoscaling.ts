@@ -1,10 +1,9 @@
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup } from "@aws-sdk/client-auto-scaling";
-import { Resources } from "../types";
+import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]> {
+async function getAutoScalingGroups(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<AutoScalingGroup[]> {
   const client = new AutoScalingClient({ region })
-  const rateLimiter = new RateLimiter(10, 1000)
 
   const autoScalingGroups: AutoScalingGroup[] = [];
 
@@ -27,8 +26,8 @@ async function getAutoScalingGroups(region: string): Promise<AutoScalingGroup[]>
   return autoScalingGroups;
 }
 
-export async function getAutoScalingResources(region: string): Promise<Resources<AutoScalingGroup>> {
-  const autoScalingGroups = await getAutoScalingGroups(region);
+export async function getAutoScalingResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<AutoScalingGroup>> {
+  const autoScalingGroups = await getAutoScalingGroups(credentials, rateLimiter, region);
 
   return autoScalingGroups.reduce((acc, autoScalingGroup) => {
     if (!autoScalingGroup.AutoScalingGroupARN) {

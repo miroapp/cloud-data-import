@@ -1,5 +1,5 @@
-import { S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket, ServerSideEncryptionConfiguration, Tag, GetBucketPolicyCommand, GetBucketVersioningCommand, GetBucketEncryptionCommand, GetBucketTaggingCommand } from "@aws-sdk/client-s3";
-import { ExtendedBucket, Resources } from "../types";
+import { S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket, GetBucketPolicyCommand, GetBucketVersioningCommand, GetBucketEncryptionCommand, GetBucketTaggingCommand } from "@aws-sdk/client-s3";
+import { Credentials, ExtendedBucket, Resources } from "../types";
 import { buildARN } from "../utils/buildArn";
 import { getAccountId } from "../utils/getAccountId";
 import { RateLimiter } from "../utils/RateLimiter";
@@ -62,9 +62,11 @@ async function enrichBucketData(client: S3Client, rateLimiter: RateLimiter, buck
   };
 }
 
-async function getS3Buckets(): Promise<ExtendedBucket[]> {
+async function getS3Buckets(
+  credentials: Credentials,
+  rateLimiter: RateLimiter
+): Promise<ExtendedBucket[]> {
   const client = new S3Client({});
-  const rateLimiter = new RateLimiter(10, 1000);
 
   const accountId = await getAccountId();
 
@@ -86,8 +88,14 @@ async function getS3Buckets(): Promise<ExtendedBucket[]> {
   }
 }
 
-export async function getS3Resources(): Promise<Resources<ExtendedBucket>> {
-  const buckets = await getS3Buckets();
+export async function getS3Resources(
+  credentials: Credentials,
+  rateLimiter: RateLimiter
+): Promise<Resources<ExtendedBucket>> {
+  const buckets = await getS3Buckets(
+    credentials,
+    rateLimiter
+  );
 
   return buckets.reduce((acc, bucket) => {
     acc[bucket.ARN] = bucket;

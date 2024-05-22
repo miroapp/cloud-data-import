@@ -10,7 +10,7 @@ import {
     Service,
     Task
 } from "@aws-sdk/client-ecs";
-import { Resources } from "../types";
+import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
   
 async function getECSClusters(client: ECSClient, rateLimiter: RateLimiter): Promise<Cluster[]> {
@@ -57,9 +57,8 @@ async function getECSServices(client: ECSClient, rateLimiter: RateLimiter, clust
     }
   }
   
-export async function getECSResources(region: string): Promise<Resources<Cluster | Service | Task>> {
+export async function getECSResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<Cluster | Service | Task>> {
     const client = new ECSClient({ region });
-    const rateLimiter = new RateLimiter(10, 1000);
   
     const clusters = await getECSClusters(client, rateLimiter);
   

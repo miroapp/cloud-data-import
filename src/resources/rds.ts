@@ -5,11 +5,10 @@ import {
     DescribeDBClustersCommand,
     DBCluster,
   } from "@aws-sdk/client-rds";
-  import { Resources } from "../types";
+  import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
   
-  async function getRDSInstances(region: string, rateLimiter: RateLimiter): Promise<DBInstance[]> {
-    const client = new RDSClient({ region });
+  async function getRDSInstances(client: RDSClient, rateLimiter: RateLimiter): Promise<DBInstance[]> {
     const dbInstances: DBInstance[] = [];
   
     let marker: string | undefined;
@@ -31,8 +30,7 @@ import { RateLimiter } from "../utils/RateLimiter";
     return dbInstances;
   }
   
-  async function getRDSClusters(region: string, rateLimiter: RateLimiter): Promise<DBCluster[]> {
-    const client = new RDSClient({ region });
+  async function getRDSClusters(client: RDSClient, rateLimiter: RateLimiter): Promise<DBCluster[]> {
     const dbClusters: DBCluster[] = [];
   
     let marker: string | undefined;
@@ -54,11 +52,12 @@ import { RateLimiter } from "../utils/RateLimiter";
     return dbClusters;
   }
   
-  export async function getRDSResources(region: string): Promise<Resources<DBInstance | DBCluster>> {
-    const rateLimiter = new RateLimiter(10, 1000);
+  export async function getRDSResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<DBInstance | DBCluster>> {
+    const client = new RDSClient({ region });
+
     const [instances, clusters] = await Promise.all([
-      getRDSInstances(region, rateLimiter),
-      getRDSClusters(region, rateLimiter),
+      getRDSInstances(client, rateLimiter),
+      getRDSClusters(client, rateLimiter),
     ]);
     
     const instanceResources = instances.reduce((acc, instance) => {

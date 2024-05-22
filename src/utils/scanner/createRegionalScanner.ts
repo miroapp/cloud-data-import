@@ -1,6 +1,7 @@
-import { Resources, ResourceDescription, ScannerError } from "../../types";
+import { Resources, ResourceDescription, ScannerError, RegionalScanFunction, Credentials } from "../../types";
+import { RateLimiter } from "../RateLimiter";
 import { scannerLogger } from "./logger";
-import { CreateRegionalScannerFunction } from "./types";
+import { CreateRegionalScannerFunction, GetRateLimiterFunction } from "./types";
 
 type RegionScanResult<T extends ResourceDescription> = {
   region: string;
@@ -9,14 +10,16 @@ type RegionScanResult<T extends ResourceDescription> = {
 };
 
 async function scanRegion<T extends ResourceDescription>(
-  region: string,
   service: string,
-  scanFunction: (region: string) => Promise<Resources<T>>
+  scanFunction: RegionalScanFunction<T>,
+  region: string,
+  credentials: Credentials,
+  rateLimiter: RateLimiter
 ): Promise<RegionScanResult<T>> {
   try {
     // Scan the region
     scannerLogger.info(service, `Scanning started`, region);
-    const resources = await scanFunction(region);
+    const resources = await scanFunction(credentials, rateLimiter, region);
     scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources`, region);
     return { region, resources, error: null };
   } catch (error) {
@@ -27,12 +30,17 @@ async function scanRegion<T extends ResourceDescription>(
 
 export const createRegionalScanner: CreateRegionalScannerFunction = <T extends ResourceDescription>(
   service: string,
-  fn: (region: string) => Promise<Resources<T>>,
-  regions: string[]
+  scanFunction: RegionalScanFunction<T>,
+  regions: string[],
+  credentials: Credentials,
+  getRateLimiter: GetRateLimiterFunction
 ) => {
   return async () => {
     // Scan each region in parallel
-    const scanResults = await Promise.all(regions.map(region => scanRegion(region, service, fn)));
+    const scanResults = await Promise.all(regions.map(region => {
+      const rateLimiter = getRateLimiter(service, region);
+      return scanRegion(service, scanFunction, region, credentials, rateLimiter)
+    }));
 
     // Combine results into a single object
     const resources = scanResults.reduce((acc, { resources }) => {

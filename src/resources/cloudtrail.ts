@@ -1,10 +1,12 @@
 import { CloudTrailClient, ListTrailsCommand, Trail } from "@aws-sdk/client-cloudtrail";
-import { Resources } from "../types";
+import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getCloudTrailTrails(): Promise<Trail[]> {
+async function getCloudTrailTrails(
+  credentials: Credentials,
+  rateLimiter: RateLimiter
+): Promise<Trail[]> {
   const client = new CloudTrailClient({});
-  const rateLimiter = new RateLimiter(10, 1000)
   
   const trails: Trail[] = [];
 
@@ -26,8 +28,11 @@ async function getCloudTrailTrails(): Promise<Trail[]> {
   return trails;
 }
 
-export async function getCloudTrailResources(): Promise<Resources<Trail>> {
-  const trails = await getCloudTrailTrails();
+export async function getCloudTrailResources(
+  credentials: Credentials,
+  rateLimiter: RateLimiter
+): Promise<Resources<Trail>> {
+  const trails = await getCloudTrailTrails(credentials, rateLimiter);
 
   return trails.reduce((acc, trail) => {
     if (!trail.TrailARN) {

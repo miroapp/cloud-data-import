@@ -4,12 +4,11 @@ import {
     GetDistributionConfigCommand,
     ListTagsForResourceCommand,
 } from "@aws-sdk/client-cloudfront";
-import { ExtendedCloudFrontDistribution, Resources } from "../types";
+import { Credentials, ExtendedCloudFrontDistribution, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getCloudFrontDistributions(): Promise<ExtendedCloudFrontDistribution[]> {
+async function getCloudFrontDistributions(credentials: Credentials, rateLimiter: RateLimiter): Promise<ExtendedCloudFrontDistribution[]> {
     const client = new CloudFrontClient({});
-    const rateLimiter = new RateLimiter(10, 1000)
 
     const command = new ListDistributionsCommand({});
     const response = await rateLimiter.throttle(() => client.send(command));
@@ -39,8 +38,11 @@ async function getCloudFrontDistributions(): Promise<ExtendedCloudFrontDistribut
     return enrichedDistributions;
 }
 
-export async function getCloudFrontResources(): Promise<Resources<ExtendedCloudFrontDistribution>> {
-    const distributions = await getCloudFrontDistributions();
+export async function getCloudFrontResources(
+    credentials: Credentials,
+    rateLimiter: RateLimiter
+): Promise<Resources<ExtendedCloudFrontDistribution>> {
+    const distributions = await getCloudFrontDistributions(credentials, rateLimiter);
 
     return distributions.reduce((acc, distribution) => {
         if (!distribution.ARN) throw new Error('Distribution ARN is missing in the response');

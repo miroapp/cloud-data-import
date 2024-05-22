@@ -2,14 +2,13 @@ import {
   EC2Client, 
   DescribeInstancesCommand,
 } from "@aws-sdk/client-ec2";
-import { ExtendedInstance, Resources } from "../types";
+import { Credentials, ExtendedInstance, Resources } from "../types";
 import { buildARN } from "../utils/buildArn";
 import { getAccountId } from "../utils/getAccountId";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getEC2Instances(region: string): Promise<ExtendedInstance[]> {
+async function getEC2Instances(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<ExtendedInstance[]> {
   const client = new EC2Client({ region });
-  const rateLimiter = new RateLimiter(10, 1000);
 
   const instances: ExtendedInstance[] = [];
   const accountId = await getAccountId();
@@ -49,8 +48,8 @@ async function getEC2Instances(region: string): Promise<ExtendedInstance[]> {
   return instances;
 }
 
-export async function getEC2Resources(region: string): Promise<Resources<ExtendedInstance>> {
-  const instances = await getEC2Instances(region);
+export async function getEC2Resources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<ExtendedInstance>> {
+  const instances = await getEC2Instances(credentials, rateLimiter, region);
 
   return instances.reduce((acc, instance) => {
     acc[instance.ARN] = instance;

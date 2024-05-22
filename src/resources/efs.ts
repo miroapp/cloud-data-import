@@ -6,12 +6,11 @@ import {
     DescribeMountTargetsCommand,
     FileSystemPolicyDescription,
 } from "@aws-sdk/client-efs";
-import { Resources, ExtendedFileSystem } from "../types";
+import { Resources, ExtendedFileSystem, Credentials } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
   
-async function getEFSFileSystems(region: string): Promise<ExtendedFileSystem[]> {
+async function getEFSFileSystems(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<ExtendedFileSystem[]> {
     const client = new EFSClient({ region });
-    const rateLimiter = new RateLimiter(10, 1000);
   
     const command = new DescribeFileSystemsCommand({});
     const response = await client.send(command);
@@ -63,8 +62,8 @@ async function getEFSFileSystems(region: string): Promise<ExtendedFileSystem[]> 
     return enrichedFileSystems;
 }
   
-export async function getEFSResources(region: string): Promise<Resources<ExtendedFileSystem>> {
-    const fileSystems = await getEFSFileSystems(region);
+export async function getEFSResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<ExtendedFileSystem>> {
+    const fileSystems = await getEFSFileSystems(credentials, rateLimiter, region);
   
     return fileSystems.reduce((acc, fileSystem) => {
         if (!fileSystem.FileSystemArn) throw new Error('FileSystemArn is missing in the response');

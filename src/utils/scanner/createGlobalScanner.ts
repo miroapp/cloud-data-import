@@ -1,5 +1,7 @@
-import { Resources, ResourceDescription, ScannerError } from "../../types";
+import { Resources, ResourceDescription, ScannerError, GlobalScanFunction, Credentials } from "../../types";
+import { RateLimiter } from "../RateLimiter";
 import { scannerLogger } from "./logger";
+import { CreateGlobalScannerFunction, GetGlobalRateLimiterFunction } from "./types";
 
 type GlobalScanResult<T extends ResourceDescription> = {
   resources: Resources<T>;
@@ -8,12 +10,14 @@ type GlobalScanResult<T extends ResourceDescription> = {
 
 async function performGlobalScan<T extends ResourceDescription>(
   service: string,
-  scanFunction: () => Promise<Resources<T>>
+  scanFunction: GlobalScanFunction<T>,
+  credentials: Credentials,
+  rateLimiter: RateLimiter
 ): Promise<GlobalScanResult<T>> {
   try {
     // Scan the service globally
     scannerLogger.success(service, `Scanning started`);
-    const resources = await scanFunction();
+    const resources = await scanFunction(credentials, rateLimiter);
     scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources globally`);
     return { resources, error: null };
   } catch (error) {
@@ -22,12 +26,15 @@ async function performGlobalScan<T extends ResourceDescription>(
   }
 }
 
-export function createGlobalScanner<T extends ResourceDescription>(
+export const createGlobalScanner: CreateGlobalScannerFunction = <T extends ResourceDescription>(
   service: string,
-  fn: () => Promise<Resources<T>>
-): () => Promise<{ resources: Resources<T>; errors: ScannerError[] }> {
+  scanFunction: GlobalScanFunction<T>,
+  credentials: Credentials,
+  getRateLimiter: GetGlobalRateLimiterFunction
+) => {
   return async () => {
-    const { resources, error } = await performGlobalScan(service, fn);
+    const rateLimiter = getRateLimiter(service);
+    const { resources, error } = await performGlobalScan(service, scanFunction, credentials, rateLimiter);
     const errors = error ? [{ service, message: error.message }] : [];
     return { resources, errors };
   };

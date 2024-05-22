@@ -1,10 +1,9 @@
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription } from "@aws-sdk/client-dynamodb";
-import { Resources } from "../types";
+import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
+async function getDynamoDBTables(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<TableDescription[]> {
   const client = new DynamoDBClient({ region });
-  const rateLimiter = new RateLimiter(10, 1000);
 
   const tableDescriptions: TableDescription[] = [];
 
@@ -39,8 +38,8 @@ async function getDynamoDBTables(region: string): Promise<TableDescription[]> {
 
 
 
-export async function getDynamoDBResources(region: string): Promise<Resources<TableDescription>> {
-  const tables = await getDynamoDBTables(region);
+export async function getDynamoDBResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<TableDescription>> {
+  const tables = await getDynamoDBTables(credentials, rateLimiter, region);
 
   return tables.reduce((acc, table) => {
     if (!table.TableArn) {
