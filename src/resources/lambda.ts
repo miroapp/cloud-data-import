@@ -3,7 +3,7 @@ import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
 async function getLambdaFunctions(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<FunctionConfiguration[]> {
-  const client = new LambdaClient({ region });
+  const client = new LambdaClient([{ credentials, region }]);
 
   const functionConfigurations: FunctionConfiguration[] = [];
 

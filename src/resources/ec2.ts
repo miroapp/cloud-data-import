@@ -8,7 +8,7 @@ import { getAccountId } from "../utils/getAccountId";
 import { RateLimiter } from "../utils/RateLimiter";
 
 async function getEC2Instances(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<ExtendedInstance[]> {
-  const client = new EC2Client({ region });
+  const client = new EC2Client([{ credentials, region }]);
 
   const instances: ExtendedInstance[] = [];
   const accountId = await getAccountId();

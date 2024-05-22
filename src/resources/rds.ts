@@ -53,7 +53,7 @@ import { RateLimiter } from "../utils/RateLimiter";
   }
   
   export async function getRDSResources(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<Resources<DBInstance | DBCluster>> {
-    const client = new RDSClient({ region });
+    const client = new RDSClient([{ credentials, region }]);
 
     const [instances, clusters] = await Promise.all([
       getRDSInstances(client, rateLimiter),

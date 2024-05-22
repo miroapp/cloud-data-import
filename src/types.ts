@@ -19,6 +19,7 @@ import {
     Tags
 } from "@aws-sdk/client-cloudfront";
 import { RateLimiter } from "./utils/RateLimiter"
+import { Credentials as STSCredentials } from '@aws-sdk/client-sts';
 
 export interface ExtendedCloudFrontDistribution extends DistributionSummary {
     DistributionConfig?: DistributionConfig;
@@ -63,7 +64,7 @@ export type Resources<T extends ResourceDescription = ResourceDescription> = {
     [arn: string]: T
 }
 
-export type Credentials = {}
+export type Credentials = STSCredentials | {}
 
 export type RegionalScanFunction<T extends ResourceDescription> = (credentials: Credentials, rateLimiter: RateLimiter, region: string) => Promise<Resources<T>>
 export type GlobalScanFunction<T extends ResourceDescription> = (credentials: Credentials, rateLimiter: RateLimiter) => Promise<Resources<T>>

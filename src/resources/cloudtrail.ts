@@ -6,7 +6,7 @@ async function getCloudTrailTrails(
   credentials: Credentials,
   rateLimiter: RateLimiter
 ): Promise<Trail[]> {
-  const client = new CloudTrailClient({});
+  const client = new CloudTrailClient([{ credentials }]);
   
   const trails: Trail[] = [];
 

@@ -3,7 +3,7 @@ import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
 async function getDynamoDBTables(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<TableDescription[]> {
-  const client = new DynamoDBClient({ region });
+  const client = new DynamoDBClient([{ credentials, region }]);
 
   const tableDescriptions: TableDescription[] = [];
 

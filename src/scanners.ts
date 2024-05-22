@@ -16,7 +16,7 @@ import { RateLimiter } from "./utils/RateLimiter";
 
 export const getScanners = (regions: string[], shouldIncludeGlobalServices: boolean): Scanner[] => {
     const credentials: Credentials = {};
-    const getRateLimiter = () => new RateLimiter(10);
+    const getRateLimiter = () => new RateLimiter(1);
 
     const scanners: Scanner[] = [
         createRegionalScanner('autoscaling', getAutoScalingResources, regions, credentials, getRateLimiter),

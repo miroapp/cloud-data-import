@@ -8,7 +8,7 @@ import { Credentials, ExtendedCloudFrontDistribution, Resources } from "../types
 import { RateLimiter } from "../utils/RateLimiter";
 
 async function getCloudFrontDistributions(credentials: Credentials, rateLimiter: RateLimiter): Promise<ExtendedCloudFrontDistribution[]> {
-    const client = new CloudFrontClient({});
+    const client = new CloudFrontClient([{ credentials }]);
 
     const command = new ListDistributionsCommand({});
     const response = await rateLimiter.throttle(() => client.send(command));

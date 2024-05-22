@@ -3,7 +3,7 @@ import { Credentials, Resources } from "../types";
 import { RateLimiter } from "../utils/RateLimiter";
 
 async function getAutoScalingGroups(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<AutoScalingGroup[]> {
-  const client = new AutoScalingClient({ region })
+  const client = new AutoScalingClient([{ credentials, region }])
 
   const autoScalingGroups: AutoScalingGroup[] = [];
 
