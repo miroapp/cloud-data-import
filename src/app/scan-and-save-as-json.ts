@@ -1,7 +1,16 @@
-import { StandardOutputSchema, Scanner, ScannerError } from "../types"
+import { Logger } from "../hooks/Logger";
+import { getScanners } from "../scanners"
+import { StandardOutputSchema, ScannerError, Config } from "../types"
 import { saveAsJson } from "../utils/saveAsJson"
 
-export const scanAndSaveAsJson = async (scanners: Scanner[], path: string, compressed: boolean) => {
+export const scanAndSaveAsJson = async (config: Config) => {
+    // prepare scanners
+    const shouldIncludeGlobalServices = !config['regional-only'];
+    const scanners = getScanners(config.regions, shouldIncludeGlobalServices, [
+        new Logger(), // log scanning progress
+    ]);
+
+    // run scanners
     const startedAt = new Date().toISOString()
     const result = await Promise.all(scanners.map(scanner => scanner()))
     const finishedAt = new Date().toISOString()
@@ -28,5 +37,5 @@ export const scanAndSaveAsJson = async (scanners: Scanner[], path: string, compr
         },
     }
 
-    saveAsJson(path, output, compressed)
+    saveAsJson(config.output, output, config.compressed)
 }
