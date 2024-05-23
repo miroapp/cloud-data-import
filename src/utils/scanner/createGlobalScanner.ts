@@ -1,4 +1,4 @@
-import { Resources, ResourceDescription, ScannerError, GlobalScanFunction, Credentials } from "../../types";
+import { Resources, ResourceDescription, GlobalScanFunction, Credentials } from "../../types";
 import { RateLimiter } from "../RateLimiter";
 import { scannerLogger } from "./logger";
 import { CreateGlobalScannerFunction, GetGlobalRateLimiterFunction } from "./types";
@@ -15,8 +15,7 @@ async function performGlobalScan<T extends ResourceDescription>(
   rateLimiter: RateLimiter
 ): Promise<GlobalScanResult<T>> {
   try {
-    // Scan the service globally
-    scannerLogger.success(service, `Scanning started`);
+    scannerLogger.info(service, `Scanning started`);
     const resources = await scanFunction(credentials, rateLimiter);
     scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources globally`);
     return { resources, error: null };

@@ -4,21 +4,10 @@ import { buildARN } from "../utils/buildArn";
 import { getAccountId } from "../utils/getAccountId";
 import { RateLimiter } from "../utils/RateLimiter";
 
-async function getBucketLocation(client: S3Client, rateLimiter: RateLimiter, bucketName: string): Promise<string> {
-  const command = new GetBucketLocationCommand({ Bucket: bucketName });
-  const response = await rateLimiter.throttle(() => client.send(command));
-
-  // Quote from https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax:
-  // "... Buckets in Region us-east-1 have a LocationConstraint of null."
-  return response.LocationConstraint || 'us-east-1';
-}
-
 async function enrichBucketData(client: S3Client, rateLimiter: RateLimiter, bucket: Bucket, accountId: string): Promise<ExtendedBucket> {
-  const region = await getBucketLocation(client, rateLimiter, bucket.Name!);
-  
   const arn = buildARN({
     accountId,
-    region,
+    region: '', // S3 ARNs don't have a region
     service: 's3',
     resource: `bucket/${bucket.Name}`,
   });
@@ -39,22 +28,28 @@ async function enrichBucketData(client: S3Client, rateLimiter: RateLimiter, buck
     .then(res => res.TagSet)
     .catch(() => undefined));
 
+  const getBucketLocationConstraint = async () => rateLimiter.throttle(() => client.send(new GetBucketLocationCommand({Bucket: bucket.Name}))
+    .then(res => res.LocationConstraint || 'us-east-1')
+    .catch(() => undefined));
+
   const [
     bucketPolicy, 
     bucketVersioning, 
     bucketEncryption, 
-    bucketTagging
+    bucketTagging,
+    bucketLocationConstraint
   ] = await Promise.all([
     getBucketPolicy(),
     getBucketVersioning(),
     getBucketEncryption(),
-    getBucketTagging()
+    getBucketTagging(),
+    getBucketLocationConstraint()
   ]);
 
   return {
     ...bucket,
-    LocationConstraint: region,
     ARN: arn,
+    LocationConstraint: bucketLocationConstraint,
     Policy: bucketPolicy,
     Versioning: bucketVersioning,
     Encryption: bucketEncryption,
@@ -77,7 +72,7 @@ async function getS3Buckets(
     const enrichedBuckets = await Promise.all(
       (listBucketsResponse.Buckets || []).map(bucket => {
         if (!bucket.Name) throw new Error('Bucket Name is missing in the response');
-        return enrichBucketData(client, rateLimiter, bucket, accountId);
+        return bucket as any;
       })
     );
 
