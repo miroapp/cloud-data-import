@@ -1,6 +1,6 @@
 import { Resources, ResourceDescription, ScannerError, RegionalScanFunction, Credentials } from "../../types";
 import { RateLimiter } from "../RateLimiter";
-import { CreateRegionalScannerFunction, GetRateLimiterFunction, ScannerLifecycleHook } from "./types";
+import { CreateRegionalScannerFunction, GetRegionalRateLimiterFunction, ScannerLifecycleHook } from "./types";
 
 type RegionScanResult<T extends ResourceDescription> = {
   region: string;
@@ -41,11 +41,15 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
   service: string,
   scanFunction: RegionalScanFunction<T>,
   regions: string[],
-  credentials: Credentials,
-  getRateLimiter: GetRateLimiterFunction,
-  hooks: ScannerLifecycleHook[],
+  options: { 
+    credentials: Credentials,
+    getRateLimiter: GetRegionalRateLimiterFunction,
+    hooks: ScannerLifecycleHook[],
+  }
 ) => {
   return async () => {
+    const { credentials, getRateLimiter, hooks } = options;
+
     // Scan each region in parallel
     const scanResults = await Promise.all(regions.map(region => {
       const rateLimiter = getRateLimiter(service, region);

@@ -39,11 +39,15 @@ async function performGlobalScan<T extends ResourceDescription>(
 export const createGlobalScanner: CreateGlobalScannerFunction = <T extends ResourceDescription>(
   service: string,
   scanFunction: GlobalScanFunction<T>,
-  credentials: Credentials,
-  getRateLimiter: GetGlobalRateLimiterFunction,
-  hooks: ScannerLifecycleHook[],
+  options: {
+    credentials: Credentials,
+    getRateLimiter: GetGlobalRateLimiterFunction,
+    hooks: ScannerLifecycleHook[],
+  }
 ) => {
   return async () => {
+    const { credentials, getRateLimiter, hooks } = options;
+
     // Perform global scan
     const rateLimiter = getRateLimiter(service);
     const { resources, error } = await performGlobalScan(service, scanFunction, credentials, rateLimiter, hooks);
