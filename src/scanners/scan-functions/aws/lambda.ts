@@ -1,6 +1,6 @@
 import { LambdaClient, ListFunctionsCommand, FunctionConfiguration } from "@aws-sdk/client-lambda";
-import { Credentials, Resources } from "../types";
-import { RateLimiter } from "../utils/RateLimiter";
+import { Credentials, Resources } from "../../../types";
+import { RateLimiter } from "../../../RateLimiter";
 
 async function getLambdaFunctions(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<FunctionConfiguration[]> {
   const client = new LambdaClient([{ credentials, region }]);

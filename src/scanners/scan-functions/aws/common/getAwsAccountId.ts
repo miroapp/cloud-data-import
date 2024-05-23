@@ -1,6 +1,6 @@
 import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 
-export const getAccountId = (() => {
+export const getAwsAccountId = (() => {
     let accountId: string | undefined;
     return async (): Promise<string> => {
         if (!accountId) {

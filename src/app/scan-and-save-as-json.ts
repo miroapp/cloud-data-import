@@ -1,12 +1,13 @@
-import { Logger } from "../hooks/Logger";
-import { getScanners } from "../scanners"
-import { StandardOutputSchema, ScannerError, Config } from "../types"
-import { saveAsJson } from "../utils/saveAsJson"
+import { Logger } from "./hooks/Logger";
+import { getAwsScanners } from "../scanners"
+import { StandardOutputSchema, ScannerError, Config, Credentials } from "../types"
+import { saveAsJson } from "./utils/saveAsJson"
 
 export const scanAndSaveAsJson = async (config: Config) => {
     // prepare scanners
+    const credentials: Credentials = {} // role is already assumed in the terminal session
     const shouldIncludeGlobalServices = !config['regional-only'];
-    const scanners = getScanners(config.regions, shouldIncludeGlobalServices, [
+    const scanners = getAwsScanners(credentials, config.regions, shouldIncludeGlobalServices, [
         new Logger(), // log scanning progress
     ]);
 

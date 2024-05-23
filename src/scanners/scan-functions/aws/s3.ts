@@ -1,8 +1,8 @@
 import { S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket, GetBucketPolicyCommand, GetBucketVersioningCommand, GetBucketEncryptionCommand, GetBucketTaggingCommand } from "@aws-sdk/client-s3";
-import { Credentials, ExtendedBucket, Resources } from "../types";
-import { buildARN } from "../utils/buildArn";
-import { getAccountId } from "../utils/getAccountId";
-import { RateLimiter } from "../utils/RateLimiter";
+import { Credentials, ExtendedBucket, Resources } from "../../../types";
+import { buildARN } from "./common/buildArn";
+import { getAwsAccountId } from "./common/getAwsAccountId";
+import { RateLimiter } from "../../../RateLimiter";
 
 async function enrichBucketData(client: S3Client, rateLimiter: RateLimiter, bucket: Bucket, accountId: string): Promise<ExtendedBucket> {
   const arn = buildARN({
@@ -63,7 +63,7 @@ async function getS3Buckets(
 ): Promise<ExtendedBucket[]> {
   const client = new S3Client([{ credentials }]);
 
-  const accountId = await getAccountId();
+  const accountId = await getAwsAccountId();
 
   try {
     const listBucketsCommand = new ListBucketsCommand({});
@@ -72,7 +72,7 @@ async function getS3Buckets(
     const enrichedBuckets = await Promise.all(
       (listBucketsResponse.Buckets || []).map(bucket => {
         if (!bucket.Name) throw new Error('Bucket Name is missing in the response');
-        return bucket as any;
+        return enrichBucketData(client, rateLimiter, bucket, accountId);
       })
     );
 

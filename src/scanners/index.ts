@@ -1,0 +1,1 @@
+export { getAwsScanners } from './getAwsScanners';

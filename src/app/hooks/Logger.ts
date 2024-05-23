@@ -1,5 +1,4 @@
-import { Resources } from "../types";
-import { ScannerLifecycleHook } from "../utils/scanner";
+import { Resources, ScannerLifecycleHook } from "../../types";
 
 export class Logger implements ScannerLifecycleHook {
     getLegend(service: string, region?: string): string {

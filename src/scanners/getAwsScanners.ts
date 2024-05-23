@@ -1,23 +1,24 @@
-import { Credentials, Scanner } from "./types";
-import { createGlobalScanner, createRegionalScanner, ScannerLifecycleHook } from "./utils/scanner";
+import { Credentials, Scanner, ScannerLifecycleHook } from "../types";
+import { createRegionalScanner } from "./common/createRegionalScanner";
+import { createGlobalScanner } from "./common/createGlobalScanner";
+import { RateLimiter } from "../RateLimiter";
 
-import { getAutoScalingResources } from "./resources/autoscaling";
-import { getCloudFrontResources } from "./resources/cloudfront";
-import { getCloudTrailResources } from "./resources/cloudtrail";
-import { getDynamoDBResources } from "./resources/dynamodb";
-import { getEC2Resources } from "./resources/ec2";
-import { getECSResources } from "./resources/ecs";
-import { getEFSResources } from "./resources/efs";
-import { getEKSResources } from "./resources/eks";
-import { getLambdaResources } from "./resources/lambda";
-import { getRDSResources } from "./resources/rds";
-import { getS3Resources } from "./resources/s3";
-import { RateLimiter } from "./utils/RateLimiter";
+import { getAutoScalingResources } from "./scan-functions/aws/autoscaling";
+import { getCloudFrontResources } from "./scan-functions/aws/cloudfront";
+import { getCloudTrailResources } from "./scan-functions/aws/cloudtrail";
+import { getDynamoDBResources } from "./scan-functions/aws/dynamodb";
+import { getEC2Resources } from "./scan-functions/aws/ec2";
+import { getECSResources } from "./scan-functions/aws/ecs";
+import { getEFSResources } from "./scan-functions/aws/efs";
+import { getEKSResources } from "./scan-functions/aws/eks";
+import { getLambdaResources } from "./scan-functions/aws/lambda";
+import { getRDSResources } from "./scan-functions/aws/rds";
+import { getS3Resources } from "./scan-functions/aws/s3";
 
-export const getScanners = (regions: string[], shouldIncludeGlobalServices: boolean, hooks: ScannerLifecycleHook[]): Scanner[] => {
+export const getAwsScanners = (credentials: Credentials, regions: string[], shouldIncludeGlobalServices: boolean, hooks: ScannerLifecycleHook[]): Scanner[] => {
     const options = {
-        // For now, we are using an empty object for credentials. This is because we are assuming the role in the terminal session.
-        credentials: {},
+        // Pass the credentials to the scanners so that they can make API calls.
+        credentials,
         // For now, we are using a single dummy rate limiter for all scanners. It is 10 requests per second.
         getRateLimiter: () => new RateLimiter(10),
         // Pass the hooks to the scanners so that they can call the appropriate lifecycle hooks at the right time.

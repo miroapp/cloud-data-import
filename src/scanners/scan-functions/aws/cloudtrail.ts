@@ -1,6 +1,6 @@
 import { CloudTrailClient, ListTrailsCommand, Trail } from "@aws-sdk/client-cloudtrail";
-import { Credentials, Resources } from "../types";
-import { RateLimiter } from "../utils/RateLimiter";
+import { Credentials, Resources } from "../../../types";
+import { RateLimiter } from "../../../RateLimiter";
 
 async function getCloudTrailTrails(
   credentials: Credentials,

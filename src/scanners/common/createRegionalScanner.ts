@@ -1,6 +1,6 @@
-import { Resources, ResourceDescription, ScannerError, RegionalScanFunction, Credentials } from "../../types";
-import { RateLimiter } from "../RateLimiter";
-import { CreateRegionalScannerFunction, GetRegionalRateLimiterFunction, ScannerLifecycleHook } from "./types";
+import { Resources, ResourceDescription, ScannerError, RegionalScanFunction, Credentials, ScannerLifecycleHook } from "../../types";
+import { RateLimiter } from "../../RateLimiter";
+import { CreateRegionalScannerFunction, GetRegionalRateLimiterFunction } from "../types";
 
 type RegionScanResult<T extends ResourceDescription> = {
   region: string;

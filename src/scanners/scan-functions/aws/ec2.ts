@@ -2,16 +2,16 @@ import {
   EC2Client, 
   DescribeInstancesCommand,
 } from "@aws-sdk/client-ec2";
-import { Credentials, ExtendedInstance, Resources } from "../types";
-import { buildARN } from "../utils/buildArn";
-import { getAccountId } from "../utils/getAccountId";
-import { RateLimiter } from "../utils/RateLimiter";
+import { Credentials, ExtendedInstance, Resources } from "../../../types";
+import { RateLimiter } from "../../../RateLimiter";
+import { buildARN } from "./common/buildArn";
+import { getAwsAccountId } from "./common/getAwsAccountId";
 
 async function getEC2Instances(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<ExtendedInstance[]> {
   const client = new EC2Client([{ credentials, region }]);
 
   const instances: ExtendedInstance[] = [];
-  const accountId = await getAccountId();
+  const accountId = await getAwsAccountId();
 
   let nextToken: string | undefined;
   do {

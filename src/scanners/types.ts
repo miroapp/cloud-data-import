@@ -1,5 +1,6 @@
-import { ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, Credentials, Resources } from "../../types"
+import { ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, Credentials } from "../types"
 import { RateLimiter } from "../RateLimiter"
+import { ScannerLifecycleHook } from "../types"
 
 // getRateLimiter function types
 export type GetRegionalRateLimiterFunction = (service: string, region: string) => RateLimiter
@@ -23,16 +24,3 @@ export type CreateGlobalScannerFunction = <T extends ResourceDescription>(
     scanFunction: GlobalScanFunction<T>,
     options: CreateScannerOptions & { getRateLimiter: GetGlobalRateLimiterFunction },
 ) => Scanner<T>
-
-/**
- * A hook that can be used to perform actions at different stages of the scanner lifecycle.
- * 
- * The `onStart` hook is called before the scanner starts scanning resources in a service.
- * The `onComplete` hook is called after the scanner has finished scanning resources in a service.
- * The `onError` hook is called if an error occurs during the scanner's operation.
- */
-export interface ScannerLifecycleHook {
-    onStart?: (service: string, region?: string) => void
-    onComplete?: (resources: Resources, service: string, region?: string) => void
-    onError?: (error: Error, service: string, region?: string) => void
-}

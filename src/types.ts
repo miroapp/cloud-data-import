@@ -18,7 +18,7 @@ import {
     DistributionConfig,
     Tags
 } from "@aws-sdk/client-cloudfront";
-import { RateLimiter } from "./utils/RateLimiter"
+import { RateLimiter } from "./RateLimiter"
 import { Credentials as STSCredentials } from '@aws-sdk/client-sts';
 
 export interface ExtendedCloudFrontDistribution extends DistributionSummary {
@@ -80,6 +80,19 @@ export type ScannerError = {
 export type ScannerResult<T extends ResourceDescription> = {
     resources: Resources<T>,
     errors: ScannerError[]
+}
+
+/**
+ * A hook that can be used to perform actions at different stages of the scanner lifecycle.
+ * 
+ * The `onStart` hook is called before the scanner starts scanning resources in a service.
+ * The `onComplete` hook is called after the scanner has finished scanning resources in a service.
+ * The `onError` hook is called if an error occurs during the scanner's operation.
+ */
+export interface ScannerLifecycleHook {
+    onStart?: (service: string, region?: string) => void
+    onComplete?: (resources: Resources, service: string, region?: string) => void
+    onError?: (error: Error, service: string, region?: string) => void
 }
 
 export type Scanner<T extends ResourceDescription = ResourceDescription> = () => Promise<ScannerResult<T>>
