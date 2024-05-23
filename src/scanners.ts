@@ -15,25 +15,33 @@ import { getS3Resources } from "./resources/s3";
 import { RateLimiter } from "./utils/RateLimiter";
 
 export const getScanners = (regions: string[], shouldIncludeGlobalServices: boolean, hooks: ScannerLifecycleHook[]): Scanner[] => {
-    const credentials: Credentials = {}; // Use the already assumed role in current terminal session
-    const getRateLimiter = () => new RateLimiter(10);
+    const options = {
+        // For now, we are using an empty object for credentials. This is because we are assuming the role in the terminal session.
+        credentials: {},
+        // For now, we are using a single dummy rate limiter for all scanners. It is 10 requests per second.
+        getRateLimiter: () => new RateLimiter(10),
+        // Pass the hooks to the scanners so that they can call the appropriate lifecycle hooks at the right time.
+        hooks
+    };
 
+    // Regional scanners
     const scanners: Scanner[] = [
-        createRegionalScanner('autoscaling', getAutoScalingResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('dynamodb', getDynamoDBResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('ec2', getEC2Resources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('ecs', getECSResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('efs', getEFSResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('eks', getEKSResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('lambda', getLambdaResources, regions, credentials, getRateLimiter, hooks),
-        createRegionalScanner('rds', getRDSResources, regions, credentials, getRateLimiter, hooks),
+        createRegionalScanner('autoscaling', getAutoScalingResources, regions, options),
+        createRegionalScanner('dynamodb', getDynamoDBResources, regions, options),
+        createRegionalScanner('ec2', getEC2Resources, regions, options),
+        createRegionalScanner('ecs', getECSResources, regions, options),
+        createRegionalScanner('efs', getEFSResources, regions, options),
+        createRegionalScanner('eks', getEKSResources, regions, options),
+        createRegionalScanner('lambda', getLambdaResources, regions, options),
+        createRegionalScanner('rds', getRDSResources, regions, options),
     ];
 
+    // Global scanners
     if (shouldIncludeGlobalServices) {
         scanners.push(
-            createGlobalScanner('cloudfront', getCloudFrontResources, credentials, getRateLimiter, hooks),
-            createGlobalScanner('cloudtrail', getCloudTrailResources, credentials, getRateLimiter, hooks),
-            createGlobalScanner('s3', getS3Resources, credentials, getRateLimiter, hooks)
+            createGlobalScanner('cloudfront', getCloudFrontResources, options),
+            createGlobalScanner('cloudtrail', getCloudTrailResources, options),
+            createGlobalScanner('s3', getS3Resources, options)
         );
     }
 

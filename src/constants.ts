@@ -1,4 +1,5 @@
 // This list is extracted from https://docs.aws.amazon.com/general/latest/gr/rande.html
+// Tip: check git history to see when was the last time this list was updated
 export const awsRegionIds: string[] = [
     "us-east-2",
     "us-east-1",
