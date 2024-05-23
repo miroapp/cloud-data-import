@@ -1,7 +1,6 @@
 import { Resources, ResourceDescription, ScannerError, RegionalScanFunction, Credentials } from "../../types";
 import { RateLimiter } from "../RateLimiter";
-import { scannerLogger } from "./logger";
-import { CreateRegionalScannerFunction, GetRateLimiterFunction } from "./types";
+import { CreateRegionalScannerFunction, GetRateLimiterFunction, ScannerLifecycleHook } from "./types";
 
 type RegionScanResult<T extends ResourceDescription> = {
   region: string;
@@ -14,16 +13,26 @@ async function scanRegion<T extends ResourceDescription>(
   scanFunction: RegionalScanFunction<T>,
   region: string,
   credentials: Credentials,
-  rateLimiter: RateLimiter
+  rateLimiter: RateLimiter,
+  hooks: ScannerLifecycleHook[]
 ): Promise<RegionScanResult<T>> {
   try {
-    // Scan the region
-    scannerLogger.info(service, `Scanning started`, region);
+    // onStart hook
+    hooks.forEach((hook) => hook.onStart(service, region));
+
+    // Perform scan
     const resources = await scanFunction(credentials, rateLimiter, region);
-    scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources`, region);
+    
+    // onComplete hook
+    hooks.forEach((hook) => hook.onComplete(resources, service, region));
+
+    // Return resources
     return { region, resources, error: null };
   } catch (error) {
-    scannerLogger.error(service, error as Error, region);
+    // onError hook
+    hooks.forEach((hook) => hook.onError(error as Error, service, region));
+
+    // Return error
     return { region, resources: null, error: error as Error };
   }
 }
@@ -33,13 +42,14 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
   scanFunction: RegionalScanFunction<T>,
   regions: string[],
   credentials: Credentials,
-  getRateLimiter: GetRateLimiterFunction
+  getRateLimiter: GetRateLimiterFunction,
+  hooks: ScannerLifecycleHook[],
 ) => {
   return async () => {
     // Scan each region in parallel
     const scanResults = await Promise.all(regions.map(region => {
       const rateLimiter = getRateLimiter(service, region);
-      return scanRegion(service, scanFunction, region, credentials, rateLimiter)
+      return scanRegion(service, scanFunction, region, credentials, rateLimiter, hooks);
     }));
 
     // Combine results into a single object

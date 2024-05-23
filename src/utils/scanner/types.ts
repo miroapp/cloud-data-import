@@ -11,6 +11,7 @@ export type CreateRegionalScannerFunction = <T extends ResourceDescription>(
     regions: string[],
     credentials: Credentials,
     getRateLimiter: GetRegionalRateLimiterFunction,
+    hooks: ScannerLifecycleHook[],
 ) => Scanner<T>
 
 export type CreateGlobalScannerFunction = <T extends ResourceDescription>(
@@ -18,4 +19,11 @@ export type CreateGlobalScannerFunction = <T extends ResourceDescription>(
     scanFunction: GlobalScanFunction<T>,
     credentials: Credentials,
     getRateLimiter: GetGlobalRateLimiterFunction,
+    hooks: ScannerLifecycleHook[],
 ) => Scanner<T>
+
+export interface ScannerLifecycleHook {
+    onStart: (service: string, region?: string) => void
+    onComplete: (data: ResourceDescription, service: string, region?: string) => void
+    onError: (error: Error, service: string, region?: string) => void
+}

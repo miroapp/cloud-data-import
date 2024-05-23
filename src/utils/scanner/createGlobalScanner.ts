@@ -1,7 +1,6 @@
 import { Resources, ResourceDescription, GlobalScanFunction, Credentials } from "../../types";
 import { RateLimiter } from "../RateLimiter";
-import { scannerLogger } from "./logger";
-import { CreateGlobalScannerFunction, GetGlobalRateLimiterFunction } from "./types";
+import { CreateGlobalScannerFunction, GetGlobalRateLimiterFunction, ScannerLifecycleHook } from "./types";
 
 type GlobalScanResult<T extends ResourceDescription> = {
   resources: Resources<T>;
@@ -12,15 +11,27 @@ async function performGlobalScan<T extends ResourceDescription>(
   service: string,
   scanFunction: GlobalScanFunction<T>,
   credentials: Credentials,
-  rateLimiter: RateLimiter
+  rateLimiter: RateLimiter,
+  hooks: ScannerLifecycleHook[]
 ): Promise<GlobalScanResult<T>> {
   try {
-    scannerLogger.info(service, `Scanning started`);
+    // onStart hook
+    hooks.forEach((hook) => hook.onStart(service));
+
+    // Perform scan
     const resources = await scanFunction(credentials, rateLimiter);
-    scannerLogger.success(service, `Discovered ${Object.keys(resources).length} resources globally`);
+
+    // onComplete hook
+    hooks.forEach((hook) => hook.onComplete(resources, service));
+
+    // Return resources
     return { resources, error: null };
   } catch (error) {
-    scannerLogger.error(service, error as Error);
+
+    // onError hook
+    hooks.forEach((hook) => hook.onError(error as Error, service));
+
+    // Return error
     return { resources: {} as Resources<never>, error: error as Error };
   }
 }
@@ -29,12 +40,18 @@ export const createGlobalScanner: CreateGlobalScannerFunction = <T extends Resou
   service: string,
   scanFunction: GlobalScanFunction<T>,
   credentials: Credentials,
-  getRateLimiter: GetGlobalRateLimiterFunction
+  getRateLimiter: GetGlobalRateLimiterFunction,
+  hooks: ScannerLifecycleHook[],
 ) => {
   return async () => {
+    // Perform global scan
     const rateLimiter = getRateLimiter(service);
-    const { resources, error } = await performGlobalScan(service, scanFunction, credentials, rateLimiter);
-    const errors = error ? [{ service, message: error.message }] : [];
-    return { resources, errors };
+    const { resources, error } = await performGlobalScan(service, scanFunction, credentials, rateLimiter, hooks);
+
+    // Return resources and errors
+    return {
+      resources,
+      errors: error ? [{ service, message: error.message }] : [],
+    };
   };
 }
