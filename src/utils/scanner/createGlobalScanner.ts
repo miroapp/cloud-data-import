@@ -16,20 +16,20 @@ async function performGlobalScan<T extends ResourceDescription>(
 ): Promise<GlobalScanResult<T>> {
   try {
     // onStart hook
-    hooks.forEach((hook) => hook.onStart(service));
+    hooks.forEach((hook) => hook.onStart?.(service));
 
     // Perform scan
     const resources = await scanFunction(credentials, rateLimiter);
 
     // onComplete hook
-    hooks.forEach((hook) => hook.onComplete(resources, service));
+    hooks.forEach((hook) => hook.onComplete?.(resources, service));
 
     // Return resources
     return { resources, error: null };
   } catch (error) {
 
     // onError hook
-    hooks.forEach((hook) => hook.onError(error as Error, service));
+    hooks.forEach((hook) => hook.onError?.(error as Error, service));
 
     // Return error
     return { resources: {} as Resources<never>, error: error as Error };

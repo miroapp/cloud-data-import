@@ -18,19 +18,19 @@ async function scanRegion<T extends ResourceDescription>(
 ): Promise<RegionScanResult<T>> {
   try {
     // onStart hook
-    hooks.forEach((hook) => hook.onStart(service, region));
+    hooks.forEach((hook) => hook.onStart?.(service, region));
 
     // Perform scan
     const resources = await scanFunction(credentials, rateLimiter, region);
     
     // onComplete hook
-    hooks.forEach((hook) => hook.onComplete(resources, service, region));
+    hooks.forEach((hook) => hook.onComplete?.(resources, service, region));
 
     // Return resources
     return { region, resources, error: null };
   } catch (error) {
     // onError hook
-    hooks.forEach((hook) => hook.onError(error as Error, service, region));
+    hooks.forEach((hook) => hook.onError?.(error as Error, service, region));
 
     // Return error
     return { region, resources: null, error: error as Error };

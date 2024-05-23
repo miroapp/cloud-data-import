@@ -1,4 +1,4 @@
-import { ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, Credentials } from "../../types"
+import { ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, Credentials, Resources } from "../../types"
 import { RateLimiter } from "../RateLimiter"
 
 export type GetRegionalRateLimiterFunction = (service: string, region: string) => RateLimiter
@@ -23,7 +23,7 @@ export type CreateGlobalScannerFunction = <T extends ResourceDescription>(
 ) => Scanner<T>
 
 export interface ScannerLifecycleHook {
-    onStart: (service: string, region?: string) => void
-    onComplete: (data: ResourceDescription, service: string, region?: string) => void
-    onError: (error: Error, service: string, region?: string) => void
+    onStart?: (service: string, region?: string) => void
+    onComplete?: (resources: Resources, service: string, region?: string) => void
+    onError?: (error: Error, service: string, region?: string) => void
 }
