@@ -18,7 +18,7 @@ import {
     DistributionConfig,
     Tags
 } from "@aws-sdk/client-cloudfront";
-import { RateLimiter } from "./RateLimiter"
+import { RateLimiter } from "./scanners/common/RateLimiter"
 import { Credentials as STSCredentials } from '@aws-sdk/client-sts';
 
 export interface ExtendedCloudFrontDistribution extends DistributionSummary {

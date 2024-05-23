@@ -2,7 +2,7 @@ import { S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket, GetBuck
 import { Credentials, ExtendedBucket, Resources } from "../../../types";
 import { buildARN } from "./common/buildArn";
 import { getAwsAccountId } from "./common/getAwsAccountId";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
 
 async function enrichBucketData(client: S3Client, rateLimiter: RateLimiter, bucket: Bucket, accountId: string): Promise<ExtendedBucket> {
   const arn = buildARN({

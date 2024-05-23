@@ -1,6 +1,6 @@
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup } from "@aws-sdk/client-auto-scaling";
 import { Credentials, Resources } from "../../../types";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
 
 async function getAutoScalingGroups(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<AutoScalingGroup[]> {
   const client = new AutoScalingClient([{ credentials, region }])

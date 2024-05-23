@@ -7,7 +7,7 @@ import {
     FileSystemPolicyDescription,
 } from "@aws-sdk/client-efs";
 import { Resources, ExtendedFileSystem, Credentials } from "../../../types";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
   
 async function getEFSFileSystems(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<ExtendedFileSystem[]> {
     const client = new EFSClient([{ credentials, region }]);

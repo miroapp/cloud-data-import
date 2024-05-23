@@ -1,6 +1,6 @@
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription } from "@aws-sdk/client-dynamodb";
 import { Credentials, Resources } from "../../../types";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
 
 async function getDynamoDBTables(credentials: Credentials, rateLimiter: RateLimiter, region: string): Promise<TableDescription[]> {
   const client = new DynamoDBClient([{ credentials, region }]);

@@ -1,7 +1,7 @@
 import { Credentials, Scanner, ScannerLifecycleHook } from "../types";
 import { createRegionalScanner } from "./common/createRegionalScanner";
 import { createGlobalScanner } from "./common/createGlobalScanner";
-import { RateLimiter } from "../RateLimiter";
+import { RateLimiter } from "./common/RateLimiter";
 
 import { getAutoScalingResources } from "./scan-functions/aws/autoscaling";
 import { getCloudFrontResources } from "./scan-functions/aws/cloudfront";

@@ -5,7 +5,7 @@ import {
     ListTagsForResourceCommand,
 } from "@aws-sdk/client-cloudfront";
 import { Credentials, ExtendedCloudFrontDistribution, Resources } from "../../../types";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
 
 async function getCloudFrontDistributions(credentials: Credentials, rateLimiter: RateLimiter): Promise<ExtendedCloudFrontDistribution[]> {
     const client = new CloudFrontClient([{ credentials }]);

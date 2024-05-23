@@ -11,7 +11,7 @@ import {
     Task
 } from "@aws-sdk/client-ecs";
 import { Credentials, Resources } from "../../../types";
-import { RateLimiter } from "../../../RateLimiter";
+import { RateLimiter } from "../../common/RateLimiter";
   
 async function getECSClusters(client: ECSClient, rateLimiter: RateLimiter): Promise<Cluster[]> {
     const listClustersCommand = new ListClustersCommand({});
