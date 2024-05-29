@@ -1,10 +1,11 @@
+import { config } from './args';
 import { Logger } from "./hooks/Logger";
 import { getAwsScanners } from "../scanners"
 import { StandardOutputSchema, ScannerError, Config } from "../types"
 import { saveAsJson } from "./utils/saveAsJson"
 import { NO_ASSUME_ROLE_ERROR, getCredentials } from "./getCredentials";
 
-export const scanAndSaveAsJson = async (config: Config) => {
+export const scanAndSaveAsJson = async () => {
     // get STS credentials
     let credentials
     try {
