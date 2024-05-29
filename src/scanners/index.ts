@@ -1,1 +1,1 @@
-export { getAwsScanners } from './getAwsScanners';
+export {getAwsScanners} from './getAwsScanners'

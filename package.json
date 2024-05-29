@@ -1,35 +1,35 @@
 {
-  "name": "aws-resource-discovery-tool",
-  "version": "0.0.1",
-  "main": "dist/index.js",
-  "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "dev": "ts-node src/index.ts"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/yargs": "^17.0.32",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "@aws-sdk/client-auto-scaling": "^3.556.0",
-    "@aws-sdk/client-cloudfront": "^3.569.0",
-    "@aws-sdk/client-cloudtrail": "^3.556.0",
-    "@aws-sdk/client-dynamodb": "^3.556.0",
-    "@aws-sdk/client-ec2": "^3.557.0",
-    "@aws-sdk/client-ecs": "^3.569.0",
-    "@aws-sdk/client-efs": "^3.569.0",
-    "@aws-sdk/client-eks": "^3.569.0",
-    "@aws-sdk/client-lambda": "^3.556.0",
-    "@aws-sdk/client-rds": "^3.556.0",
-    "@aws-sdk/client-s3": "^3.556.0",
-    "@aws-sdk/client-sts": "^3.577.0",
-    "@aws-sdk/smithy-client": "^3.374.0",
-    "@aws-sdk/util-arn-parser": "^3.568.0",
-    "@mirohq/prettier-config": "^2.0.0",
-    "yargs": "^17.7.2"
-  }
+	"name": "aws-resource-discovery-tool",
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"scripts": {
+		"start": "node dist/index.js",
+		"build": "tsc",
+		"dev": "ts-node src/index.ts"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^20.12.7",
+		"@types/yargs": "^17.0.32",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"@aws-sdk/client-auto-scaling": "^3.556.0",
+		"@aws-sdk/client-cloudfront": "^3.569.0",
+		"@aws-sdk/client-cloudtrail": "^3.556.0",
+		"@aws-sdk/client-dynamodb": "^3.556.0",
+		"@aws-sdk/client-ec2": "^3.557.0",
+		"@aws-sdk/client-ecs": "^3.569.0",
+		"@aws-sdk/client-efs": "^3.569.0",
+		"@aws-sdk/client-eks": "^3.569.0",
+		"@aws-sdk/client-lambda": "^3.556.0",
+		"@aws-sdk/client-rds": "^3.556.0",
+		"@aws-sdk/client-s3": "^3.556.0",
+		"@aws-sdk/client-sts": "^3.577.0",
+		"@aws-sdk/smithy-client": "^3.374.0",
+		"@aws-sdk/util-arn-parser": "^3.568.0",
+		"@mirohq/prettier-config": "^2.0.0",
+		"yargs": "^17.7.2"
+	}
 }

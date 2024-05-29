@@ -1,5 +1,5 @@
-import { ARN, build } from '@aws-sdk/util-arn-parser'
+import {ARN, build} from '@aws-sdk/util-arn-parser'
 
-type BuildOptions = Omit<ARN, "partition"> & { partition?: string };
+type BuildOptions = Omit<ARN, 'partition'> & {partition?: string}
 
-export const buildARN = (arn: BuildOptions): string => build(arn);
+export const buildARN = (arn: BuildOptions): string => build(arn)
