@@ -1,7 +1,6 @@
 import {Credentials, Scanner, ScannerLifecycleHook} from '../types'
 import {createRegionalScanner} from './common/createRegionalScanner'
 import {createGlobalScanner} from './common/createGlobalScanner'
-import {RateLimiter} from './common/RateLimiter'
 
 import {getAutoScalingResources} from './scan-functions/aws/autoscaling'
 import {getCloudFrontResources} from './scan-functions/aws/cloudfront'
@@ -14,19 +13,26 @@ import {getEKSResources} from './scan-functions/aws/eks'
 import {getLambdaResources} from './scan-functions/aws/lambda'
 import {getRDSResources} from './scan-functions/aws/rds'
 import {getS3Resources} from './scan-functions/aws/s3'
+import {GetRateLimiterFunction} from './types'
 
-export const getAwsScanners = (
-	credentials: Credentials,
-	regions: string[],
-	shouldIncludeGlobalServices: boolean,
-	hooks: ScannerLifecycleHook[],
-): Scanner[] => {
+interface GetAwsScannersArguments {
+	credentials: Credentials
+	getRateLimiter: GetRateLimiterFunction
+	hooks: ScannerLifecycleHook[]
+	regions: string[]
+	shouldIncludeGlobalServices: boolean
+}
+
+export const getAwsScanners = ({
+	credentials,
+	hooks,
+	getRateLimiter,
+	regions,
+	shouldIncludeGlobalServices,
+}: GetAwsScannersArguments): Scanner[] => {
 	const options = {
-		// Pass the credentials to the scanners so that they can make API calls.
 		credentials,
-		// For now, we are using a single dummy rate limiter for all scanners. It is 10 requests per second.
-		getRateLimiter: () => new RateLimiter(10),
-		// Pass the hooks to the scanners so that they can call the appropriate lifecycle hooks at the right time.
+		getRateLimiter,
 		hooks,
 	}
 

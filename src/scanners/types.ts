@@ -2,25 +2,25 @@ import {ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, 
 import {RateLimiter} from './common/RateLimiter'
 import {ScannerLifecycleHook} from '../types'
 
-// getRateLimiter function types
-export type GetRegionalRateLimiterFunction = (service: string, region: string) => RateLimiter
-export type GetGlobalRateLimiterFunction = (service: string) => RateLimiter
+// get rate limiter function for global and regional scanners
+export type GetRateLimiterFunction = (service: string, region?: string) => RateLimiter
 
 // every scanner needs to know the credentials, rate limiter, and hooks
 interface CreateScannerOptions {
 	credentials: Credentials
 	hooks: ScannerLifecycleHook[]
+	getRateLimiter: GetRateLimiterFunction
 }
 
 export type CreateRegionalScannerFunction = <T extends ResourceDescription>(
 	service: string,
 	scanFunction: RegionalScanFunction<T>,
 	regions: string[],
-	options: CreateScannerOptions & {getRateLimiter: GetRegionalRateLimiterFunction},
+	options: CreateScannerOptions,
 ) => Scanner<T>
 
 export type CreateGlobalScannerFunction = <T extends ResourceDescription>(
 	service: string,
 	scanFunction: GlobalScanFunction<T>,
-	options: CreateScannerOptions & {getRateLimiter: GetGlobalRateLimiterFunction},
+	options: CreateScannerOptions,
 ) => Scanner<T>

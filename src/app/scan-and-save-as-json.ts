@@ -4,6 +4,7 @@ import {getAwsScanners} from '../scanners'
 import {StandardOutputSchema, ScannerError, Config} from '../types'
 import {saveAsJson} from './utils/saveAsJson'
 import {NO_ASSUME_ROLE_ERROR, getCredentials} from './getCredentials'
+import {RateLimiter} from '../scanners/common/RateLimiter'
 
 export const scanAndSaveAsJson = async () => {
 	// get STS credentials
@@ -21,10 +22,15 @@ export const scanAndSaveAsJson = async () => {
 	}
 
 	// prepare scanners
-	const shouldIncludeGlobalServices = !config['regional-only']
-	const scanners = getAwsScanners(credentials, config.regions, shouldIncludeGlobalServices, [
-		new Logger(), // log scanning progress
-	])
+	const scanners = getAwsScanners({
+		credentials,
+		regions: config.regions,
+		getRateLimiter: () => new RateLimiter(config['call-rate-rps']),
+		shouldIncludeGlobalServices: !config['regional-only'],
+		hooks: [
+			new Logger(), // log scanning progress
+		],
+	})
 
 	// run scanners
 	const startedAt = new Date().toISOString()

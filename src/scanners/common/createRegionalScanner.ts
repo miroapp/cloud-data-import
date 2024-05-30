@@ -7,7 +7,7 @@ import {
 	ScannerLifecycleHook,
 } from '../../types'
 import {RateLimiter} from './RateLimiter'
-import {CreateRegionalScannerFunction, GetRegionalRateLimiterFunction} from '../types'
+import {CreateRegionalScannerFunction, GetRateLimiterFunction} from '../types'
 
 type RegionScanResult<T extends ResourceDescription> = {
 	region: string
@@ -50,7 +50,7 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
 	regions: string[],
 	options: {
 		credentials: Credentials
-		getRateLimiter: GetRegionalRateLimiterFunction
+		getRateLimiter: GetRateLimiterFunction
 		hooks: ScannerLifecycleHook[]
 	},
 ) => {

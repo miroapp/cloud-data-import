@@ -1,6 +1,6 @@
 import {Resources, ResourceDescription, GlobalScanFunction, Credentials, ScannerLifecycleHook} from '../../types'
 import {RateLimiter} from './RateLimiter'
-import {CreateGlobalScannerFunction, GetGlobalRateLimiterFunction} from '../types'
+import {CreateGlobalScannerFunction, GetRateLimiterFunction} from '../types'
 
 type GlobalScanResult<T extends ResourceDescription> = {
 	resources: Resources<T>
@@ -40,7 +40,7 @@ export const createGlobalScanner: CreateGlobalScannerFunction = <T extends Resou
 	scanFunction: GlobalScanFunction<T>,
 	options: {
 		credentials: Credentials
-		getRateLimiter: GetGlobalRateLimiterFunction
+		getRateLimiter: GetRateLimiterFunction
 		hooks: ScannerLifecycleHook[]
 	},
 ) => {

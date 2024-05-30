@@ -34,6 +34,12 @@ export const config = yargs(hideBin(process.argv))
 			return arg
 		},
 	})
+	.option('call-rate-rps', {
+		alias: 'rps',
+		type: 'number',
+		description: 'Maximum number of API calls to make per second (per quota)',
+		default: 10,
+	})
 	.option('compressed', {
 		alias: 'c',
 		type: 'boolean',
