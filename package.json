@@ -10,6 +10,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^20.12.7",
+		"@types/spinnies": "^0.5.3",
 		"@types/yargs": "^17.0.32",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.4.5"
@@ -30,6 +31,7 @@
 		"@aws-sdk/smithy-client": "^3.374.0",
 		"@aws-sdk/util-arn-parser": "^3.568.0",
 		"@mirohq/prettier-config": "^2.0.0",
+		"spinnies": "^0.5.1",
 		"yargs": "^17.7.2"
 	}
 }

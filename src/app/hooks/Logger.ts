@@ -1,21 +1,34 @@
+import Spinnies from 'spinnies'
 import {Resources, ScannerLifecycleHook} from '../../types'
 
 export class Logger implements ScannerLifecycleHook {
+	private spinnies = new Spinnies()
+
 	getLegend(service: string, region?: string): string {
 		const timestamp = new Date().toISOString()
 		const regionInfo = region ? ` in ${region}` : ''
 		return `[${timestamp}] [${service}${regionInfo}]`
 	}
 
+	getSpinnerKey(service: string, region?: string): string {
+		return `${service}-${region || 'default'}`
+	}
+
 	onStart(service: string, region?: string): void {
-		console.info(`🆕 ${this.getLegend(service, region)}: scanning...`)
+		const spinnerKey = this.getSpinnerKey(service, region)
+		const legend = this.getLegend(service, region)
+		this.spinnies.add(spinnerKey, {text: `${legend}: scanning...`})
 	}
 
 	onComplete(resources: Resources, service: string, region?: string): void {
-		console.info(`✅ ${this.getLegend(service, region)}: discovered ${Object.keys(resources).length} resources.`)
+		const spinnerKey = this.getSpinnerKey(service, region)
+		const legend = this.getLegend(service, region)
+		this.spinnies.succeed(spinnerKey, {text: `${legend}: discovered ${Object.keys(resources).length} resources.`})
 	}
 
 	onError(error: Error, service: string, region?: string): void {
-		console.error(`❌ ${this.getLegend(service, region)}: ${error.message}`)
+		const spinnerKey = this.getSpinnerKey(service, region)
+		const legend = this.getLegend(service, region)
+		this.spinnies.fail(spinnerKey, {text: `${legend}: ${error.message}`})
 	}
 }
