@@ -6,8 +6,8 @@ import {
 	DescribeMountTargetsCommand,
 	FileSystemPolicyDescription,
 } from '@aws-sdk/client-efs'
-import {Resources, ExtendedFileSystem, Credentials} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Resources, ExtendedFileSystem, Credentials} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getEFSFileSystems(
 	credentials: Credentials,

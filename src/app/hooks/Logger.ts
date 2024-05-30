@@ -1,5 +1,5 @@
 import Spinnies from 'spinnies'
-import {Resources, ScannerLifecycleHook} from '../../types'
+import {Resources, ScannerLifecycleHook} from '@/types'
 
 export class Logger implements ScannerLifecycleHook {
 	private spinnies = new Spinnies()

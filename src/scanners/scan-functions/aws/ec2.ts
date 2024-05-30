@@ -1,6 +1,6 @@
 import {EC2Client, DescribeInstancesCommand} from '@aws-sdk/client-ec2'
-import {Credentials, ExtendedInstance, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, ExtendedInstance, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 

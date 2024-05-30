@@ -1,5 +1,5 @@
 import {STSClient, GetCallerIdentityCommand} from '@aws-sdk/client-sts'
-import {Config, Credentials} from '../types'
+import {Config, Credentials} from '@/types'
 
 export const NO_ASSUME_ROLE_ERROR = 'NO_ASSUMED_ROLE_ERROR'
 

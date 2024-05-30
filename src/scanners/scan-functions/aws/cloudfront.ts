@@ -4,8 +4,8 @@ import {
 	GetDistributionConfigCommand,
 	ListTagsForResourceCommand,
 } from '@aws-sdk/client-cloudfront'
-import {Credentials, ExtendedCloudFrontDistribution, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, ExtendedCloudFrontDistribution, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getCloudFrontDistributions(
 	credentials: Credentials,

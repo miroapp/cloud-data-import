@@ -8,10 +8,10 @@ import {
 	GetBucketEncryptionCommand,
 	GetBucketTaggingCommand,
 } from '@aws-sdk/client-s3'
-import {Credentials, ExtendedBucket, Resources} from '../../../types'
+import {Credentials, ExtendedBucket, Resources} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
-import {RateLimiter} from '../../common/RateLimiter'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function enrichBucketData(
 	client: S3Client,

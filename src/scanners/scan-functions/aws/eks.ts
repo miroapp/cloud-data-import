@@ -1,6 +1,6 @@
 import {EKSClient, ListClustersCommand, DescribeClusterCommand, Cluster} from '@aws-sdk/client-eks'
-import {Credentials, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getEKSClusters(client: EKSClient, rateLimiter: RateLimiter): Promise<Cluster[]> {
 	const listClustersCommand = new ListClustersCommand({})

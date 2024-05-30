@@ -1,6 +1,6 @@
 import {AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup} from '@aws-sdk/client-auto-scaling'
-import {Credentials, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getAutoScalingGroups(
 	credentials: Credentials,

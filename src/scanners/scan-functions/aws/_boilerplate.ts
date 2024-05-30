@@ -1,6 +1,6 @@
 import {DBInstance} from '@aws-sdk/client-rds'
-import {Credentials, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 /**
  * 0️⃣ I put DBInstance just as an example of a real aws type.

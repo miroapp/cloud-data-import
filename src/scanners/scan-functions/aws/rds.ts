@@ -5,8 +5,8 @@ import {
 	DescribeDBClustersCommand,
 	DBCluster,
 } from '@aws-sdk/client-rds'
-import {Credentials, Resources} from '../../../types'
-import {RateLimiter} from '../../common/RateLimiter'
+import {Credentials, Resources} from '@/types'
+import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getRDSInstances(client: RDSClient, rateLimiter: RateLimiter): Promise<DBInstance[]> {
 	const dbInstances: DBInstance[] = []

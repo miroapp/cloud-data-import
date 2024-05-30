@@ -1,7 +1,7 @@
 import yargs from 'yargs'
 import {hideBin} from 'yargs/helpers'
-import {Config} from '../types'
-import {awsRegionIds} from '../constants'
+import {Config} from '@/types'
+import {awsRegionIds} from '@/constants'
 
 export const config = yargs(hideBin(process.argv))
 	.option('regions', {

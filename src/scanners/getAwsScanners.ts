@@ -1,4 +1,4 @@
-import {Credentials, Scanner, ScannerLifecycleHook} from '../types'
+import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
 import {createRegionalScanner} from './common/createRegionalScanner'
 import {createGlobalScanner} from './common/createGlobalScanner'
 

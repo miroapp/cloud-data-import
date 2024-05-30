@@ -1,12 +1,11 @@
+import path from 'path'
 import {config} from './args'
 import {Logger} from './hooks/Logger'
-import {getAwsScanners} from '../scanners'
-import {StandardOutputSchema, ScannerError} from '../types'
+import {getAwsScanners, RateLimiter} from '@/scanners'
+import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import {NO_ASSUME_ROLE_ERROR, getCredentials} from './getCredentials'
-import {RateLimiter} from '../scanners/common/RateLimiter'
 import * as cliMessages from './cliMessages'
-import path from 'path'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
