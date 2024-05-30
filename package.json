@@ -31,6 +31,7 @@
 		"@aws-sdk/smithy-client": "^3.374.0",
 		"@aws-sdk/util-arn-parser": "^3.568.0",
 		"@mirohq/prettier-config": "^2.0.0",
+		"colorette": "^2.0.20",
 		"spinnies": "^0.5.1",
 		"yargs": "^17.7.2"
 	}

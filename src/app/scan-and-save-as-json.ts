@@ -1,12 +1,16 @@
 import {config} from './args'
 import {Logger} from './hooks/Logger'
 import {getAwsScanners} from '../scanners'
-import {StandardOutputSchema, ScannerError, Config} from '../types'
+import {StandardOutputSchema, ScannerError} from '../types'
 import {saveAsJson} from './utils/saveAsJson'
 import {NO_ASSUME_ROLE_ERROR, getCredentials} from './getCredentials'
 import {RateLimiter} from '../scanners/common/RateLimiter'
+import * as cliMessages from './cliMessages'
+import path from 'path'
 
 export const scanAndSaveAsJson = async () => {
+	console.log(cliMessages.getIntro())
+
 	// get STS credentials
 	let credentials
 	try {
@@ -33,9 +37,12 @@ export const scanAndSaveAsJson = async () => {
 	})
 
 	// run scanners
-	const startedAt = new Date().toISOString()
+	const startedAt = new Date()
 	const result = await Promise.all(scanners.map((scanner) => scanner()))
-	const finishedAt = new Date().toISOString()
+	const finishedAt = new Date()
+
+	// calculate duration
+	const duration = parseFloat(((finishedAt.getTime() - startedAt.getTime()) / 1000).toFixed(2))
 
 	// aggregate resources
 	const resources = result.reduce((acc, {resources}) => {
@@ -54,10 +61,25 @@ export const scanAndSaveAsJson = async () => {
 		resources,
 		errors,
 		metadata: {
-			startedAt,
-			finishedAt,
+			startedAt: startedAt.toISOString(),
+			finishedAt: finishedAt.toISOString(),
 		},
 	}
 
-	saveAsJson(config.output, output, config.compressed)
+	const pathname = path.join(process.cwd(), config.output)
+
+	try {
+		await saveAsJson(pathname, output, config.compressed)
+	} catch (error) {
+		console.error(`\n[ERROR] Failed to save output to ${config.output}\n`)
+		throw error
+	}
+
+	console.log(
+		cliMessages.getOutro({
+			pathname,
+			duration,
+			count: Object.keys(resources).length,
+		}),
+	)
 }
