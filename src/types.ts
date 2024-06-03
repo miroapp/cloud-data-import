@@ -7,6 +7,7 @@ import {DBCluster, DBInstance} from '@aws-sdk/client-rds'
 import * as S3 from '@aws-sdk/client-s3'
 import * as ECS from '@aws-sdk/client-ecs'
 import * as EKS from '@aws-sdk/client-eks'
+import * as SNS from '@aws-sdk/client-sns'
 import {
 	FileSystemDescription,
 	FileSystemPolicyDescription,
@@ -57,6 +58,7 @@ export type ResourceDescription =
 	| ECS.Cluster
 	| ECS.Service
 	| ECS.Task
+	| SNS.Topic
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T

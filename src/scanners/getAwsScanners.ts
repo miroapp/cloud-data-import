@@ -14,6 +14,7 @@ import {getLambdaResources} from './scan-functions/aws/lambda'
 import {getRDSResources} from './scan-functions/aws/rds'
 import {getS3Resources} from './scan-functions/aws/s3'
 import {GetRateLimiterFunction} from './types'
+import {getSNSTopics} from './scan-functions/aws/sns'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -46,6 +47,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('eks', getEKSResources, regions, options),
 		createRegionalScanner('lambda', getLambdaResources, regions, options),
 		createRegionalScanner('rds', getRDSResources, regions, options),
+		createRegionalScanner('sns', getSNSTopics, regions, options),
 	]
 
 	// Global scanners
