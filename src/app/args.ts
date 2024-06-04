@@ -2,6 +2,7 @@ import yargs from 'yargs'
 import {hideBin} from 'yargs/helpers'
 import {Config} from '@/types'
 import {awsRegionIds} from '@/constants'
+import {getDefaultOutputName} from './utils/getDefaultOutputName'
 
 export const config = yargs(hideBin(process.argv))
 	.option('regions', {
@@ -28,7 +29,7 @@ export const config = yargs(hideBin(process.argv))
 		alias: 'o',
 		type: 'string',
 		description: 'Output file path (must be .json)',
-		demandOption: true,
+		default: getDefaultOutputName(),
 		coerce: (arg: string | string[]) => {
 			if (Array.isArray(arg)) {
 				arg = arg.filter(Boolean)[0] || ''
