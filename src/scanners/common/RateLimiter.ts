@@ -95,9 +95,12 @@ export class RateLimiter {
 
 	// Check if error is a request limit error
 	private isRequestLimitError(error: Error) {
-		return ['ThrottlingException', 'ProvisionedThroughputExceededException', 'RequestLimitExceeded'].includes(
-			error.name,
-		)
+		return [
+			'TooManyRequestsException',
+			'ThrottlingException',
+			'ProvisionedThroughputExceededException',
+			'RequestLimitExceeded',
+		].includes(error.name)
 	}
 
 	// Process the queue of function calls
