@@ -7,15 +7,20 @@ export const config = yargs(hideBin(process.argv))
 	.option('regions', {
 		alias: 'r',
 		type: 'array',
-		description: 'List of regions to scan',
+		description: 'List of regions to scan (use "all" to scan all regions)',
 		demandOption: true,
 		coerce: (arg: string[]) => {
+			if (arg.includes('all')) {
+				return awsRegionIds
+			}
+
 			const invalidRegions = arg.filter((region) => !awsRegionIds.includes(region))
-			if (invalidRegions.length > 0) {
+			if (invalidRegions.length) {
 				throw new Error(
 					`Invalid region(s): ${invalidRegions.join(', ')}. Valid regions are: ${awsRegionIds.join(', ')}`,
 				)
 			}
+
 			return arg
 		},
 	})
