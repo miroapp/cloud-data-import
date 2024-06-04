@@ -4,29 +4,14 @@ import {Logger} from './hooks/Logger'
 import {getAwsScanners, RateLimiter} from '@/scanners'
 import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
-import {NO_ASSUME_ROLE_ERROR, getCredentials} from './getCredentials'
 import * as cliMessages from './cliMessages'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
 
-	// get STS credentials
-	let credentials
-	try {
-		credentials = await getCredentials(config)
-	} catch (error) {
-		if ((error as Error).message === NO_ASSUME_ROLE_ERROR) {
-			console.error(
-				'\n[ERROR] No role is assumed! Please run `assume` command to assume a role before running this script!\n',
-			)
-			process.exit(1)
-		}
-		throw error
-	}
-
 	// prepare scanners
 	const scanners = getAwsScanners({
-		credentials,
+		credentials: {}, // assume that the credentials are already set in the environment
 		regions: config.regions,
 		getRateLimiter: () => new RateLimiter(config['call-rate-rps']),
 		shouldIncludeGlobalServices: !config['regional-only'],
