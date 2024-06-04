@@ -7,7 +7,7 @@ async function getAutoScalingGroups(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<AutoScalingGroup[]> {
-	const client = new AutoScalingClient([{credentials, region}])
+	const client = new AutoScalingClient({credentials, region})
 
 	const autoScalingGroups: AutoScalingGroup[] = []
 

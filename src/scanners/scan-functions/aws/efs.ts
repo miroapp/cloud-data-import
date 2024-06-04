@@ -14,7 +14,7 @@ async function getEFSFileSystems(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<ExtendedFileSystem[]> {
-	const client = new EFSClient([{credentials, region}])
+	const client = new EFSClient({credentials, region})
 
 	const command = new DescribeFileSystemsCommand({})
 	const response = await client.send(command)

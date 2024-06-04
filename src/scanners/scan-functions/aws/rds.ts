@@ -57,7 +57,7 @@ export async function getRDSResources(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<Resources<DBInstance | DBCluster>> {
-	const client = new RDSClient([{credentials, region}])
+	const client = new RDSClient({credentials, region})
 
 	const [instances, clusters] = await Promise.all([
 		getRDSInstances(client, rateLimiter),

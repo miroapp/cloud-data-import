@@ -16,7 +16,7 @@ import {
 } from '@aws-sdk/client-efs'
 import {DistributionSummary, DistributionConfig, Tags} from '@aws-sdk/client-cloudfront'
 import {RateLimiter} from './scanners/common/RateLimiter'
-import {Credentials as STSCredentials} from '@aws-sdk/client-sts'
+import {AwsCredentialIdentity} from '@aws-sdk/types'
 
 export interface ExtendedCloudFrontDistribution extends DistributionSummary {
 	DistributionConfig?: DistributionConfig
@@ -64,7 +64,7 @@ export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T
 }
 
-export type Credentials = STSCredentials | {}
+export type Credentials = AwsCredentialIdentity | undefined
 
 export type RegionalScanFunction<T extends ResourceDescription> = (
 	credentials: Credentials,

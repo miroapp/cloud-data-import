@@ -62,7 +62,7 @@ export async function getECSResources(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<Resources<Cluster | Service | Task>> {
-	const client = new ECSClient([{credentials, region}])
+	const client = new ECSClient({credentials, region})
 
 	const clusters = await getECSClusters(client, rateLimiter)
 

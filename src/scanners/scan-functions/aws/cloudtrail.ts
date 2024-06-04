@@ -3,7 +3,7 @@ import {Credentials, Resources} from '@/types'
 import {RateLimiter} from '@/scanners/common/RateLimiter'
 
 async function getCloudTrailTrails(credentials: Credentials, rateLimiter: RateLimiter): Promise<Trail[]> {
-	const client = new CloudTrailClient([{credentials}])
+	const client = new CloudTrailClient({credentials})
 
 	const trails: Trail[] = []
 

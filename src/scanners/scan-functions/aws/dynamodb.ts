@@ -7,7 +7,7 @@ async function getDynamoDBTables(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<TableDescription[]> {
-	const client = new DynamoDBClient([{credentials, region}])
+	const client = new DynamoDBClient({credentials, region})
 
 	const tableDescriptions: TableDescription[] = []
 

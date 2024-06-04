@@ -9,7 +9,7 @@ async function getEC2Instances(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<ExtendedInstance[]> {
-	const client = new EC2Client([{credentials, region}])
+	const client = new EC2Client({credentials, region})
 
 	const instances: ExtendedInstance[] = []
 	const accountId = await getAwsAccountId()

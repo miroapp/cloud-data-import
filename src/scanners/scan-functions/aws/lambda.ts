@@ -7,7 +7,7 @@ async function getLambdaFunctions(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<FunctionConfiguration[]> {
-	const client = new LambdaClient([{credentials, region}])
+	const client = new LambdaClient({credentials, region})
 
 	const functionConfigurations: FunctionConfiguration[] = []
 

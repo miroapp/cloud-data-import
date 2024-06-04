@@ -25,7 +25,7 @@ export async function getEKSResources(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<Resources<Cluster>> {
-	const client = new EKSClient([{credentials, region}])
+	const client = new EKSClient({credentials, region})
 
 	const clusters = await getEKSClusters(client, rateLimiter)
 

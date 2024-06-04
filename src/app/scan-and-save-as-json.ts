@@ -11,7 +11,7 @@ export const scanAndSaveAsJson = async () => {
 
 	// prepare scanners
 	const scanners = getAwsScanners({
-		credentials: {}, // assume that the credentials are already set in the environment
+		credentials: undefined, // assume that the credentials are already set in the environment
 		regions: config.regions,
 		getRateLimiter: () => new RateLimiter(config['call-rate-rps']),
 		shouldIncludeGlobalServices: !config['regional-only'],

@@ -7,7 +7,7 @@ export async function getSNSTopics(
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<Resources<Topic>> {
-	const client = new SNSClient([{credentials, region}])
+	const client = new SNSClient({credentials, region})
 	const topics: Resources<Topic> = {}
 
 	let nextToken: string | undefined

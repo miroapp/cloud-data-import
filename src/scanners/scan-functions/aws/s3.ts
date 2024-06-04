@@ -88,7 +88,7 @@ async function enrichBucketData(
 }
 
 async function getS3Buckets(credentials: Credentials, rateLimiter: RateLimiter): Promise<ExtendedBucket[]> {
-	const client = new S3Client([{credentials}])
+	const client = new S3Client({credentials})
 
 	const accountId = await getAwsAccountId()
 
