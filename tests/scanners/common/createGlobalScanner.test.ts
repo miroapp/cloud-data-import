@@ -96,17 +96,14 @@ describe('createGlobalScanner', () => {
 
 		await scanner()
 
-		const firstHook = mockHooks[0]
-		const secondHook = mockHooks[1]
+		mockHooks.forEach((hook) => {
+			expect(hook.onStart).toHaveBeenCalledTimes(1)
+			expect(hook.onComplete).toHaveBeenCalledTimes(1)
+			expect(hook.onError).not.toHaveBeenCalled()
 
-		expect(firstHook.onStart).toHaveBeenCalledWith('mockService')
-		expect(secondHook.onStart).toHaveBeenCalledWith('mockService')
-
-		expect(firstHook.onComplete).toHaveBeenCalledWith(mockResources, 'mockService')
-		expect(secondHook.onComplete).toHaveBeenCalledWith(mockResources, 'mockService')
-
-		expect(firstHook.onError).not.toHaveBeenCalled()
-		expect(secondHook.onError).not.toHaveBeenCalled()
+			expect(hook.onStart).toHaveBeenCalledWith('mockService')
+			expect(hook.onComplete).toHaveBeenCalledWith(mockResources, 'mockService')
+		})
 	})
 
 	it('should call onError hook if scan fails', async () => {
@@ -121,16 +118,13 @@ describe('createGlobalScanner', () => {
 
 		await scanner()
 
-		const firstHook = mockHooks[0]
-		const secondHook = mockHooks[1]
+		mockHooks.forEach((hook) => {
+			expect(hook.onStart).toHaveBeenCalledTimes(1)
+			expect(hook.onComplete).not.toHaveBeenCalled()
+			expect(hook.onError).toHaveBeenCalledTimes(1)
 
-		expect(firstHook.onStart).toHaveBeenCalledWith('mockService')
-		expect(secondHook.onStart).toHaveBeenCalledWith('mockService')
-
-		expect(firstHook.onComplete).not.toHaveBeenCalled()
-		expect(secondHook.onComplete).not.toHaveBeenCalled()
-
-		expect(firstHook.onError).toHaveBeenCalledWith(mockError, 'mockService')
-		expect(secondHook.onError).toHaveBeenCalledWith(mockError, 'mockService')
+			expect(hook.onStart).toHaveBeenCalledWith('mockService')
+			expect(hook.onError).toHaveBeenCalledWith(mockError, 'mockService')
+		})
 	})
 })
