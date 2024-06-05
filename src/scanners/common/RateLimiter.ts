@@ -6,7 +6,11 @@ const ONE_SECOND = 1000
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export class RateLimiter {
+export interface RateLimiter {
+	throttle<U>(fn: () => Promise<U>): Promise<U>
+}
+
+class RateLimiterImpl implements RateLimiter {
 	private allowance: number
 	private lastCheck: number
 	private maxUsage: number
@@ -112,3 +116,5 @@ export class RateLimiter {
 		}
 	}
 }
+
+export const createRateLimiter = (rate: number): RateLimiter => new RateLimiterImpl(rate)

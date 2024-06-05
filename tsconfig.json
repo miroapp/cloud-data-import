@@ -3,7 +3,7 @@
 		"target": "es2016",
 		"module": "commonjs",
 		"baseUrl": "./",
-		"paths": {"@/*": ["./src/*"]},
+		"paths": {"@/*": ["./src/*"], "tests/*": ["./tests/*"]},
 		"types": ["jest"],
 		"outDir": "dist",
 		"esModuleInterop": true,

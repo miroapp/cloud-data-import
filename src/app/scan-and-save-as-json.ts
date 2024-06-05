@@ -1,7 +1,7 @@
 import path from 'path'
 import {config} from './args'
 import {Logger} from './hooks/Logger'
-import {getAwsScanners, RateLimiter} from '@/scanners'
+import {getAwsScanners, createRateLimiter} from '@/scanners'
 import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
@@ -14,7 +14,7 @@ export const scanAndSaveAsJson = async () => {
 	const scanners = getAwsScanners({
 		credentials: undefined, // assume that the credentials are already set in the environment
 		regions: config.regions,
-		getRateLimiter: () => new RateLimiter(config['call-rate-rps']),
+		getRateLimiter: () => createRateLimiter(config['call-rate-rps']),
 		shouldIncludeGlobalServices: !config['regional-only'],
 		hooks: [
 			new Logger(), // log scanning progress

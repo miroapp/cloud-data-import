@@ -1,6 +1,6 @@
 import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
-import {createRegionalScanner} from './common/createRegionalScanner'
-import {createGlobalScanner} from './common/createGlobalScanner'
+import {GetRateLimiterFunction} from './types'
+import {createRegionalScanner, createGlobalScanner} from '.'
 
 import {getAutoScalingResources} from './scan-functions/aws/autoscaling'
 import {getCloudFrontResources} from './scan-functions/aws/cloudfront'
@@ -13,7 +13,6 @@ import {getEKSResources} from './scan-functions/aws/eks'
 import {getLambdaResources} from './scan-functions/aws/lambda'
 import {getRDSResources} from './scan-functions/aws/rds'
 import {getS3Resources} from './scan-functions/aws/s3'
-import {GetRateLimiterFunction} from './types'
 import {getSNSTopics} from './scan-functions/aws/sns'
 
 interface GetAwsScannersArguments {
