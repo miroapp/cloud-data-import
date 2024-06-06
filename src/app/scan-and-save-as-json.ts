@@ -52,7 +52,7 @@ export const scanAndSaveAsJson = async () => {
 		},
 	}
 
-	const tranformedOutput = transformJSONForVisualization(output);
+	const tranformedOutput = await transformJSONForVisualization(output);
 
 	const pathname = path.join(process.cwd(), config.output)
 
