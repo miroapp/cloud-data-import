@@ -1,14 +1,17 @@
 {
-	"name": "aws-resource-discovery-tool",
+	"name": "cloudview",
 	"version": "0.0.1",
 	"main": "dist/index.js",
+	"bin": {
+		"cloudview": "./dist/index.js"
+	},
 	"scripts": {
-		"start": "node dist/index.js",
+		"start": "node -r tsconfig-paths/register dist/index.js",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"prepare": "husky init",
-		"build": "tsc",
-		"dev": "npx ts-node -r tsconfig-paths/register src/index.ts"
+		"prepare": "husky",
+		"build": "tsc && tsc-alias",
+		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
 	},
 	"license": "MIT",
 	"devDependencies": {
@@ -21,6 +24,7 @@
 		"lint-staged": "^15.2.5",
 		"ts-jest": "^29.1.4",
 		"ts-node": "^10.9.2",
+		"tsc-alias": "^1.8.10",
 		"tsconfig-paths": "^4.2.0",
 		"typescript": "^5.4.5"
 	},
