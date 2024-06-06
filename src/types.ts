@@ -122,3 +122,24 @@ export interface StandardOutputSchema {
 		finishedAt: string
 	}
 }
+
+export type VisualResourceDescription = {
+	region?: string,
+	type: string,
+	vpc?: string
+	avialabilityZones?: string[]
+	accountID?: string
+}
+
+export type VisualResources =  {
+	[arn: string]: VisualResourceDescription
+}
+
+export type VisualizationSchema = {
+	resources: VisualResources;
+	metadata: {
+		startedAt: string;
+		finishedAt: string;
+		account?: string;
+	}
+}

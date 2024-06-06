@@ -6,6 +6,7 @@ import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
+import { transformJSONForVisualization } from './visualization/transformJSON'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
@@ -51,11 +52,13 @@ export const scanAndSaveAsJson = async () => {
 		},
 	}
 
+	const tranformedOutput = transformJSONForVisualization(output);
+
 	const pathname = path.join(process.cwd(), config.output)
 
 	// save output to a file
 	try {
-		await saveAsJson(pathname, output, config.compressed)
+		await saveAsJson(pathname, tranformedOutput, config.compressed)
 	} catch (error) {
 		console.error(`\n[ERROR] Failed to save output to ${config.output}\n`)
 		throw error
