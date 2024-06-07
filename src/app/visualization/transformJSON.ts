@@ -11,10 +11,15 @@ export const transformJSONForVisualization = async (input: StandardOutputSchema)
     const resourcesToVisualize = input.resources
 
     for (const arn in resourcesToVisualize) {
-        const result: VisualResourceDescription | null = transformByConfig(arn, resourcesToVisualize[arn])
-        if(result) {
-            output.resources[arn] = result
+        try {
+            const result: VisualResourceDescription | null = transformByConfig(arn, resourcesToVisualize[arn])
+            if(result) {
+                output.resources[arn] = result
+            }
+        } catch (error) {
+            console.log(error)
         }
+
     }
     return output
     

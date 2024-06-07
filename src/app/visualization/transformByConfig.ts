@@ -7,9 +7,10 @@ import {parse, ARN} from '@aws-sdk/util-arn-parser'
 
 
 export const transformByConfig = (arn: string, resource: ResourceDescription): VisualResourceDescription | null => {
-    const arnData: ARN = parse(arn)
+    const arnData = parse(arn);
 
-    if (!arnData) return null;
+    if (!arnData) throw new Error("No arn Data found");
+
 
     const output: VisualResourceDescription = {
         region: arnData.region,
