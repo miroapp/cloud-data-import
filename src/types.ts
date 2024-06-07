@@ -128,7 +128,7 @@ export type VisualResourceDescription = {
 	type: string,
 	vpc?: string
 	avialabilityZones?: string[]
-	accountID?: string
+	account?: string
 }
 
 export type VisualResources =  {
