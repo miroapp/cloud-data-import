@@ -2,7 +2,7 @@
 
 import { ExtendedFileSystem, ExtendedInstance, ResourceDescription, VisualResourceDescription } from "@/types";
 import { FunctionConfiguration } from "@aws-sdk/client-lambda";
-import { DBCluster } from "@aws-sdk/client-rds";
+import { DBCluster, DBInstance } from "@aws-sdk/client-rds";
 import {parse, ARN} from '@aws-sdk/util-arn-parser'
 
 
@@ -21,8 +21,12 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
             output.vpc = (resource as FunctionConfiguration).VpcConfig?.VpcId
             break;
         case 'rds':
-            output.vpc = (resource as any).DBSubnetGroup?.VpcId // there is an issue with DBCluserType
-            output.avialabilityZones = (resource as DBCluster).AvailabilityZones
+            if ((resource as DBInstance).DBInstanceArn) {
+                output.vpc = (resource as DBInstance).DBSubnetGroup?.VpcId
+                output.avialabilityZones = (resource as DBInstance).AvailabilityZone ? [String((resource as DBInstance).AvailabilityZone)] : undefined
+            } else {
+                output.avialabilityZones = (resource as DBCluster).AvailabilityZones
+            }
             break;
         case 'ec2':
             output.vpc = (resource as ExtendedInstance).VpcId
