@@ -1,13 +1,13 @@
 // transform awsData to visualization schema for each service.
 
 import { ExtendedFileSystem, ExtendedInstance, ResourceDescription, VisualResourceDescription } from "@/types";
-import { parseARN } from "./parseARN";
 import { FunctionConfiguration } from "@aws-sdk/client-lambda";
 import { DBCluster } from "@aws-sdk/client-rds";
+import {parse, ARN} from '@aws-sdk/util-arn-parser'
 
 
 export const transformByConfig = (arn: string, resource: ResourceDescription): VisualResourceDescription | null => {
-    const arnData = parseARN(arn)
+    const arnData: ARN = parse(arn)
 
     if (!arnData) return null;
 
