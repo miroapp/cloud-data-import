@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import {scanAndSaveAsJson} from './app/scan-and-save-as-json'
 
 async function main() {

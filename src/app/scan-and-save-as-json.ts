@@ -1,15 +1,17 @@
 import path from 'path'
-import {config} from './args'
 import {Logger} from './hooks/Logger'
 import {getAwsScanners, createRateLimiter} from '@/scanners'
 import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
-import { transformJSONForVisualization } from './visualization/transformJSON'
+import {transformJSONForVisualization} from './visualization/transformJSON'
+import {getConfig} from './config'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
+
+	const config = await getConfig()
 
 	// prepare scanners
 	const scanners = getAwsScanners({

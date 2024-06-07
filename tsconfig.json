@@ -2,8 +2,11 @@
 	"compilerOptions": {
 		"target": "es2016",
 		"module": "commonjs",
-		"baseUrl": "./",
-		"paths": {"@/*": ["./src/*"], "tests/*": ["./tests/*"]},
+		"baseUrl": "./src",
+		"paths": {
+			"@/*": ["./*"],
+			"tests/*": ["../tests/*"]
+		},
 		"types": ["jest"],
 		"outDir": "dist",
 		"esModuleInterop": true,
@@ -11,6 +14,6 @@
 		"strict": true,
 		"skipLibCheck": true
 	},
-	"include": ["src/**/*.ts", "tests/**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "tests/**/*"]
 }
