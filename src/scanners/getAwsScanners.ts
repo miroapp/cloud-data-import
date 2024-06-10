@@ -10,6 +10,7 @@ import {getEC2Resources} from './scan-functions/aws/ec2'
 import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSResources} from './scan-functions/aws/efs'
 import {getEKSResources} from './scan-functions/aws/eks'
+import {getELBV2Resources} from './scan-functions/aws/elbv2'
 import {getLambdaResources} from './scan-functions/aws/lambda'
 import {getRDSResources} from './scan-functions/aws/rds'
 import {getS3Resources} from './scan-functions/aws/s3'
@@ -43,6 +44,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2', getEC2Resources, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs', getEFSResources, regions, options),
+		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
 		createRegionalScanner('eks', getEKSResources, regions, options),
 		createRegionalScanner('lambda', getLambdaResources, regions, options),
 		createRegionalScanner('rds', getRDSResources, regions, options),
