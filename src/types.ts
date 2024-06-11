@@ -40,10 +40,6 @@ export interface ExtendedBucket extends S3.Bucket {
 	Tagging?: S3.Tag[]
 }
 
-export interface ExtendedInstance extends EC2.Instance {
-	ARN: string
-}
-
 export type ResourceDescription =
 	| AutoScalingGroup
 	| ExtendedBucket
@@ -53,7 +49,15 @@ export type ResourceDescription =
 	| DBCluster
 	| FunctionConfiguration
 	| ExtendedFileSystem
-	| ExtendedInstance
+	| EC2.Instance
+	| EC2.InternetGateway
+	| EC2.NatGateway
+	| EC2.RouteTable
+	| EC2.Vpc
+	| EC2.VpcEndpoint
+	| EC2.Subnet
+	| EC2.Volume
+	| EC2.TransitGateway
 	| Trail
 	| TableDescription
 	| ECS.Cluster
