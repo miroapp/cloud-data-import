@@ -1,22 +1,23 @@
-import {AutoScalingGroup} from '@aws-sdk/client-auto-scaling'
-import {Trail} from '@aws-sdk/client-cloudtrail'
-import {TableDescription} from '@aws-sdk/client-dynamodb'
-import * as EC2 from '@aws-sdk/client-ec2'
-import {FunctionConfiguration} from '@aws-sdk/client-lambda'
-import {DBCluster, DBInstance} from '@aws-sdk/client-rds'
-import * as S3 from '@aws-sdk/client-s3'
-import * as ECS from '@aws-sdk/client-ecs'
-import * as EKS from '@aws-sdk/client-eks'
-import * as SNS from '@aws-sdk/client-sns'
-import {
+import type {AutoScalingGroup} from '@aws-sdk/client-auto-scaling'
+import type {Trail} from '@aws-sdk/client-cloudtrail'
+import type {TableDescription} from '@aws-sdk/client-dynamodb'
+import type * as EC2 from '@aws-sdk/client-ec2'
+import type {FunctionConfiguration} from '@aws-sdk/client-lambda'
+import type {DBCluster, DBInstance} from '@aws-sdk/client-rds'
+import type * as S3 from '@aws-sdk/client-s3'
+import type * as ECS from '@aws-sdk/client-ecs'
+import type * as EKS from '@aws-sdk/client-eks'
+import type * as SNS from '@aws-sdk/client-sns'
+import type * as ELBV2 from '@aws-sdk/client-elastic-load-balancing-v2'
+import type {
 	FileSystemDescription,
 	FileSystemPolicyDescription,
 	LifecycleConfigurationDescription,
 	MountTargetDescription,
 } from '@aws-sdk/client-efs'
-import {DistributionSummary, DistributionConfig, Tags} from '@aws-sdk/client-cloudfront'
-import {RateLimiter} from './scanners/common/RateLimiter'
-import {AwsCredentialIdentity} from '@aws-sdk/types'
+import type {DistributionSummary, DistributionConfig, Tags} from '@aws-sdk/client-cloudfront'
+import type {RateLimiter} from './scanners/common/RateLimiter'
+import type {AwsCredentialIdentity} from '@aws-sdk/types'
 
 export interface ExtendedCloudFrontDistribution extends DistributionSummary {
 	DistributionConfig?: DistributionConfig
@@ -59,6 +60,8 @@ export type ResourceDescription =
 	| ECS.Service
 	| ECS.Task
 	| SNS.Topic
+	| ELBV2.LoadBalancer
+	| ELBV2.TargetGroup
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T
@@ -124,22 +127,22 @@ export interface StandardOutputSchema {
 }
 
 export type VisualResourceDescription = {
-	region?: string,
-	type: string,
+	region?: string
+	type: string
 	vpc?: string
 	avialabilityZones?: string[]
 	account?: string
 }
 
-export type VisualResources =  {
+export type VisualResources = {
 	[arn: string]: VisualResourceDescription
 }
 
 export type VisualizationSchema = {
-	resources: VisualResources;
+	resources: VisualResources
 	metadata: {
-		startedAt: string;
-		finishedAt: string;
-		account?: string;
+		startedAt: string
+		finishedAt: string
+		account?: string
 	}
 }
