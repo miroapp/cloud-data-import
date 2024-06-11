@@ -7,17 +7,20 @@ import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
 import {transformJSONForVisualization} from './visualization/transformJSON'
 import {getConfig} from './config'
+import {getRateLimitService} from './getRateLimiter'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
 
 	const config = await getConfig()
 
+	const getRateLimiter = getRateLimitService(config)
+
 	// prepare scanners
 	const scanners = getAwsScanners({
 		credentials: undefined, // assume that the credentials are already set in the environment
 		regions: config.regions,
-		getRateLimiter: () => createRateLimiter(config['call-rate-rps']),
+		getRateLimiter,
 		shouldIncludeGlobalServices: !config['regional-only'],
 		hooks: [
 			new Logger(), // log scanning progress
