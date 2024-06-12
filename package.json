@@ -1,5 +1,5 @@
 {
-	"name": "cloudview",
+	"name": "@mirohq/cloudview",
 	"version": "0.0.1",
 	"main": "dist/index.js",
 	"bin": {
@@ -11,6 +11,7 @@
 		"test:watch": "jest --watch",
 		"prepare": "husky",
 		"build": "tsc && tsc-alias",
+		"dev:setup": "npm install && npm run build && npm link",
 		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
 	},
 	"license": "MIT",
