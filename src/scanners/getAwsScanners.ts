@@ -11,7 +11,6 @@ import {getEFSResources} from './scan-functions/aws/efs'
 import {getEKSResources} from './scan-functions/aws/eks'
 import {getELBV2Resources} from './scan-functions/aws/elbv2'
 import {getLambdaResources} from './scan-functions/aws/lambda'
-import {getRDSResources} from './scan-functions/aws/rds'
 import {getS3Resources} from './scan-functions/aws/s3'
 import {getSNSTopics} from './scan-functions/aws/sns'
 import {getEC2Instances} from './scan-functions/aws/ec2-instances'
@@ -23,6 +22,9 @@ import {getEC2InternetGateways} from './scan-functions/aws/ec2-internet-gateways
 import {getEC2NatGateways} from './scan-functions/aws/ec2-nat-gateways'
 import {getEC2TransitGateways} from './scan-functions/aws/ec2-transit-gateways'
 import {getEC2Volumes} from './scan-functions/aws/ec2-volumes'
+import {getRDSInstances} from './scan-functions/aws/rds-instances'
+import {getRDSClusters} from './scan-functions/aws/rds-clusters'
+import {getRDSProxies} from './scan-functions/aws/rds-proxies'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -63,7 +65,9 @@ export const getAwsScanners = ({
 		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
 		createRegionalScanner('eks', getEKSResources, regions, options),
 		createRegionalScanner('lambda', getLambdaResources, regions, options),
-		createRegionalScanner('rds', getRDSResources, regions, options),
+		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
+		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
+		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
 		createRegionalScanner('sns', getSNSTopics, regions, options),
 	]
 

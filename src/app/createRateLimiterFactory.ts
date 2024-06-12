@@ -12,6 +12,10 @@ const getQuotaServiceName = (service: string) => {
 		return 'ec2'
 	}
 
+	if (service.startsWith('rds/')) {
+		return 'rds'
+	}
+
 	return service
 }
 
