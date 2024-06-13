@@ -35,7 +35,8 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 		case 'ec2:instance':
 			output.vpc = (resource as EC2.Instance).VpcId
 			break
-		case 'elasticfilesystem:file-system':
+		case 'elasticloadbalancing:loadbalancer':
+		case 'elasticloadbalancing:targetgroup':
 			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
 				output.avialabilityZones = [(resource as EFS.FileSystemDescription).AvailabilityZoneName as string]
 			}
