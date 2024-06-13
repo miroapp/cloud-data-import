@@ -7,14 +7,14 @@ import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
 import {transformJSONForVisualization} from './visualization/transformJSON'
 import {getConfig} from './config'
-import {getRateLimitService} from './getRateLimiter'
+import {createRateLimiterFactory} from './createRateLimiterFactory'
 
 export const scanAndSaveAsJson = async () => {
 	console.log(cliMessages.getIntro())
 
 	const config = await getConfig()
 
-	const getRateLimiter = getRateLimitService(config)
+	const getRateLimiter = createRateLimiterFactory(config)
 
 	// prepare scanners
 	const scanners = getAwsScanners({

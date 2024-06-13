@@ -12,6 +12,10 @@ const getQuotaServiceName = (service: string) => {
 		return 'ec2'
 	}
 
+	if (service.startsWith('rds/')) {
+		return 'rds'
+	}
+
 	return service
 }
 
@@ -20,7 +24,7 @@ const getQuotaServiceName = (service: string) => {
  *
  * this also handles the shared rate limiters for services like `ec2` and `ec2/volumes` or `rds/clusters` and `rds/db-instances`
  */
-export const getRateLimitService = (config: Config): GetRateLimiterFunction => {
+export const createRateLimiterFactory = (config: Config): GetRateLimiterFunction => {
 	const rateLimiters = new Map<string, RateLimiter>()
 
 	return (service: string, region?: string) => {
