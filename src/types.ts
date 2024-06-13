@@ -1,55 +1,31 @@
-import type {AutoScalingGroup} from '@aws-sdk/client-auto-scaling'
-import type {Trail} from '@aws-sdk/client-cloudtrail'
-import type {TableDescription} from '@aws-sdk/client-dynamodb'
+import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
+import type * as CloudTrail from '@aws-sdk/client-cloudtrail'
+import type * as DynamoDB from '@aws-sdk/client-dynamodb'
 import type * as EC2 from '@aws-sdk/client-ec2'
-import type {FunctionConfiguration} from '@aws-sdk/client-lambda'
-import type {DBCluster, DBInstance} from '@aws-sdk/client-rds'
+import type * as Lambda from '@aws-sdk/client-lambda'
+import type * as RDS from '@aws-sdk/client-rds'
 import type * as S3 from '@aws-sdk/client-s3'
 import type * as ECS from '@aws-sdk/client-ecs'
 import type * as EKS from '@aws-sdk/client-eks'
 import type * as SNS from '@aws-sdk/client-sns'
 import type * as Route53 from '@aws-sdk/client-route-53'
 import type * as ELBV2 from '@aws-sdk/client-elastic-load-balancing-v2'
-import type {
-	FileSystemDescription,
-	FileSystemPolicyDescription,
-	LifecycleConfigurationDescription,
-	MountTargetDescription,
-} from '@aws-sdk/client-efs'
-import type {DistributionSummary, DistributionConfig, Tags} from '@aws-sdk/client-cloudfront'
+import type * as CloudFront from '@aws-sdk/client-cloudfront'
+import type * as EFS from '@aws-sdk/client-efs'
+
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
 
-export interface ExtendedCloudFrontDistribution extends DistributionSummary {
-	DistributionConfig?: DistributionConfig
-	Tags?: Tags
-}
-
-export interface ExtendedFileSystem extends FileSystemDescription {
-	Policy?: FileSystemPolicyDescription
-	LifecycleConfiguration?: LifecycleConfigurationDescription
-	MountTargets?: MountTargetDescription[]
-}
-
-export interface ExtendedBucket extends S3.Bucket {
-	CreationDate?: Date
-	LocationConstraint?: string
-	ARN: string
-	Policy?: string
-	Versioning?: string
-	Encryption?: S3.ServerSideEncryptionConfiguration
-	Tagging?: S3.Tag[]
-}
-
 export type ResourceDescription =
-	| AutoScalingGroup
-	| ExtendedBucket
-	| ExtendedCloudFrontDistribution
+	| AutoScaling.AutoScalingGroup
+	| S3.Bucket
+	| CloudFront.DistributionSummary
 	| EKS.Cluster
-	| DBInstance
-	| DBCluster
-	| FunctionConfiguration
-	| ExtendedFileSystem
+	| RDS.DBInstance
+	| RDS.DBCluster
+	| RDS.DBProxy
+	| Lambda.FunctionConfiguration
+	| EFS.FileSystemDescription
 	| EC2.Instance
 	| EC2.InternetGateway
 	| EC2.NatGateway
@@ -59,8 +35,8 @@ export type ResourceDescription =
 	| EC2.Subnet
 	| EC2.Volume
 	| EC2.TransitGateway
-	| Trail
-	| TableDescription
+	| CloudTrail.Trail
+	| DynamoDB.TableDescription
 	| ECS.Cluster
 	| ECS.Service
 	| ECS.Task
