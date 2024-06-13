@@ -62,7 +62,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/transit-gateways', getEC2TransitGateways, regions, options),
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
-		createRegionalScanner('efs', getEFSFileSystems, regions, options),
+		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
 		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
 		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
 		createRegionalScanner('lambda/functions', getLambdaFunctions, regions, options),
