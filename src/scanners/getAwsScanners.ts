@@ -8,7 +8,7 @@ import {getCloudTrailResources} from './scan-functions/aws/cloudtrail-trails'
 import {getDynamoDBTables} from './scan-functions/aws/dynamodb-tables'
 import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
-import {getEKSResources} from './scan-functions/aws/eks'
+import {getEKSClusters} from './scan-functions/aws/eks-clusters'
 import {getELBV2Resources} from './scan-functions/aws/elbv2'
 import {getLambdaResources} from './scan-functions/aws/lambda'
 import {getS3Buckets} from './scan-functions/aws/s3-buckets'
@@ -64,13 +64,13 @@ export const getAwsScanners = ({
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs', getEFSFileSystems, regions, options),
 		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
-		createRegionalScanner('eks', getEKSResources, regions, options),
+		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
 		createRegionalScanner('lambda', getLambdaResources, regions, options),
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
 		createRegionalScanner('route53/hostedzone', getHostedZones, regions, options),
-		createRegionalScanner('sns', getSNSTopics, regions, options),
+		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 	]
 
 	// Global scanners
