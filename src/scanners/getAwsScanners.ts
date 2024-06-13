@@ -2,10 +2,10 @@ import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
 import {GetRateLimiterFunction} from './types'
 import {createRegionalScanner, createGlobalScanner} from '.'
 
-import {getAutoScalingResources} from './scan-functions/aws/autoscaling'
+import {getAutoScalingResources} from './scan-functions/aws/autoscaling-groups'
 import {getCloudFrontDistributions} from './scan-functions/aws/cloudfront-distributions'
-import {getCloudTrailResources} from './scan-functions/aws/cloudtrail'
-import {getDynamoDBResources} from './scan-functions/aws/dynamodb'
+import {getCloudTrailResources} from './scan-functions/aws/cloudtrail-trails'
+import {getDynamoDBTables} from './scan-functions/aws/dynamodb-tables'
 import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
 import {getEKSResources} from './scan-functions/aws/eks'
@@ -50,8 +50,8 @@ export const getAwsScanners = ({
 
 	// Regional scanners
 	const scanners: Scanner[] = [
-		createRegionalScanner('autoscaling', getAutoScalingResources, regions, options),
-		createRegionalScanner('dynamodb', getDynamoDBResources, regions, options),
+		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
+		createRegionalScanner('dynamodb/tables', getDynamoDBTables, regions, options),
 		createRegionalScanner('ec2/instances', getEC2Instances, regions, options),
 		createRegionalScanner('ec2/vpcs', getEC2Vpcs, regions, options),
 		createRegionalScanner('ec2/vpc-endpoints', getEC2VpcEndpoints, regions, options),
