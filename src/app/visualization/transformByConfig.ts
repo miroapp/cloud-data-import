@@ -12,31 +12,30 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 
 	if (!arnData) throw new Error('No arn Data found')
 
+	const resourceType = arnData.resource.split('/')[0].split(':')[0]
+
 	const output: VisualResourceDescription = {
 		region: arnData.region,
-		type: `${arnData.service}:${arnData.resource}`,
+		type: `${arnData.service}:${resourceType}`,
 	}
 
 	switch (arnData.service) {
-		case 'lambda':
+		case 'lambda:function':
 			output.vpc = (resource as Lambda.FunctionConfiguration).VpcConfig?.VpcId
 			break
-		case 'rds':
-			if ((resource as RDS.DBInstance).DBInstanceArn) {
-				output.vpc = (resource as RDS.DBInstance).DBSubnetGroup?.VpcId
-				output.avialabilityZones = (resource as RDS.DBInstance).AvailabilityZone
-					? [String((resource as RDS.DBInstance).AvailabilityZone)]
-					: undefined
-			} else {
-				output.avialabilityZones = (resource as RDS.DBCluster).AvailabilityZones
-			}
+		case 'rds:db':
+			output.vpc = (resource as RDS.DBInstance).DBSubnetGroup?.VpcId
+			output.avialabilityZones = (resource as RDS.DBInstance).AvailabilityZone
+				? [String((resource as RDS.DBInstance).AvailabilityZone)]
+				: undefined
 			break
-		case 'ec2':
-			if (arnData.resource.startsWith('instance/')) {
-				output.vpc = (resource as EC2.Instance).VpcId
-			}
+		case 'rds:cluster':
+			output.avialabilityZones = (resource as RDS.DBCluster).AvailabilityZones
 			break
-		case 'efs':
+		case 'ec2:instance':
+			output.vpc = (resource as EC2.Instance).VpcId
+			break
+		case 'elasticfilesystem:file-system':
 			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
 				output.avialabilityZones = [(resource as EFS.FileSystemDescription).AvailabilityZoneName as string]
 			}
