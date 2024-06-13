@@ -10,7 +10,7 @@ import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
 import {getEKSClusters} from './scan-functions/aws/eks-clusters'
 import {getELBV2Resources} from './scan-functions/aws/elbv2'
-import {getLambdaResources} from './scan-functions/aws/lambda'
+import {getLambdaFunctions} from './scan-functions/aws/lambda-functions'
 import {getS3Buckets} from './scan-functions/aws/s3-buckets'
 import {getSNSTopics} from './scan-functions/aws/sns'
 import {getEC2Instances} from './scan-functions/aws/ec2-instances'
@@ -65,11 +65,11 @@ export const getAwsScanners = ({
 		createRegionalScanner('efs', getEFSFileSystems, regions, options),
 		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
 		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
-		createRegionalScanner('lambda', getLambdaResources, regions, options),
+		createRegionalScanner('lambda/functions', getLambdaFunctions, regions, options),
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
-		createRegionalScanner('route53/hostedzone', getHostedZones, regions, options),
+		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
 		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 	]
 
