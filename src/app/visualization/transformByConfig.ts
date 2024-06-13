@@ -1,7 +1,8 @@
 // transform awsData to visualization schema for each service.
 
-import {ExtendedFileSystem, ResourceDescription, VisualResourceDescription} from '@/types'
+import {ResourceDescription, VisualResourceDescription} from '@/types'
 import type * as EC2 from '@aws-sdk/client-ec2'
+import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
 import type * as RDS from '@aws-sdk/client-rds'
 import {parse} from '@aws-sdk/util-arn-parser'
@@ -36,8 +37,8 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 			}
 			break
 		case 'efs':
-			if ((resource as ExtendedFileSystem).AvailabilityZoneName) {
-				output.avialabilityZones = [(resource as ExtendedFileSystem).AvailabilityZoneName as string]
+			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
+				output.avialabilityZones = [(resource as EFS.FileSystemDescription).AvailabilityZoneName as string]
 			}
 		default:
 			break
