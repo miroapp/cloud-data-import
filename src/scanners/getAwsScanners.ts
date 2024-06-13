@@ -25,6 +25,7 @@ import {getEC2Volumes} from './scan-functions/aws/ec2-volumes'
 import {getRDSInstances} from './scan-functions/aws/rds-instances'
 import {getRDSClusters} from './scan-functions/aws/rds-clusters'
 import {getRDSProxies} from './scan-functions/aws/rds-proxies'
+import {getHostedZones} from './scan-functions/aws/route53-hosted-zones'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -68,6 +69,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
+		createRegionalScanner('route53/hostedzone', getHostedZones, regions, options),
 		createRegionalScanner('sns', getSNSTopics, regions, options),
 	]
 

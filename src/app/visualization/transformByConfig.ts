@@ -13,7 +13,7 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 
 	const output: VisualResourceDescription = {
 		region: arnData.region,
-		type: arnData.service,
+		type: `${arnData.service}:${arnData.resource}`,
 	}
 
 	switch (arnData.service) {
