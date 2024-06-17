@@ -8,6 +8,7 @@ import type * as S3 from '@aws-sdk/client-s3'
 import type * as ECS from '@aws-sdk/client-ecs'
 import type * as EKS from '@aws-sdk/client-eks'
 import type * as SNS from '@aws-sdk/client-sns'
+import type * as Route53 from '@aws-sdk/client-route-53'
 import type * as ELBV2 from '@aws-sdk/client-elastic-load-balancing-v2'
 import type {
 	FileSystemDescription,
@@ -66,6 +67,7 @@ export type ResourceDescription =
 	| SNS.Topic
 	| ELBV2.LoadBalancer
 	| ELBV2.TargetGroup
+	| Route53.HostedZone
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T
