@@ -12,7 +12,11 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 
 	if (!arnData) throw new Error('No arn Data found')
 
-	const resourceType = arnData.resource.split('/')[0].split(':')[0]
+	const resourceType = (() => {
+		if (arnData.service === 'sns') return 'topic'
+
+		return arnData.resource.split('/')[0].split(':')[0]
+	})()
 
 	const output: VisualResourceDescription = {
 		region: arnData.region,
