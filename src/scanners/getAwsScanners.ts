@@ -2,17 +2,17 @@ import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
 import {GetRateLimiterFunction} from './types'
 import {createRegionalScanner, createGlobalScanner} from '.'
 
-import {getAutoScalingResources} from './scan-functions/aws/autoscaling'
-import {getCloudFrontResources} from './scan-functions/aws/cloudfront'
-import {getCloudTrailResources} from './scan-functions/aws/cloudtrail'
-import {getDynamoDBResources} from './scan-functions/aws/dynamodb'
+import {getAutoScalingResources} from './scan-functions/aws/autoscaling-groups'
+import {getCloudFrontDistributions} from './scan-functions/aws/cloudfront-distributions'
+import {getCloudTrailResources} from './scan-functions/aws/cloudtrail-trails'
+import {getDynamoDBTables} from './scan-functions/aws/dynamodb-tables'
 import {getECSResources} from './scan-functions/aws/ecs'
-import {getEFSResources} from './scan-functions/aws/efs'
-import {getEKSResources} from './scan-functions/aws/eks'
+import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
+import {getEKSClusters} from './scan-functions/aws/eks-clusters'
 import {getELBV2Resources} from './scan-functions/aws/elbv2'
-import {getLambdaResources} from './scan-functions/aws/lambda'
-import {getS3Resources} from './scan-functions/aws/s3'
-import {getSNSTopics} from './scan-functions/aws/sns'
+import {getLambdaFunctions} from './scan-functions/aws/lambda-functions'
+import {getS3Buckets} from './scan-functions/aws/s3-buckets'
+import {getSNSTopics} from './scan-functions/aws/sns-topics'
 import {getEC2Instances} from './scan-functions/aws/ec2-instances'
 import {getEC2Vpcs} from './scan-functions/aws/ec2-vpcs'
 import {getEC2VpcEndpoints} from './scan-functions/aws/ec2-vpc-endpoints'
@@ -50,8 +50,8 @@ export const getAwsScanners = ({
 
 	// Regional scanners
 	const scanners: Scanner[] = [
-		createRegionalScanner('autoscaling', getAutoScalingResources, regions, options),
-		createRegionalScanner('dynamodb', getDynamoDBResources, regions, options),
+		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
+		createRegionalScanner('dynamodb/tables', getDynamoDBTables, regions, options),
 		createRegionalScanner('ec2/instances', getEC2Instances, regions, options),
 		createRegionalScanner('ec2/vpcs', getEC2Vpcs, regions, options),
 		createRegionalScanner('ec2/vpc-endpoints', getEC2VpcEndpoints, regions, options),
@@ -62,23 +62,23 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/transit-gateways', getEC2TransitGateways, regions, options),
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
-		createRegionalScanner('efs', getEFSResources, regions, options),
+		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
 		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
-		createRegionalScanner('eks', getEKSResources, regions, options),
-		createRegionalScanner('lambda', getLambdaResources, regions, options),
+		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
+		createRegionalScanner('lambda/functions', getLambdaFunctions, regions, options),
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
-		createRegionalScanner('route53/hostedzone', getHostedZones, regions, options),
-		createRegionalScanner('sns', getSNSTopics, regions, options),
+		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
+		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 	]
 
 	// Global scanners
 	if (shouldIncludeGlobalServices) {
 		scanners.push(
-			createGlobalScanner('cloudfront', getCloudFrontResources, options),
-			createGlobalScanner('cloudtrail', getCloudTrailResources, options),
-			createGlobalScanner('s3', getS3Resources, options),
+			createGlobalScanner('cloudfront/distributions', getCloudFrontDistributions, options),
+			createGlobalScanner('cloudtrail/trails', getCloudTrailResources, options),
+			createGlobalScanner('s3/buckets', getS3Buckets, options),
 		)
 	}
 
