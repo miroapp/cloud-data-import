@@ -62,7 +62,7 @@ export default async () => {
 
 	const tranformedOutput = await transformJSONForVisualization(output)
 
-	const pathname = path.join(process.cwd(), config.output)
+	const pathname = path.resolve(process.cwd(), config.output)
 
 	// save output to a file
 	try {
