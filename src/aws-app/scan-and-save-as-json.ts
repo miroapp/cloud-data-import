@@ -14,6 +14,9 @@ export default async () => {
 
 	const config = await getConfig()
 
+	// setting the AWS_REGION explicitly to meet SDK requirements
+	process.env.AWS_REGION = config.regions[0]
+
 	const getRateLimiter = createRateLimiterFactory(config)
 
 	// prepare scanners
