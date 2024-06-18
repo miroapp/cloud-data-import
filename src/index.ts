@@ -6,7 +6,8 @@ const commands = process.argv.slice(2)
 
 async function main() {
 	// If a command is provided and it is not `aws`, print an error message
-	const nonArguments = commands.filter((command) => !command.startsWith('--'))
+	const firstArgIndex = commands.findIndex((arg) => arg.startsWith('-'))
+	const nonArguments = firstArgIndex === -1 ? commands : commands.slice(0, firstArgIndex)
 	if (nonArguments.length > 0 && nonArguments[0] !== 'aws') {
 		throw new Error(`Unknown command: ${nonArguments[0]}`)
 	}

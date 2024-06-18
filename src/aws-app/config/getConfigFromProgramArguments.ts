@@ -13,6 +13,14 @@ export const getConfigFromProgramArguments = (): Config => {
 			default: getEnvConfig(SUPPORTED_ENV_VARS.REGIONS)?.split(',') || undefined, // Load from env if set
 			coerce: (arg: string[]) => {
 				if (arg.filter(Boolean).length === 0) {
+					const region = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION
+
+					if (region) {
+						const envVar = process.env.AWS_REGION ? 'AWS_REGION' : 'AWS_DEFAULT_REGION'
+						console.log(`[INFO] Using the ${region} region provided by the ${envVar} environment variable\n`)
+						return [region]
+					}
+
 					throw new Error('[ERROR] At least one region must be provided')
 				}
 
