@@ -1,9 +1,9 @@
 {
-	"name": "@mirohq/cloudview",
+	"name": "@mirohq/cloud-data-import",
 	"version": "0.0.1",
 	"main": "dist/index.js",
 	"bin": {
-		"cloudview": "./dist/index.js"
+		"cloud-data-import": "./dist/index.js"
 	},
 	"scripts": {
 		"start": "node -r tsconfig-paths/register dist/index.js",

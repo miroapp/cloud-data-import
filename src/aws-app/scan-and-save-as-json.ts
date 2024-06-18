@@ -9,7 +9,7 @@ import {transformJSONForVisualization} from './visualization/transformJSON'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './createRateLimiterFactory'
 
-export const scanAndSaveAsJson = async () => {
+export default async () => {
 	console.log(cliMessages.getIntro())
 
 	const config = await getConfig()
