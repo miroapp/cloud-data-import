@@ -25,7 +25,6 @@ const outputPathPrompt = async (defaultPath: string): Promise<string> => {
 			name: 'output',
 			message: 'Output file path (.json):',
 			default: defaultPath,
-			validate: (input: string) => input.endsWith('.json') || 'Output file must have a .json extension',
 		},
 	])
 	return output

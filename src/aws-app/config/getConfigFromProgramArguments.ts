@@ -39,9 +39,6 @@ export const getConfigFromProgramArguments = (): Config => {
 				if (Array.isArray(arg)) {
 					arg = arg.filter(Boolean)[0] || ''
 				}
-				if (!arg.endsWith('.json')) {
-					throw new Error('[ERROR] Output file must have a .json extension')
-				}
 				return arg
 			},
 		})
