@@ -1,6 +1,6 @@
 import path from 'path'
 import {Logger} from './hooks/Logger'
-import {getAwsScanners, createRateLimiter} from '@/scanners'
+import {getAwsScanners} from '@/scanners'
 import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
@@ -60,13 +60,13 @@ export default async () => {
 		},
 	}
 
-	const tranformedOutput = await transformJSONForVisualization(output)
+	const transformedOutput = await transformJSONForVisualization(output)
 
 	const pathname = path.resolve(process.cwd(), config.output)
 
 	// save output to a file
 	try {
-		await saveAsJson(pathname, tranformedOutput, config.compressed)
+		await saveAsJson(pathname, transformedOutput, config.compressed)
 	} catch (error) {
 		console.error(`\n[ERROR] Failed to save output to ${config.output}\n`)
 		throw error

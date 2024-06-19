@@ -28,6 +28,7 @@ import {getRDSClusters} from './scan-functions/aws/rds-clusters'
 import {getRDSProxies} from './scan-functions/aws/rds-proxies'
 import {getHostedZones} from './scan-functions/aws/route53-hosted-zones'
 import {getSQSQueues} from './scan-functions/aws/sqs-queues'
+import {getElastiCacheClusters} from './scan-functions/aws/elasticache-clusters'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -65,6 +66,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
+		createRegionalScanner('elasticache/clusters', getElastiCacheClusters, regions, options),
 		createRegionalScanner('elbv2/load-balancers', getELBv2LoadBalancers, regions, options),
 		createRegionalScanner('elbv1/load-balancers', getELBv1LoadBalancers, regions, options),
 		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
