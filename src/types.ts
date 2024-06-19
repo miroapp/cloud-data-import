@@ -40,7 +40,7 @@ export type ResourceDescription =
 	| EC2.Subnet
 	| EC2.Volume
 	| EC2.TransitGateway
-	| CloudTrail.Trail
+	| CloudTrail.TrailInfo
 	| DynamoDB.TableDescription
 	| ECS.Cluster
 	| ECS.Service
@@ -110,28 +110,23 @@ export interface StandardOutputSchema {
 	resources: Resources
 	errors: ScannerError[]
 	metadata: {
+		account: string
+		regions: string[]
 		startedAt: string
 		finishedAt: string
 	}
 }
 
-export type VisualResourceDescription = {
+export type ResourcePlacementInfo = {
 	region?: string
 	type: string
 	vpc?: string
-	avialabilityZones?: string[]
+	availabilityZones?: string[]
 	account?: string
 }
 
-export type VisualResources = {
-	[arn: string]: VisualResourceDescription
-}
-
-export type VisualizationSchema = {
-	resources: VisualResources
-	metadata: {
-		startedAt: string
-		finishedAt: string
-		account?: string
+export type VisualizationDataSchema = StandardOutputSchema & {
+	resources: {
+		[arn: string]: ResourcePlacementInfo
 	}
 }

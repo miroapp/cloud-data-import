@@ -1,42 +1,31 @@
-import {CloudTrailClient, ListTrailsCommand, Trail} from '@aws-sdk/client-cloudtrail'
+import {CloudTrailClient, ListTrailsCommand, ListTrailsCommandOutput, TrailInfo} from '@aws-sdk/client-cloudtrail'
 import {Credentials, Resources} from '@/types'
 import {RateLimiter} from '@/scanners/common/RateLimiter'
 
-async function getCloudTrailTrails(credentials: Credentials, rateLimiter: RateLimiter): Promise<Trail[]> {
-	const client = new CloudTrailClient({credentials})
+export async function getCloudTrailTrails(
+	credentials: Credentials,
+	rateLimiter: RateLimiter,
+	region: string,
+): Promise<Resources<TrailInfo>> {
+	const client = new CloudTrailClient({credentials, region})
 
-	const trails: Trail[] = []
+	const resources: {[arn: string]: TrailInfo} = {}
 
 	let nextToken: string | undefined
 	do {
 		const listTrailsCommand = new ListTrailsCommand({
 			NextToken: nextToken,
 		})
+		const listTrailsResponse: ListTrailsCommandOutput = await rateLimiter.throttle(() => client.send(listTrailsCommand))
 
-		const listTrailsResponse = await rateLimiter.throttle(() => client.send(listTrailsCommand))
-
-		if (listTrailsResponse.Trails) {
-			trails.push(...listTrailsResponse.Trails)
+		for (const trail of listTrailsResponse.Trails || []) {
+			if (trail.TrailARN) {
+				resources[trail.TrailARN] = trail
+			}
 		}
 
 		nextToken = listTrailsResponse.NextToken
 	} while (nextToken)
 
-	return trails
-}
-
-export async function getCloudTrailResources(
-	credentials: Credentials,
-	rateLimiter: RateLimiter,
-): Promise<Resources<Trail>> {
-	const trails = await getCloudTrailTrails(credentials, rateLimiter)
-
-	return trails.reduce((acc, trail) => {
-		if (!trail.TrailARN) {
-			throw new Error('TrailARN is missing in the response')
-		}
-
-		acc[trail.TrailARN] = trail
-		return acc
-	}, {} as Resources<Trail>)
+	return resources
 }
