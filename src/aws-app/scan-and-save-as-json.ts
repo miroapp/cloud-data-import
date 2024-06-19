@@ -63,7 +63,7 @@ export default async () => {
 		},
 	}
 
-	const transformedOutput = await transformJSONForVisualization(output)
+	const transformedOutput = !config.raw ? await transformJSONForVisualization(output) : output
 
 	const pathname = path.resolve(process.cwd(), config.output)
 

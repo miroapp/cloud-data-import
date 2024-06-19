@@ -68,6 +68,12 @@ export const getConfigFromProgramArguments = (): Config => {
 			description: 'Compress the output',
 			default: getEnvConfig(SUPPORTED_ENV_VARS.COMPRESSED) === 'true',
 		})
+		.option('raw', {
+			type: 'boolean',
+			description:
+				'Output raw JSON without any transformations (this will be the only available option in the near-future)',
+			default: false,
+		})
 		.option('regional-only', {
 			alias: 'ro',
 			type: 'boolean',

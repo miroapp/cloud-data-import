@@ -100,6 +100,7 @@ export interface Config {
 	regions: string[]
 	output: string
 	compressed: boolean
+	raw: boolean
 	'call-rate-rps': number
 	'regional-only': boolean
 }
