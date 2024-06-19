@@ -4,7 +4,7 @@ import {createRegionalScanner, createGlobalScanner} from '.'
 
 import {getAutoScalingResources} from './scan-functions/aws/autoscaling-groups'
 import {getCloudFrontDistributions} from './scan-functions/aws/cloudfront-distributions'
-import {getCloudTrailResources} from './scan-functions/aws/cloudtrail-trails'
+import {getCloudTrailTrails} from './scan-functions/aws/cloudtrail-trails'
 import {getDynamoDBTables} from './scan-functions/aws/dynamodb-tables'
 import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
@@ -54,6 +54,7 @@ export const getAwsScanners = ({
 	// Regional scanners
 	const scanners: Scanner[] = [
 		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
+		createRegionalScanner('cloudtrail/trails', getCloudTrailTrails, regions, options),
 		createRegionalScanner('dynamodb/tables', getDynamoDBTables, regions, options),
 		createRegionalScanner('ec2/instances', getEC2Instances, regions, options),
 		createRegionalScanner('ec2/vpcs', getEC2Vpcs, regions, options),
@@ -75,17 +76,14 @@ export const getAwsScanners = ({
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
 		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
+		createRegionalScanner('s3/buckets', getS3Buckets, regions, options),
 		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 		createRegionalScanner('sqs/queues', getSQSQueues, regions, options),
 	]
 
 	// Global scanners
 	if (shouldIncludeGlobalServices) {
-		scanners.push(
-			createGlobalScanner('cloudfront/distributions', getCloudFrontDistributions, options),
-			createGlobalScanner('cloudtrail/trails', getCloudTrailResources, options),
-			createGlobalScanner('s3/buckets', getS3Buckets, options),
-		)
+		scanners.push(createGlobalScanner('cloudfront/distributions', getCloudFrontDistributions, options))
 	}
 
 	return scanners

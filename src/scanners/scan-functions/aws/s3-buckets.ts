@@ -4,8 +4,12 @@ import {RateLimiter} from '@/scanners/common/RateLimiter'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
-export async function getS3Buckets(credentials: Credentials, rateLimiter: RateLimiter): Promise<Resources<Bucket>> {
-	const client = new S3Client({credentials})
+export async function getS3Buckets(
+	credentials: Credentials,
+	rateLimiter: RateLimiter,
+	region: string,
+): Promise<Resources<Bucket>> {
+	const client = new S3Client({credentials, region})
 
 	const accountId = await getAwsAccountId()
 
@@ -15,19 +19,13 @@ export async function getS3Buckets(credentials: Credentials, rateLimiter: RateLi
 	const resources: {[arn: string]: Bucket} = {}
 
 	for (const bucket of listBucketsResponse.Buckets || []) {
-		if (bucket.Name) {
-			const getBucketLocationCommand = new GetBucketLocationCommand({Bucket: bucket.Name})
-			const getBucketLocationResponse = await rateLimiter.throttle(() => client.send(getBucketLocationCommand))
-			const bucketRegion = getBucketLocationResponse.LocationConstraint || ''
-
-			const arn = buildARN({
-				service: 's3',
-				region: bucketRegion,
-				accountId,
-				resource: bucket.Name,
-			})
-			resources[arn] = bucket
-		}
+		const arn = buildARN({
+			service: 's3',
+			region: region,
+			accountId,
+			resource: `bucket/${bucket.Name}`,
+		})
+		resources[arn] = bucket
 	}
 
 	return resources

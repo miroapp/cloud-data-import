@@ -9,15 +9,24 @@ export async function getElastiCacheClusters(
 ): Promise<Resources<CacheCluster>> {
 	const client = new ElastiCacheClient({credentials, region})
 
-	const describeCacheClustersCommand = new DescribeCacheClustersCommand({ShowCacheNodeInfo: true})
-	const describeCacheClustersResponse = await rateLimiter.throttle(() => client.send(describeCacheClustersCommand))
-
 	const resources: {[arn: string]: CacheCluster} = {}
-	for (const cluster of describeCacheClustersResponse.CacheClusters || []) {
-		if (cluster.ARN) {
-			resources[cluster.ARN] = cluster
+
+	let marker: string | undefined
+	do {
+		const describeCacheClustersCommand = new DescribeCacheClustersCommand({
+			ShowCacheNodeInfo: true,
+			Marker: marker,
+		})
+		const describeCacheClustersResponse = await rateLimiter.throttle(() => client.send(describeCacheClustersCommand))
+
+		for (const cluster of describeCacheClustersResponse.CacheClusters || []) {
+			if (cluster.ARN) {
+				resources[cluster.ARN] = cluster
+			}
 		}
-	}
+
+		marker = describeCacheClustersResponse.Marker
+	} while (marker)
 
 	return resources
 }
