@@ -14,6 +14,7 @@ export const transformByConfig = (arn: string, resource: ResourceDescription): V
 
 	const resourceType = (() => {
 		if (arnData.service === 'sns') return 'topic'
+		if (arnData.service === 'sqs') return 'queue'
 
 		return arnData.resource.split('/')[0].split(':')[0]
 	})()

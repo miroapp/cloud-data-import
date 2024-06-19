@@ -27,6 +27,7 @@ import {getRDSInstances} from './scan-functions/aws/rds-instances'
 import {getRDSClusters} from './scan-functions/aws/rds-clusters'
 import {getRDSProxies} from './scan-functions/aws/rds-proxies'
 import {getHostedZones} from './scan-functions/aws/route53-hosted-zones'
+import {getSQSQueues} from './scan-functions/aws/sqs-queues'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -73,6 +74,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
 		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
 		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
+		createRegionalScanner('sqs/queues', getSQSQueues, regions, options),
 	]
 
 	// Global scanners

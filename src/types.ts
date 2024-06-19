@@ -13,9 +13,12 @@ import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
 import type * as ELBv1 from '@aws-sdk/client-elastic-load-balancing'
 import type * as CloudFront from '@aws-sdk/client-cloudfront'
 import type * as EFS from '@aws-sdk/client-efs'
+import type * as SQS from '@aws-sdk/client-sqs'
 
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
+
+export type SQSQueue = NonNullable<SQS.GetQueueAttributesResult['Attributes']>
 
 export type ResourceDescription =
 	| AutoScaling.AutoScalingGroup
@@ -45,6 +48,7 @@ export type ResourceDescription =
 	| ELBv1.LoadBalancerDescription
 	| ELBv2.LoadBalancer
 	| Route53.HostedZone
+	| SQSQueue
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T
