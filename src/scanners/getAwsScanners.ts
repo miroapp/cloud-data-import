@@ -9,7 +9,8 @@ import {getDynamoDBTables} from './scan-functions/aws/dynamodb-tables'
 import {getECSResources} from './scan-functions/aws/ecs'
 import {getEFSFileSystems} from './scan-functions/aws/efs-file-systems'
 import {getEKSClusters} from './scan-functions/aws/eks-clusters'
-import {getELBV2Resources} from './scan-functions/aws/elbv2'
+import {getELBv2LoadBalancers} from './scan-functions/aws/elbv2-load-balancers'
+import {getELBv1LoadBalancers} from './scan-functions/aws/elbv1-load-balancers'
 import {getLambdaFunctions} from './scan-functions/aws/lambda-functions'
 import {getS3Buckets} from './scan-functions/aws/s3-buckets'
 import {getSNSTopics} from './scan-functions/aws/sns-topics'
@@ -63,7 +64,8 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
-		createRegionalScanner('elbv2', getELBV2Resources, regions, options),
+		createRegionalScanner('elbv2/load-balancers', getELBv2LoadBalancers, regions, options),
+		createRegionalScanner('elbv1/load-balancers', getELBv1LoadBalancers, regions, options),
 		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
 		createRegionalScanner('lambda/functions', getLambdaFunctions, regions, options),
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
