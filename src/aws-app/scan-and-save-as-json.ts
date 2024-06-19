@@ -5,9 +5,10 @@ import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
-import {transformJSONForVisualization} from './visualization/transformJSON'
+import {transformJSONForVisualization} from './visualization/transformJSONForVisualization'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './createRateLimiterFactory'
+import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 
 export default async () => {
 	console.log(cliMessages.getIntro())
@@ -55,6 +56,8 @@ export default async () => {
 		resources,
 		errors,
 		metadata: {
+			account: await getAwsAccountId(),
+			regions: config.regions,
 			startedAt: startedAt.toISOString(),
 			finishedAt: finishedAt.toISOString(),
 		},
