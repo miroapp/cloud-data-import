@@ -7,5 +7,5 @@ export const getDefaultOutputName = () => {
 		now.getMinutes(),
 	)}${pad(now.getSeconds())}`
 
-	return `miro-cloudview-${timestamp}.json`
+	return `miro-aws-${timestamp}.json`
 }
