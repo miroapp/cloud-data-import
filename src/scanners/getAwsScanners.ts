@@ -51,6 +51,12 @@ export const getAwsScanners = ({
 		hooks,
 	}
 
+	/**
+	 * ❗ Note: Services with same service-name will automatically share the rate limiter. e.g:
+	 *   ec2/instances and ec2/volumes
+	 *   or, rds/clusters and rds/db-instances
+	 */
+
 	// Regional scanners
 	const scanners: Scanner[] = [
 		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
