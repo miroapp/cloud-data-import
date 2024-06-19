@@ -4,13 +4,15 @@ export const getIntro = () => `
 
 --
 
-${blueBright(`Welcome to CloudView’s Resource Discovery Tool by Miro! 🌥️✨`)}
+${blueBright(`Welcome to Cloud Data Import Tool by Miro! 🌥️✨`)}
 
 Use this tool to extract your cloud resources securely in your own machine and save them as a JSON file. Then import the exported JSON into a Miro board for seamless visualization and optimization.
 
-💻 Find the source-code and full documentation at ${yellowBright('https://github.com/miroapp/cloudview-cli')}
+💻 Find the source-code and full documentation at ${yellowBright('https://github.com/miroapp/cloud-data-import')}
 
-🔧 In case you face any issues, please report them at ${yellowBright('https://github.com/miroapp/cloudview-cli/issues')}
+🔧 In case you face any issues, please report them at ${yellowBright(
+	'https://github.com/miroapp/cloud-data-import/issues',
+)}
 
 --
 
