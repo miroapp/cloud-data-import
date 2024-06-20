@@ -101,6 +101,7 @@ export interface Config {
 	output: string
 	compressed: boolean
 	raw: boolean
+	'open-output-dir': boolean
 	'call-rate-rps': number
 	'regional-only': boolean
 }

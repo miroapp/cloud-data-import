@@ -86,6 +86,7 @@ export const getConfigViaGui = async (): Promise<Config> => {
 		'call-rate-rps': callRateRps,
 		compressed,
 		raw: false,
+		'open-output-dir': true,
 		'regional-only': !scanGlobal,
 	}
 }

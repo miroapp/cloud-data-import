@@ -40,4 +40,4 @@ coverage
 
 # Output
 output.json
-miro-cloudview-*.json
+*.cloud.json

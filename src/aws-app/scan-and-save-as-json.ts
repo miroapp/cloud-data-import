@@ -76,10 +76,12 @@ export default async () => {
 	}
 
 	// open the output directory and focus on the generated file
-	try {
-		await openDirectoryAndFocusFile(pathname)
-	} catch (error) {
-		// ignore
+	if (config['open-output-dir']) {
+		try {
+			await openDirectoryAndFocusFile(pathname)
+		} catch (error) {
+			// ignore
+		}
 	}
 
 	console.log(
