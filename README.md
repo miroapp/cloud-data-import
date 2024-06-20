@@ -23,13 +23,14 @@ This command will automatically install and run the script, launching a GUI for 
 
 The script accepts several arguments to customize the data import process:
 
-| Argument                 | Description                                                                 |
-| ------------------------ | --------------------------------------------------------------------------- |
-| `-r, --regions`          | Specify the AWS regions to scan. Use `"all"` to scan all available regions. |
-| `-o, --output`           | Define the output file path for the imported data. Must be a `.json` file.  |
-| `--rps, --call-rate-rps` | Set the maximum number of API calls to make per second. Default is 10.      |
-| `-c, --compressed`       | Enable output compression.                                                  |
-| `-ro, --regional-only`   | Limit the scan to regional services, ignoring global services.              |
+| Argument                   | Description                                                                                    |
+| -------------------------- | ---------------------------------------------------------------------------------------------- |
+| `-r, --regions`            | Specify the AWS regions to scan. Use `"all"` to scan all available regions.                    |
+| `-o, --output`             | Define the output file path for the imported data. Must be a `.json` file.                     |
+| `--rps, --call-rate-rps`   | Set the maximum number of API calls to make per second. Default is 10.                         |
+| `-c, --compressed`         | Enable output compression.                                                                     |
+| `-ro, --regional-only`     | Limit the scan to regional services, ignoring global services.                                 |
+| `--ood, --open-output-dir` | Open the output directory and points to the output file, after the import process is complete. |
 
 #### Example Usage with Arguments
 
