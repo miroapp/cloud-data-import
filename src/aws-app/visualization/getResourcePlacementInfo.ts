@@ -19,7 +19,19 @@ export const getResourcePlacementInfo = (arn: string, resource: ResourceDescript
 		return arnData.resource.split('/')[0].split(':')[0]
 	})()
 
+	const name = (() => {
+		const resourceFullName = arnData.resource // could be either something like "function:name" or "function/name" or in some cases just "name"
+
+		if (resourceFullName.startsWith(resourceType)) {
+			// remove the resource type + one more character (usually a colon or a slash)
+			return resourceFullName.slice(resourceType.length + 1)
+		}
+
+		return resourceFullName
+	})()
+
 	const output: ResourcePlacementInfo = {
+		name,
 		region: arnData.region,
 		type: `${arnData.service}:${resourceType}`,
 	}

@@ -120,6 +120,7 @@ export interface StandardOutputSchema {
 }
 
 export type ResourcePlacementInfo = {
+	name: string
 	region?: string
 	type: string
 	vpc?: string
