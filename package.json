@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@types/inquirer": "^9.0.7",
 		"@types/jest": "^29.5.12",
-		"@types/node": "^20.12.7",
+		"@types/node": "^20.14.8",
 		"@types/spinnies": "^0.5.3",
 		"@types/yargs": "^17.0.32",
 		"eslint": "^9.5.0",
