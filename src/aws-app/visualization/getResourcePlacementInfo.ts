@@ -3,6 +3,8 @@ import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
 import type * as RDS from '@aws-sdk/client-rds'
+import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
+
 import {parse} from '@aws-sdk/util-arn-parser'
 
 export const getResourcePlacementInfo = (arn: string, resource: ResourceDescription): ResourcePlacementInfo | null => {
@@ -17,12 +19,24 @@ export const getResourcePlacementInfo = (arn: string, resource: ResourceDescript
 		return arnData.resource.split('/')[0].split(':')[0]
 	})()
 
+	const name = (() => {
+		const resourceFullName = arnData.resource // could be either something like "function:name" or "function/name" or in some cases just "name"
+
+		if (resourceFullName.startsWith(resourceType)) {
+			// remove the resource type + one more character (usually a colon or a slash)
+			return resourceFullName.slice(resourceType.length + 1)
+		}
+
+		return resourceFullName
+	})()
+
 	const output: ResourcePlacementInfo = {
+		name,
 		region: arnData.region,
 		type: `${arnData.service}:${resourceType}`,
 	}
 
-	switch (arnData.service) {
+	switch (output.type) {
 		case 'lambda:function':
 			output.vpc = (resource as Lambda.FunctionConfiguration).VpcConfig?.VpcId
 			break
@@ -37,6 +51,16 @@ export const getResourcePlacementInfo = (arn: string, resource: ResourceDescript
 			break
 		case 'ec2:instance':
 			output.vpc = (resource as EC2.Instance).VpcId
+			output.availabilityZones = [(resource as EC2.Instance).Placement?.AvailabilityZone as string]
+			break
+		case 'ec2:volume':
+			output.availabilityZones = [(resource as EC2.Volume).AvailabilityZone as string]
+			break
+		case 'elasticloadbalancing:loadbalancer':
+			output.vpc = (resource as ELBv2.LoadBalancer).VpcId
+			output.availabilityZones = (resource as ELBv2.LoadBalancer).AvailabilityZones?.map(
+				(az) => az.ZoneName || '',
+			).filter(Boolean)
 			break
 		case 'elasticfilesystem:file-system':
 			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
