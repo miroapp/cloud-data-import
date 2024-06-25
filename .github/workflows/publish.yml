@@ -30,6 +30,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Creates a release PR if unpublished changesets exist; publishes directly if there are no new changesets
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
