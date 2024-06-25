@@ -60,7 +60,7 @@ const scanGlobalPrompt = async (defaultScanGlobal: boolean): Promise<boolean> =>
 		{
 			type: 'confirm',
 			name: 'scanGlobal',
-			message: 'Should we also scan global resources?',
+			message: 'Scan global resources?',
 			default: defaultScanGlobal,
 		},
 	])
