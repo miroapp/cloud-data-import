@@ -5,7 +5,7 @@ import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
-import {transformJSONForVisualization} from './visualization/transformJSONForVisualization'
+import {getProcessedData} from './process/getProcessedData'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
@@ -53,7 +53,8 @@ export default async () => {
 	const output: StandardOutputSchema = {
 		provider: 'aws',
 		docVersion: '0.0.1',
-		resources,
+		resources: config.raw ? resources : {},
+		processed: await getProcessedData(resources),
 		errors,
 		metadata: {
 			account: await getAwsAccountId(),
@@ -63,13 +64,11 @@ export default async () => {
 		},
 	}
 
-	const transformedOutput = !config.raw ? await transformJSONForVisualization(output) : output
-
 	const pathname = path.resolve(process.cwd(), config.output)
 
 	// save output to a file
 	try {
-		await saveAsJson(pathname, transformedOutput, config.compressed)
+		await saveAsJson(pathname, output, config.compressed)
 	} catch (error) {
 		console.error(`\n[ERROR] Failed to save output to ${config.output}\n`)
 		throw error

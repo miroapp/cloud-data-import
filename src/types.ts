@@ -106,20 +106,7 @@ export interface Config {
 	'regional-only': boolean
 }
 
-export interface StandardOutputSchema {
-	provider: 'aws'
-	docVersion: '0.0.1'
-	resources: Resources
-	errors: ScannerError[]
-	metadata: {
-		account: string
-		regions: string[]
-		startedAt: string
-		finishedAt: string
-	}
-}
-
-export type ResourcePlacementInfo = {
+export type ProcessedResource = {
 	name: string
 	region?: string
 	type: string
@@ -128,8 +115,22 @@ export type ResourcePlacementInfo = {
 	account?: string
 }
 
-export type VisualizationDataSchema = StandardOutputSchema & {
+export interface ProcessedData {
 	resources: {
-		[arn: string]: ResourcePlacementInfo
+		[arn: string]: ProcessedResource
+	}
+}
+
+export interface StandardOutputSchema {
+	provider: 'aws'
+	docVersion: string
+	resources: Resources
+	processed: ProcessedData
+	errors: ScannerError[]
+	metadata: {
+		account: string
+		regions: string[]
+		startedAt: string
+		finishedAt: string
 	}
 }
