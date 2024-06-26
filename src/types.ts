@@ -106,7 +106,7 @@ export interface Config {
 	'regional-only': boolean
 }
 
-export type ResourcePlacementInfo = {
+export type ProcessedResource = {
 	name: string
 	region?: string
 	type: string
@@ -115,9 +115,9 @@ export type ResourcePlacementInfo = {
 	account?: string
 }
 
-export interface PostProcessedData {
+export interface ProcessedData {
 	resources: {
-		[arn: string]: ResourcePlacementInfo
+		[arn: string]: ProcessedResource
 	}
 }
 
@@ -125,7 +125,7 @@ export interface StandardOutputSchema {
 	provider: 'aws'
 	docVersion: string
 	resources: Resources
-	processed: PostProcessedData
+	processed: ProcessedData
 	errors: ScannerError[]
 	metadata: {
 		account: string

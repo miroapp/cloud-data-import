@@ -1,4 +1,4 @@
-import {ResourceDescription, ResourcePlacementInfo} from '@/types'
+import {ResourceDescription, ProcessedResource} from '@/types'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
@@ -7,7 +7,7 @@ import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
 
 import {parse} from '@aws-sdk/util-arn-parser'
 
-export const getResourcePlacementInfo = (arn: string, resource: ResourceDescription): ResourcePlacementInfo | null => {
+export const getProcessedResource = (arn: string, resource: ResourceDescription): ProcessedResource | null => {
 	const arnData = parse(arn)
 
 	if (!arnData) throw new Error('No arn Data found')
@@ -30,7 +30,7 @@ export const getResourcePlacementInfo = (arn: string, resource: ResourceDescript
 		return resourceFullName
 	})()
 
-	const output: ResourcePlacementInfo = {
+	const output: ProcessedResource = {
 		name,
 		region: arnData.region,
 		type: `${arnData.service}:${resourceType}`,

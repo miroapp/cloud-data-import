@@ -5,7 +5,7 @@ import {StandardOutputSchema, ScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
-import {getPostProcessedData} from './post-process/getPostProcessedData'
+import {getProcessedData} from './process/getProcessedData'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
@@ -54,7 +54,7 @@ export default async () => {
 		provider: 'aws',
 		docVersion: '0.0.1',
 		resources: config.raw ? resources : {},
-		processed: await getPostProcessedData(resources),
+		processed: await getProcessedData(resources),
 		errors,
 		metadata: {
 			account: await getAwsAccountId(),
