@@ -14,11 +14,13 @@
 		"format": "prettier --write \"**/*.{js,ts,json,md}\"",
 		"prepare": "husky",
 		"build": "tsc && tsc-alias",
+		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",
 		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
 	},
 	"license": "MIT",
 	"devDependencies": {
+		"@changesets/cli": "^2.27.6",
 		"@types/inquirer": "^9.0.7",
 		"@types/jest": "^29.5.12",
 		"@types/node": "^20.14.8",
