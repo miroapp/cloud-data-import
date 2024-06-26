@@ -5,6 +5,9 @@
 	"bin": {
 		"cloud-data-import": "./dist/index.js"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"engines": {
 		"node": ">=20.x"
 	},
