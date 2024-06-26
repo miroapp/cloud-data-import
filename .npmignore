@@ -43,7 +43,7 @@ output.json
 miro-cloudview-*.json
 
 # Tests
-test/
+tests/
 *.spec.js
 *.spec.ts
 *.test.js
