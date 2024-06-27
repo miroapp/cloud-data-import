@@ -67,7 +67,7 @@
 		"@mirohq/prettier-config": "^2.0.0",
 		"colorette": "^2.0.20",
 		"dotenv": "^16.4.5",
-		"inquirer": "^8.2.6",
+		"inquirer": "^9.3.1",
 		"spinnies": "^0.5.1",
 		"yargs": "^17.7.2"
 	},
