@@ -1,13 +1,12 @@
 import {RateLimiter, createRateLimiter} from '@/scanners'
 import {GetRateLimiterFunction} from '@/scanners/types'
-import {Config} from '@/types'
 
 /**
  * Returns the getRateLimiter function for a given service and region
  *
  * this also handles the shared rate limiters for services like `ec2` and `ec2/volumes` or `rds/clusters` and `rds/db-instances`
  */
-export const createRateLimiterFactory = (config: Config): GetRateLimiterFunction => {
+export const createRateLimiterFactory = (callRateRps: number): GetRateLimiterFunction => {
 	const rateLimiters = new Map<string, RateLimiter>()
 
 	return (service: string, region?: string) => {
@@ -15,7 +14,7 @@ export const createRateLimiterFactory = (config: Config): GetRateLimiterFunction
 		const key = region ? `${quotaServiceName}-${region}` : quotaServiceName
 
 		if (!rateLimiters.has(key)) {
-			rateLimiters.set(key, createRateLimiter(config['call-rate-rps']))
+			rateLimiters.set(key, createRateLimiter(callRateRps))
 		}
 
 		return rateLimiters.get(key) as RateLimiter
