@@ -7,7 +7,7 @@ import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
 import {getProcessedData} from './process/getProcessedData'
 import {getConfig} from './config'
-import {createRateLimiterFactory} from './createRateLimiterFactory'
+import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 
 export default async () => {
