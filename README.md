@@ -41,3 +41,15 @@ npx @mirohq/cloud-data-import@latest aws --regions us-east-1 us-west-2 --output 
 ### 📜 License
 
 This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for more details.
+
+### 🤝 Contributing
+
+We welcome contributions to the Cloud Data Import project! If you're interested in helping improve this tool, please take a moment to review our [contribution guide](CONTRIBUTING.md). It outlines our development process, how to propose bugfixes and improvements, and how to build and test your changes.
+
+Here are some ways you can contribute:
+
+- Report bugs or suggest features by [opening an issue](https://github.com/miroapp/cloud-data-import/issues/new/choose)
+- Improve documentations
+- Submit pull requests with bug fixes or new features
+
+We appreciate your interest in making Cloud Data Import tool better!
