@@ -7,7 +7,7 @@ import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
 import {getProcessedData} from './process/getProcessedData'
 import {getConfig} from './config'
-import {createRateLimiterFactory} from './createRateLimiterFactory'
+import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 
 export default async () => {
@@ -18,7 +18,7 @@ export default async () => {
 	// setting the AWS_REGION explicitly to meet SDK requirements
 	process.env.AWS_REGION = config.regions[0]
 
-	const getRateLimiter = createRateLimiterFactory(config)
+	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'])
 
 	// prepare scanners
 	const scanners = getAwsScanners({

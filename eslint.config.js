@@ -15,6 +15,7 @@ const config = new ESLint({
 		rules: {
 			'prettier/prettier': 'error',
 		},
+		ignorePatterns: ['node_modules/', 'dist/', '.changeset/'],
 	},
 })
 

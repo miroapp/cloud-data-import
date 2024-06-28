@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-import discoverAwsApp from './aws-app/scan-and-save-as-json'
+import discoverAwsApp from './aws-app/main'
 
 const commands = process.argv.slice(2)
 
