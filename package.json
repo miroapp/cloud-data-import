@@ -59,7 +59,7 @@
 		"@aws-sdk/client-rds": "^3.556.0",
 		"@aws-sdk/client-route-53": "^3.600.0",
 		"@aws-sdk/client-s3": "^3.556.0",
-		"@aws-sdk/client-sns": "^3.600.0",
+		"@aws-sdk/client-sns": "^3.606.0",
 		"@aws-sdk/client-sqs": "^3.600.0",
 		"@aws-sdk/client-sts": "^3.606.0",
 		"@aws-sdk/smithy-client": "^3.374.0",
