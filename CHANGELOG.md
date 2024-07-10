@@ -1,5 +1,16 @@
 # @mirohq/cloud-data-import
 
+## 0.2.1
+
+### Patch Changes
+
+- 70b0d70: chore(deps): bump @aws-sdk/client-ec2 from 3.604.0 to 3.609.0
+- 3ed43d3: chore(deps): bump @aws-sdk/client-sns from 3.600.0 to 3.609.0
+- 1813d20: chore(deps): bump @aws-sdk/client-elastic-load-balancing from 3.600.0 to 3.609.0
+- b285db2: - Added CONTRIBUTING.md
+  - Readme improvements
+- 156475e: chore(deps): bump @aws-sdk/client-eks from 3.605.0 to 3.609.0
+
 ## 0.2.0
 
 ### Minor Changes
