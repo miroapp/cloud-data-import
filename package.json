@@ -50,7 +50,7 @@
 		"@aws-sdk/client-dynamodb": "^3.602.0",
 		"@aws-sdk/client-ec2": "^3.609.0",
 		"@aws-sdk/client-ecs": "^3.569.0",
-		"@aws-sdk/client-efs": "^3.600.0",
+		"@aws-sdk/client-efs": "^3.614.0",
 		"@aws-sdk/client-eks": "^3.609.0",
 		"@aws-sdk/client-elastic-load-balancing": "^3.609.0",
 		"@aws-sdk/client-elastic-load-balancing-v2": "^3.592.0",
