@@ -48,6 +48,7 @@ export type ResourceDescription =
 	| SNS.Topic
 	| ELBv1.LoadBalancerDescription
 	| ELBv2.LoadBalancer
+	| ELBv2.TargetGroup
 	| ElastiCache.CacheCluster
 	| Route53.HostedZone
 	| SQSQueue

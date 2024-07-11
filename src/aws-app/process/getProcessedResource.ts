@@ -62,6 +62,11 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 				(az) => az.ZoneName || '',
 			).filter(Boolean)
 			break
+		case 'elasticloadbalancing:targetgroup':
+			output.vpc = (resource as ELBv2.TargetGroup).VpcId
+			const targetGroupName = (resource as ELBv2.TargetGroup).TargetGroupName
+			if (targetGroupName) output.name = targetGroupName
+			break
 		case 'elasticfilesystem:file-system':
 			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
 				output.availabilityZones = [(resource as EFS.FileSystemDescription).AvailabilityZoneName as string]
