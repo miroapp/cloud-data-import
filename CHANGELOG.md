@@ -1,5 +1,17 @@
 # @mirohq/cloud-data-import
 
+## 0.3.0
+
+### Minor Changes
+
+- 6d78791: Added support for ELBv2 Target Groups
+
+### Patch Changes
+
+- 20d3c31: chore(deps): bump @aws-sdk/client-ecs from 3.600.0 to 3.614.0
+- 520d496: chore(deps): bump @aws-sdk/client-efs from 3.600.0 to 3.614.0
+- f0569a3: chore(deps): bump @aws-sdk/client-dynamodb from 3.602.0 to 3.614.0
+
 ## 0.2.1
 
 ### Patch Changes
