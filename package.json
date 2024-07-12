@@ -1,6 +1,6 @@
 {
 	"name": "@mirohq/cloud-data-import",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"main": "dist/index.js",
 	"bin": {
 		"cloud-data-import": "./dist/index.js"
@@ -19,7 +19,7 @@
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write \"**/*.{js,ts,json,md}\"",
 		"prepare": "husky",
-		"build": "tsc && tsc-alias",
+		"build": "tsc -p tsconfig.build.json && tsc-alias",
 		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",
 		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
