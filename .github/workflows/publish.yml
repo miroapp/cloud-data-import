@@ -28,7 +28,7 @@ jobs:
         run: npm install
 
       - name: List directory contents before build
-        run: ls -R
+        run: ls
 
       - name: Display TypeScript version
         run: npx tsc --version
@@ -40,7 +40,18 @@ jobs:
         run: npm run build
 
       - name: List directory contents after build
-        run: ls -R
+        run: ls
+
+      - name: Check dist folder
+        run: |
+          if [ -d "dist" ]; then
+            echo "dist folder exists"
+            ls -R dist
+          else
+            echo "dist folder does not exist"
+            pwd
+            ls -R
+          fi
 
       - name: Display build logs
         run: cat $(find . -name "*.log")
