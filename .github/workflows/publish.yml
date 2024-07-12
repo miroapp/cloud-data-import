@@ -30,6 +30,23 @@ jobs:
       - name: Build package
         run: npm run build
 
+      - name: Check dist folder
+        run: |
+          if [ -d "dist" ]; then
+            echo "dist folder exists"
+            echo "dist/"
+            ls -la dist
+          else
+            echo "Error: dist folder does not exist"
+            echo "/"
+            pwd
+            ls -la
+            exit 1
+          fi
+
+      - name: Display build logs
+        run: cat $(find . -name "*.log")
+
       # Creates a release PR if unpublished changesets exist; publishes directly if there are no new changesets
       - name: Create Release Pull Request or Publish
         id: changesets
