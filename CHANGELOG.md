@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.3.1
+
+### Patch Changes
+
+- fd3aaed: fix: build step added to the publish workflow
+
 ## 0.3.0
 
 ### Minor Changes
