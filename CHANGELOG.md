@@ -1,6 +1,6 @@
 # @mirohq/cloud-data-import
 
-## 0.3.1
+## 0.3.2
 
 ### Patch Changes
 

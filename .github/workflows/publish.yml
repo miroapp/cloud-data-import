@@ -27,30 +27,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: List directory contents before build
-        run: ls
-
-      - name: Display TypeScript version
-        run: npx tsc --version
-
-      - name: Display tsconfig.json content
-        run: cat tsconfig.json
-
       - name: Build package
         run: npm run build
-
-      - name: List directory contents after build
-        run: ls
 
       - name: Check dist folder
         run: |
           if [ -d "dist" ]; then
             echo "dist folder exists"
-            ls -R dist
+            echo "dist/"
+            ls -la dist
           else
-            echo "dist folder does not exist"
+            echo "Error: dist folder does not exist"
+            echo "/"
             pwd
-            ls -R
+            ls -la
+            exit 1
           fi
 
       - name: Display build logs
