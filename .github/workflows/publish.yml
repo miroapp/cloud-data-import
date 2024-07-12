@@ -27,8 +27,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: List directory contents before build
+        run: ls -R
+
+      - name: Display TypeScript version
+        run: npx tsc --version
+
+      - name: Display tsconfig.json content
+        run: cat tsconfig.json
+
       - name: Build package
         run: npm run build
+
+      - name: List directory contents after build
+        run: ls -R
+
+      - name: Display build logs
+        run: cat $(find . -name "*.log")
 
       # Creates a release PR if unpublished changesets exist; publishes directly if there are no new changesets
       - name: Create Release Pull Request or Publish
