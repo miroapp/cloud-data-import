@@ -15,6 +15,7 @@ import type * as CloudFront from '@aws-sdk/client-cloudfront'
 import type * as EFS from '@aws-sdk/client-efs'
 import type * as SQS from '@aws-sdk/client-sqs'
 import type * as ElastiCache from '@aws-sdk/client-elasticache'
+import type * as Redshift from '@aws-sdk/client-redshift'
 
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
@@ -50,6 +51,7 @@ export type ResourceDescription =
 	| ELBv2.LoadBalancer
 	| ELBv2.TargetGroup
 	| ElastiCache.CacheCluster
+	| Redshift.Cluster
 	| Route53.HostedZone
 	| SQSQueue
 

@@ -27,6 +27,7 @@ import {getRDSInstances} from './scan-functions/aws/rds-instances'
 import {getRDSClusters} from './scan-functions/aws/rds-clusters'
 import {getRDSProxies} from './scan-functions/aws/rds-proxies'
 import {getHostedZones} from './scan-functions/aws/route53-hosted-zones'
+import {getRedshiftClusters} from './scan-functions/aws/redshift-clusters'
 import {getSQSQueues} from './scan-functions/aws/sqs-queues'
 import {getElastiCacheClusters} from './scan-functions/aws/elasticache-clusters'
 import {getELBv2TargetGroups} from './scan-functions/aws/elbv2-target-groups'
@@ -80,6 +81,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('elbv1/load-balancers', getELBv1LoadBalancers, regions, options),
 		createRegionalScanner('eks/clusters', getEKSClusters, regions, options),
 		createRegionalScanner('lambda/functions', getLambdaFunctions, regions, options),
+		createRegionalScanner('redshift/clusters', getRedshiftClusters, regions, options),
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
