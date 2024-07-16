@@ -4,6 +4,7 @@ import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
 import type * as RDS from '@aws-sdk/client-rds'
 import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
+import type * as Redshift from '@aws-sdk/client-redshift'
 
 import {parse} from '@aws-sdk/util-arn-parser'
 
@@ -71,6 +72,10 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 			if ((resource as EFS.FileSystemDescription).AvailabilityZoneName) {
 				output.availabilityZones = [(resource as EFS.FileSystemDescription).AvailabilityZoneName as string]
 			}
+			break
+		case 'redshift:cluster':
+			output.vpc = (resource as Redshift.Cluster).VpcId
+			output.availabilityZones = [(resource as Redshift.Cluster).AvailabilityZone as string]
 		default:
 			break
 	}
