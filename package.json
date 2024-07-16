@@ -45,7 +45,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-auto-scaling": "^3.600.0",
-		"@aws-sdk/client-cloudfront": "^3.600.0",
+		"@aws-sdk/client-cloudfront": "^3.614.0",
 		"@aws-sdk/client-cloudtrail": "^3.556.0",
 		"@aws-sdk/client-dynamodb": "^3.614.0",
 		"@aws-sdk/client-ec2": "^3.609.0",
