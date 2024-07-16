@@ -41,14 +41,14 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 			const lambdaResource = resource as Lambda.FunctionConfiguration
 			return {
 				...baseOutput,
-				vpc: lambdaResource.VpcConfig?.VpcId ?? undefined,
+				vpc: lambdaResource.VpcConfig?.VpcId,
 			}
 		}
 		case 'rds:db': {
 			const rdsResource = resource as RDS.DBInstance
 			return {
 				...baseOutput,
-				vpc: rdsResource.DBSubnetGroup?.VpcId ?? undefined,
+				vpc: rdsResource.DBSubnetGroup?.VpcId,
 				availabilityZones: rdsResource.AvailabilityZone ? [rdsResource.AvailabilityZone] : undefined,
 			}
 		}
@@ -63,7 +63,7 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 			const ec2Instance = resource as EC2.Instance
 			return {
 				...baseOutput,
-				vpc: ec2Instance.VpcId ?? undefined,
+				vpc: ec2Instance.VpcId,
 				availabilityZones: ec2Instance.Placement?.AvailabilityZone
 					? [ec2Instance.Placement.AvailabilityZone]
 					: undefined,
@@ -89,16 +89,15 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 			return {
 				...baseOutput,
 				type,
-				vpc: elbResource.VpcId ?? undefined,
-				availabilityZones:
-					(elbResource.AvailabilityZones?.map((az) => az.ZoneName).filter(Boolean) as string[]) ?? undefined,
+				vpc: elbResource.VpcId,
+				availabilityZones: elbResource.AvailabilityZones?.map((az) => az.ZoneName).filter(Boolean) as string[],
 			}
 		}
 		case 'elasticloadbalancing:targetgroup': {
 			const targetGroup = resource as ELBv2.TargetGroup
 			return {
 				...baseOutput,
-				vpc: targetGroup.VpcId ?? undefined,
+				vpc: targetGroup.VpcId,
 				name: targetGroup.TargetGroupName ?? baseOutput.name,
 			}
 		}
@@ -113,7 +112,7 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 			const redshiftCluster = resource as Redshift.Cluster
 			return {
 				...baseOutput,
-				vpc: redshiftCluster.VpcId ?? undefined,
+				vpc: redshiftCluster.VpcId,
 				availabilityZones: redshiftCluster.AvailabilityZone ? [redshiftCluster.AvailabilityZone] : undefined,
 			}
 		}
