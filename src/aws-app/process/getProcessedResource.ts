@@ -46,8 +46,17 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 		}
 		case 'rds:db': {
 			const rdsResource = resource as RDS.DBInstance
+
+			const isAurora = rdsResource.Engine?.startsWith('aurora')
+
+			const type = (() => {
+				if (isAurora) return `${baseOutput.type}:aurora`
+				return baseOutput.type
+			})()
+
 			return {
 				...baseOutput,
+				type,
 				vpc: rdsResource.DBSubnetGroup?.VpcId,
 				availabilityZones: rdsResource.AvailabilityZone ? [rdsResource.AvailabilityZone] : undefined,
 			}
