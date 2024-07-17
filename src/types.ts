@@ -17,7 +17,6 @@ import type * as SQS from '@aws-sdk/client-sqs'
 import type * as ElastiCache from '@aws-sdk/client-elasticache'
 import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as CloudWatch from '@aws-sdk/client-cloudwatch'
-import type * as CloudWatchLogs from '@aws-sdk/client-cloudwatch-logs'
 
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
@@ -29,7 +28,7 @@ export type ResourceDescription =
 	| S3.Bucket
 	| CloudFront.DistributionSummary
 	| CloudWatch.MetricAlarm
-	| CloudWatchLogs.LogStream
+	| CloudWatch.MetricStreamEntry
 	| EKS.Cluster
 	| RDS.DBInstance
 	| RDS.DBCluster
