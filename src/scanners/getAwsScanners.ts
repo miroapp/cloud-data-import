@@ -34,6 +34,7 @@ import {getElastiCacheClusters} from './scan-functions/aws/elasticache-clusters'
 import {getELBv2TargetGroups} from './scan-functions/aws/elbv2-target-groups'
 import {getCloudWatchMetricAlarms} from './scan-functions/aws/cloudwatch-metric-alarms'
 import {getCloudWatchMetricStreams} from './scan-functions/aws/cloudwatch-metric-streams'
+import {getEC2VpnGateways} from './scan-functions/aws/ec2-vpn-gateways'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -79,6 +80,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/transit-gateways', getEC2TransitGateways, regions, options),
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
 		createRegionalScanner('ec2/network-acls', getEC2NetworkAcls, regions, options),
+		createRegionalScanner('ec2/vpn-gateways', getEC2VpnGateways, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
 		createRegionalScanner('elasticache/clusters', getElastiCacheClusters, regions, options),
