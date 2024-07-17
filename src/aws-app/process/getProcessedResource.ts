@@ -76,6 +76,14 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 				availabilityZones: ec2Volume.AvailabilityZone ? [ec2Volume.AvailabilityZone] : undefined,
 			}
 		}
+		case 'ec2:vpn-gateway': {
+			const vpnGateway = resource as EC2.VpnGateway
+			return {
+				...baseOutput,
+				availabilityZones: vpnGateway.AvailabilityZone ? [vpnGateway.AvailabilityZone] : undefined,
+				vpc: vpnGateway.VpcAttachments?.[0]?.VpcId,
+			}
+		}
 		case 'elasticloadbalancing:loadbalancer': {
 			const elbResource = resource as ELBv2.LoadBalancer
 
