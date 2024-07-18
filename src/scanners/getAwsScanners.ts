@@ -31,6 +31,8 @@ import {getRedshiftClusters} from './scan-functions/aws/redshift-clusters'
 import {getSQSQueues} from './scan-functions/aws/sqs-queues'
 import {getElastiCacheClusters} from './scan-functions/aws/elasticache-clusters'
 import {getELBv2TargetGroups} from './scan-functions/aws/elbv2-target-groups'
+import {getCloudWatchMetricAlarms} from './scan-functions/aws/cloudwatch-metric-alarms'
+import {getCloudWatchMetricStreams} from './scan-functions/aws/cloudwatch-metric-streams'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -63,6 +65,8 @@ export const getAwsScanners = ({
 	const scanners: Scanner[] = [
 		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
 		createRegionalScanner('cloudtrail/trails', getCloudTrailTrails, regions, options),
+		createRegionalScanner('cloudwatch/metric-alarms', getCloudWatchMetricAlarms, regions, options),
+		createRegionalScanner('cloudwatch/metric-streams', getCloudWatchMetricStreams, regions, options),
 		createRegionalScanner('dynamodb/tables', getDynamoDBTables, regions, options),
 		createRegionalScanner('ec2/instances', getEC2Instances, regions, options),
 		createRegionalScanner('ec2/vpcs', getEC2Vpcs, regions, options),
