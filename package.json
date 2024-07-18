@@ -30,7 +30,8 @@
 		"build": "npm run build:cjs && npm run build:esm",
 		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",
-		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
+		"dev": "ts-node -r tsconfig-paths/register src/index.ts",
+		"changeset": "changeset"
 	},
 	"license": "MIT",
 	"devDependencies": {
