@@ -41,6 +41,7 @@ export type ResourceDescription =
 	| EC2.RouteTable
 	| EC2.Vpc
 	| EC2.VpcEndpoint
+	| EC2.NetworkAcl
 	| EC2.Subnet
 	| EC2.Volume
 	| EC2.TransitGateway

@@ -21,6 +21,7 @@ import {getEC2Subnets} from './scan-functions/aws/ec2-subnets'
 import {getEC2RouteTables} from './scan-functions/aws/ec2-route-tables'
 import {getEC2InternetGateways} from './scan-functions/aws/ec2-internet-gateways'
 import {getEC2NatGateways} from './scan-functions/aws/ec2-nat-gateways'
+import {getEC2NetworkAcls} from './scan-functions/aws/ec2-network-acls'
 import {getEC2TransitGateways} from './scan-functions/aws/ec2-transit-gateways'
 import {getEC2Volumes} from './scan-functions/aws/ec2-volumes'
 import {getRDSInstances} from './scan-functions/aws/rds-instances'
@@ -77,6 +78,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('ec2/nat-gateways', getEC2NatGateways, regions, options),
 		createRegionalScanner('ec2/transit-gateways', getEC2TransitGateways, regions, options),
 		createRegionalScanner('ec2/volumes', getEC2Volumes, regions, options),
+		createRegionalScanner('ec2/network-acls', getEC2NetworkAcls, regions, options),
 		createRegionalScanner('ecs', getECSResources, regions, options),
 		createRegionalScanner('efs/file-systems', getEFSFileSystems, regions, options),
 		createRegionalScanner('elasticache/clusters', getElastiCacheClusters, regions, options),

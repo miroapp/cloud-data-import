@@ -116,6 +116,13 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 				availabilityZones: redshiftCluster.AvailabilityZone ? [redshiftCluster.AvailabilityZone] : undefined,
 			}
 		}
+		case 'ec2:network-acl': {
+			const ec2Acl = resource as EC2.NetworkAcl
+			return {
+				...baseOutput,
+				vpc: ec2Acl.VpcId,
+			}
+		}
 		default:
 			return baseOutput
 	}
