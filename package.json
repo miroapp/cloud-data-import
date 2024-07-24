@@ -3,7 +3,13 @@
 	"version": "0.3.3",
 	"main": "dist/index.js",
 	"bin": {
-		"cloud-data-import": "./dist/index.js"
+		"cloud-data-import": "./dist/cli.js"
+	},
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/esm/index.js"
+		}
 	},
 	"publishConfig": {
 		"access": "public"
@@ -19,10 +25,13 @@
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write \"**/*.{js,ts,json,md}\"",
 		"prepare": "husky",
-		"build": "tsc -p tsconfig.build.json && tsc-alias",
+		"build:cjs": "tsc -p tsconfig.build.json && tsc-alias",
+		"build:esm": "tsc -p tsconfig.esm.json && tsc-alias",
+		"build": "npm run build:cjs && npm run build:esm",
 		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",
-		"dev": "ts-node -r tsconfig-paths/register src/index.ts"
+		"dev": "ts-node -r tsconfig-paths/register src/index.ts",
+		"changeset": "changeset"
 	},
 	"license": "MIT",
 	"devDependencies": {
