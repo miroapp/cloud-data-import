@@ -18,7 +18,7 @@
 		"node": ">=20.x"
 	},
 	"scripts": {
-		"start": "node -r tsconfig-paths/register dist/index.js",
+		"start": "node -r tsconfig-paths/register dist/cli.js",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"lint": "eslint .",
@@ -30,7 +30,7 @@
 		"build": "npm run build:cjs && npm run build:esm",
 		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",
-		"dev": "ts-node -r tsconfig-paths/register src/index.ts",
+		"dev": "ts-node -r tsconfig-paths/register src/cli.ts",
 		"changeset": "changeset"
 	},
 	"license": "MIT",
