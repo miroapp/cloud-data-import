@@ -36,6 +36,7 @@ import {getCloudWatchMetricAlarms} from './scan-functions/aws/cloudwatch-metric-
 import {getCloudWatchMetricStreams} from './scan-functions/aws/cloudwatch-metric-streams'
 import {getEC2VpnGateways} from './scan-functions/aws/ec2-vpn-gateways'
 import {getEC2NetworkInterfaces} from './scan-functions/aws/ec2-network-interfaces'
+import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 
 interface GetAwsScannersArguments {
 	credentials: Credentials
@@ -66,6 +67,7 @@ export const getAwsScanners = ({
 
 	// Regional scanners
 	const scanners: Scanner[] = [
+		createRegionalScanner('athena/named-queries', getAthenaNamedQueries, regions, options),
 		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
 		createRegionalScanner('cloudtrail/trails', getCloudTrailTrails, regions, options),
 		createRegionalScanner('cloudwatch/metric-alarms', getCloudWatchMetricAlarms, regions, options),
