@@ -68,7 +68,7 @@
 		"@aws-sdk/client-lambda": "^3.614.0",
 		"@aws-sdk/client-rds": "^3.620.0",
 		"@aws-sdk/client-redshift": "3.614.0",
-		"@aws-sdk/client-route-53": "^3.600.0",
+		"@aws-sdk/client-route-53": "^3.620.0",
 		"@aws-sdk/client-s3": "^3.614.0",
 		"@aws-sdk/client-sns": "^3.616.0",
 		"@aws-sdk/client-sqs": "^3.614.0",
