@@ -43,6 +43,7 @@ export type ResourceDescription =
 	| EC2.Vpc
 	| EC2.VpcEndpoint
 	| EC2.NetworkAcl
+	| EC2.VpnGateway
 	| EC2.Subnet
 	| EC2.Volume
 	| EC2.TransitGateway
