@@ -69,6 +69,14 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 					: undefined,
 			}
 		}
+		case 'ec2:network-interface': {
+			const ec2NetworkInterface = resource as EC2.NetworkInterface
+			return {
+				...baseOutput,
+				vpc: ec2NetworkInterface.VpcId,
+				availabilityZones: ec2NetworkInterface.AvailabilityZone ? [ec2NetworkInterface.AvailabilityZone] : undefined,
+			}
+		}
 		case 'ec2:volume': {
 			const ec2Volume = resource as EC2.Volume
 			return {

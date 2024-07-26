@@ -38,6 +38,7 @@ export type ResourceDescription =
 	| EC2.Instance
 	| EC2.InternetGateway
 	| EC2.NatGateway
+	| EC2.NetworkInterface
 	| EC2.RouteTable
 	| EC2.Vpc
 	| EC2.VpcEndpoint
