@@ -1,5 +1,33 @@
 # @mirohq/cloud-data-import
 
+## 0.4.0
+
+### Minor Changes
+
+- 6033467: Added support for Athena Named Queries
+- 7915b44: Added support for Network ACLs
+- 64f5b9f: Added support for Application Load Balancers
+- d0e209d: Added support for Redshift clusters
+- 5dc8f7a: Added support for CloudWatch Metric Alarms and Streams
+- 2b17717: Exported the scanner and rate-limiter features out, making them available for programmatic use.
+- cece9d7: Added support for VPN Gateways
+
+### Patch Changes
+
+- 37ed633: chore(deps): bump @aws-sdk/client-elastic-load-balancing-v2 from 3.600.0 to 3.614.0
+- e4d2fd4: chore(deps): bump @aws-sdk/client-cloudfront from 3.600.0 to 3.614.0
+- 8f8c7b9: chore(deps): bump @aws-sdk/client-ec2 from 3.609.0 to 3.616.0
+- 3f01d1e: chore(deps): bump @aws-sdk/client-eks from 3.609.0 to 3.614.0
+- 4961d5b: chore(deps): bump @aws-sdk/client-sns from 3.614.0 to 3.616.0
+- bc8728a: chore(deps): bump @aws-sdk/client-s3 from 3.600.0 to 3.614.0
+- 3a633cc: chore(deps): bump @aws-sdk/client-auto-scaling from 3.604.0 to 3.616.0
+- ffc1760: chore(deps): bump @aws-sdk/client-sns from 3.609.0 to 3.614.0
+- feaefa3: chore(deps): bump @aws-sdk/client-sts from 3.609.0 to 3.614.0
+- 24cad6c: chore(deps): bump @aws-sdk/client-rds from 3.600.0 to 3.620.0
+- 3e46cee: chore(deps): bump @aws-sdk/client-sqs from 3.600.0 to 3.614.0
+- 1488e2e: chore(deps): bump @aws-sdk/client-elasticache from 3.600.0 to 3.616.0
+- b089fbe: chore(deps): bump @aws-sdk/client-lambda from 3.600.0 to 3.614.0
+
 ## 0.3.3
 
 ### Patch Changes

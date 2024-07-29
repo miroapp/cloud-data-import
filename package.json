@@ -1,6 +1,6 @@
 {
 	"name": "@mirohq/cloud-data-import",
-	"version": "0.3.3",
+	"version": "0.4.0",
 	"main": "dist/index.js",
 	"bin": {
 		"cloud-data-import": "./dist/cli.js"
