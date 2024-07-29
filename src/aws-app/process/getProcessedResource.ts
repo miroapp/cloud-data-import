@@ -5,6 +5,7 @@ import type * as Lambda from '@aws-sdk/client-lambda'
 import type * as RDS from '@aws-sdk/client-rds'
 import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
 import type * as Redshift from '@aws-sdk/client-redshift'
+import type * as Athena from '@aws-sdk/client-athena'
 
 import {parse} from '@aws-sdk/util-arn-parser'
 
@@ -37,6 +38,20 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 	}
 
 	switch (baseOutput.type) {
+		case 'athena:workgroup': {
+			const isNamedQuery = baseOutput.name.includes('/query/')
+
+			if (isNamedQuery) {
+				const namedQuery = resource as Athena.NamedQuery
+				return {
+					...baseOutput,
+					name: namedQuery.Name ?? baseOutput.name,
+					type: `athena:named-query`,
+				}
+			}
+
+			return baseOutput
+		}
 		case 'lambda:function': {
 			const lambdaResource = resource as Lambda.FunctionConfiguration
 			return {

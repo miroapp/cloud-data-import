@@ -54,6 +54,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-auto-scaling": "^3.616.0",
+		"@aws-sdk/client-athena": "^3.616.0",
 		"@aws-sdk/client-cloudfront": "^3.614.0",
 		"@aws-sdk/client-cloudtrail": "^3.556.0",
 		"@aws-sdk/client-cloudwatch": "^3.614.0",

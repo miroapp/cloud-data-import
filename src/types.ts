@@ -17,6 +17,7 @@ import type * as SQS from '@aws-sdk/client-sqs'
 import type * as ElastiCache from '@aws-sdk/client-elasticache'
 import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as CloudWatch from '@aws-sdk/client-cloudwatch'
+import type * as Athena from '@aws-sdk/client-athena'
 
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
@@ -24,6 +25,7 @@ import type {AwsCredentialIdentity} from '@aws-sdk/types'
 export type SQSQueue = NonNullable<SQS.GetQueueAttributesResult['Attributes']>
 
 export type ResourceDescription =
+	| Athena.NamedQuery
 	| AutoScaling.AutoScalingGroup
 	| S3.Bucket
 	| CloudFront.DistributionSummary
