@@ -65,7 +65,7 @@
 		"@aws-sdk/client-eks": "^3.614.0",
 		"@aws-sdk/client-elastic-load-balancing": "^3.609.0",
 		"@aws-sdk/client-elastic-load-balancing-v2": "^3.614.0",
-		"@aws-sdk/client-elasticache": "^3.616.0",
+		"@aws-sdk/client-elasticache": "^3.621.0",
 		"@aws-sdk/client-lambda": "^3.614.0",
 		"@aws-sdk/client-rds": "^3.620.0",
 		"@aws-sdk/client-redshift": "3.614.0",
