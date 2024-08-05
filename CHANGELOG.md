@@ -1,5 +1,32 @@
 # @mirohq/cloud-data-import
 
+## 0.4.1
+
+### Patch Changes
+
+- b772caf: - chore(deps): bump `@aws-sdk/client-auto-scaling` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-athena` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-cloudfront` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-cloudtrail` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-cloudwatch` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-dynamodb` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-ec2` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-ecs` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-efs` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-eks` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-elastic-load-balancing` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-elastic-load-balancing-v2` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-elasticache` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-lambda` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-rds` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-redshift` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-route-53` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-s3` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-sns` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-sqs` to `^3.621.0`
+  - chore(deps): bump `@aws-sdk/client-sts` to `^3.621.0`
+- 4b23e2c: Added types for module
+
 ## 0.4.0
 
 ### Minor Changes
