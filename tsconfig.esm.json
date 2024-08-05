@@ -5,7 +5,9 @@
 		"outDir": "./dist/esm",
 		"moduleResolution": "node",
 		"module": "esnext",
-		"target": "esnext"
+		"target": "esnext",
+		"declaration": true,
+		"declarationMap": true
 	},
 	"exclude": ["tests"]
 }

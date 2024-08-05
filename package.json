@@ -2,13 +2,20 @@
 	"name": "@mirohq/cloud-data-import",
 	"version": "0.4.0",
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"module": "dist/esm/index.js",
+	"files": [
+		"dist",
+		"dist/esm"
+	],
 	"bin": {
 		"cloud-data-import": "./dist/cli.js"
 	},
 	"exports": {
 		".": {
 			"require": "./dist/index.js",
-			"import": "./dist/esm/index.js"
+			"import": "./dist/esm/index.js",
+			"types": "./dist/index.d.ts"
 		}
 	},
 	"publishConfig": {
@@ -25,8 +32,8 @@
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write \"**/*.{js,ts,json,md}\"",
 		"prepare": "husky",
-		"build:cjs": "tsc -p tsconfig.build.json && tsc-alias",
-		"build:esm": "tsc -p tsconfig.esm.json && tsc-alias",
+		"build:cjs": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+		"build:esm": "tsc -p tsconfig.esm.json && tsc-alias -p tsconfig.esm.json",
 		"build": "npm run build:cjs && npm run build:esm",
 		"release": "npm run build && changeset publish",
 		"dev:setup": "npm install && npm run build && npm link",

@@ -38,10 +38,10 @@ import {getEC2VpnGateways} from './scan-functions/aws/ec2-vpn-gateways'
 import {getEC2NetworkInterfaces} from './scan-functions/aws/ec2-network-interfaces'
 import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 
-interface GetAwsScannersArguments {
-	credentials: Credentials
+export interface GetAwsScannersArguments {
+	credentials?: Credentials
 	getRateLimiter: GetRateLimiterFunction
-	hooks: ScannerLifecycleHook[]
+	hooks?: ScannerLifecycleHook[]
 	regions: string[]
 	shouldIncludeGlobalServices: boolean
 }
@@ -56,7 +56,7 @@ export const getAwsScanners = ({
 	const options = {
 		credentials,
 		getRateLimiter,
-		hooks,
+		hooks: hooks || [],
 	}
 
 	/**
