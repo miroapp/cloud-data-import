@@ -1,5 +1,7 @@
 import {createRateLimiter, getAwsScanners} from '@/scanners'
 
+export type {GetAwsScannersArguments} from '@/scanners'
+
 /**
  * @public
  * @experimental This export is experimental and may change or be removed in future versions.
