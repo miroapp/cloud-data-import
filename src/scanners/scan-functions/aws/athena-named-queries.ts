@@ -10,7 +10,7 @@ export async function getAthenaNamedQueries(
 	region: string,
 ): Promise<Resources<NamedQuery>> {
 	const client = new AthenaClient({credentials, region})
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const resources: Resources<NamedQuery> = {}
 	let nextToken: string | undefined

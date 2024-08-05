@@ -10,7 +10,7 @@ export async function getEC2VpnGateways(
 	region: string,
 ): Promise<Resources<VpnGateway>> {
 	const client = new EC2Client({credentials, region})
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const resources: Resources<VpnGateway> = {}
 

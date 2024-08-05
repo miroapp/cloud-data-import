@@ -20,9 +20,11 @@ export default async () => {
 
 	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'])
 
+	const credentials = undefined // assume that the credentials are already set in the environment
+
 	// prepare scanners
 	const scanners = getAwsScanners({
-		credentials: undefined, // assume that the credentials are already set in the environment
+		credentials,
 		regions: config.regions,
 		getRateLimiter,
 		shouldIncludeGlobalServices: !config['regional-only'],
@@ -57,7 +59,7 @@ export default async () => {
 		processed: await getProcessedData(resources),
 		errors,
 		metadata: {
-			account: await getAwsAccountId(),
+			account: await getAwsAccountId(credentials),
 			regions: config.regions,
 			startedAt: startedAt.toISOString(),
 			finishedAt: finishedAt.toISOString(),

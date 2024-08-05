@@ -14,7 +14,7 @@ export async function getELBv1LoadBalancers(
 ): Promise<Resources<LoadBalancerDescription>> {
 	const client = new ElasticLoadBalancingClient({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeLoadBalancersCommand = new DescribeLoadBalancersCommand({})
 	const describeLoadBalancersResponse = await rateLimiter.throttle(() => client.send(describeLoadBalancersCommand))

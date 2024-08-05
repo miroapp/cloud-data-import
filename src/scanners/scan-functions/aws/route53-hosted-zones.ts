@@ -11,7 +11,7 @@ export async function getHostedZones(
 ): Promise<Resources<HostedZone>> {
 	const client = new Route53Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const hostedZones: Resources<HostedZone> = {}
 

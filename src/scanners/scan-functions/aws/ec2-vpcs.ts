@@ -11,7 +11,7 @@ export async function getEC2Vpcs(
 ): Promise<Resources<Vpc>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeVpcsCommand = new DescribeVpcsCommand({})
 	const describeVpcsResponse = await rateLimiter.throttle(() => client.send(describeVpcsCommand))

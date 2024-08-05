@@ -11,7 +11,7 @@ export async function getEC2Volumes(
 ): Promise<Resources<Volume>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeVolumesCommand = new DescribeVolumesCommand({})
 	const describeVolumesResponse = await rateLimiter.throttle(() => client.send(describeVolumesCommand))

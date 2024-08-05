@@ -11,7 +11,7 @@ export async function getEC2TransitGateways(
 ): Promise<Resources<TransitGateway>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeTransitGatewaysCommand = new DescribeTransitGatewaysCommand({})
 	const describeTransitGatewaysResponse = await rateLimiter.throttle(() => client.send(describeTransitGatewaysCommand))
