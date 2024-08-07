@@ -87,7 +87,7 @@ export type ScannerError = {
 	region?: string
 }
 
-export type ScannerResult<T extends ResourceDescription> = {
+export type ScannerResult<T extends ResourceDescription = ResourceDescription> = {
 	resources: Resources<T>
 	errors: ScannerError[]
 }
