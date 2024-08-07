@@ -1,11 +1,14 @@
 import type {ResourceDescription, Resources} from '@/types'
+import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
 import type * as RDS from '@aws-sdk/client-rds'
+import type * as ELBv1 from '@aws-sdk/client-elastic-load-balancing'
 import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
 import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as Athena from '@aws-sdk/client-athena'
+import type * as ECS from '@aws-sdk/client-ecs'
 
 import {PlacementData, ResourcePlacementData} from './types'
 import {getArnInfo} from './common/getArnInfo'
@@ -39,6 +42,15 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		}
 	}
 
+	if (service === 'autoscaling' && type === 'autoScalingGroup') {
+		const asgResource = resource as AutoScaling.AutoScalingGroup
+		return {
+			...baseOutput,
+			name: asgResource.AutoScalingGroupName ?? baseOutput.name,
+			availabilityZones: asgResource.AvailabilityZones ?? [],
+		}
+	}
+
 	// Lambda functions
 	if (service === 'lambda' && type === 'function') {
 		const lambdaResource = resource as Lambda.FunctionConfiguration
@@ -55,6 +67,8 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 			...baseOutput,
 			vpc: rdsResource.DBSubnetGroup?.VpcId ?? null,
 			availabilityZones: rdsResource.AvailabilityZone ? [rdsResource.AvailabilityZone] : [],
+			subnets: rdsResource.DBSubnetGroup?.Subnets?.map((subnet) => subnet.SubnetIdentifier).filter(Boolean) as string[],
+			securityGroups: rdsResource.VpcSecurityGroups?.map((sg) => sg.VpcSecurityGroupId).filter(Boolean) as string[],
 		}
 	}
 
@@ -64,6 +78,18 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		return {
 			...baseOutput,
 			availabilityZones: rdsCluster.AvailabilityZones || [],
+			securityGroups: rdsCluster.VpcSecurityGroups?.map((sg) => sg.VpcSecurityGroupId).filter(Boolean) as string[],
+		}
+	}
+
+	// RDS DB Proxies
+	if (service === 'rds' && type === 'proxy') {
+		const rdsProxy = resource as RDS.DBProxy
+		return {
+			...baseOutput,
+			vpc: rdsProxy.VpcId ?? null,
+			subnets: rdsProxy.VpcSubnetIds ?? [],
+			securityGroups: rdsProxy.VpcSecurityGroupIds ?? [],
 		}
 	}
 
@@ -74,6 +100,36 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 			...baseOutput,
 			vpc: ec2Instance.VpcId ?? null,
 			availabilityZones: ec2Instance.Placement?.AvailabilityZone ? [ec2Instance.Placement.AvailabilityZone] : [],
+			subnets: ec2Instance.SubnetId ? [ec2Instance.SubnetId] : [],
+		}
+	}
+
+	// EC2 VPCs
+	if (service === 'ec2' && type === 'vpc') {
+		const ec2Vpc = resource as EC2.Vpc
+		return {
+			...baseOutput,
+			vpc: ec2Vpc.VpcId ?? null,
+		}
+	}
+
+	// EC2 VPC Endpoints
+	if (service === 'ec2' && type === 'vpc-endpoint') {
+		const vpcEndpoint = resource as EC2.VpcEndpoint
+		return {
+			...baseOutput,
+			vpc: vpcEndpoint.VpcId ?? null,
+			subnets: vpcEndpoint.SubnetIds ?? [],
+		}
+	}
+
+	// EC2 Subnets
+	if (service === 'ec2' && type === 'subnet') {
+		const ec2Subnet = resource as EC2.Subnet
+		return {
+			...baseOutput,
+			vpc: ec2Subnet.VpcId ?? null,
+			availabilityZones: ec2Subnet.AvailabilityZone ? [ec2Subnet.AvailabilityZone] : [],
 		}
 	}
 
@@ -84,6 +140,16 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 			...baseOutput,
 			vpc: ec2NetworkInterface.VpcId ?? null,
 			availabilityZones: ec2NetworkInterface.AvailabilityZone ? [ec2NetworkInterface.AvailabilityZone] : [],
+			subnets: ec2NetworkInterface.SubnetId ? [ec2NetworkInterface.SubnetId] : [],
+		}
+	}
+
+	// EC2 Route Tables
+	if (service === 'ec2' && type === 'route-table') {
+		const routeTable = resource as EC2.RouteTable
+		return {
+			...baseOutput,
+			vpc: routeTable.VpcId ?? null,
 		}
 	}
 
@@ -93,6 +159,15 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		return {
 			...baseOutput,
 			availabilityZones: ec2Volume.AvailabilityZone ? [ec2Volume.AvailabilityZone] : [],
+		}
+	}
+
+	// EC2 Internet Gateways
+	if (service === 'ec2' && type === 'internet-gateway') {
+		const internetGateway = resource as EC2.InternetGateway
+		return {
+			...baseOutput,
+			vpc: internetGateway.Attachments?.[0]?.VpcId ?? null,
 		}
 	}
 
@@ -106,17 +181,55 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		}
 	}
 
-	// ELBv2 Load Balancers
-	if (service === 'elasticloadbalancing' && type === 'loadbalancer') {
-		const elbResource = resource as ELBv2.LoadBalancer
-
-		const variant = elbResource.Type === 'application' ? 'application' : ''
-
+	// EC2 Nat Gateways
+	if (service === 'ec2' && type === 'nat-gateway') {
+		const natGateway = resource as EC2.NatGateway
 		return {
 			...baseOutput,
-			variant,
-			vpc: elbResource.VpcId ?? null,
-			availabilityZones: elbResource.AvailabilityZones?.map((az) => az.ZoneName).filter(Boolean) as string[],
+			vpc: natGateway.VpcId ?? null,
+			subnets: natGateway.SubnetId ? [natGateway.SubnetId] : [],
+		}
+	}
+
+	// ECS Tasks
+	if (service === 'ecs' && type === 'task') {
+		const ecsTask = resource as ECS.Task
+		return {
+			...baseOutput,
+			availabilityZones: ecsTask.availabilityZone ? [ecsTask.availabilityZone] : [],
+		}
+	}
+
+	// Load Balancers
+	if (service === 'elasticloadbalancing' && type === 'loadbalancer') {
+		const isV2 = !!(resource as any).LoadBalancerArn // LoadBalancerArn is only present in ELBv2
+
+		// ELBv2 Load Balancers
+		if (isV2) {
+			const elbResource = resource as ELBv2.LoadBalancer
+
+			const variant = elbResource.Type === 'application' ? 'application' : ''
+
+			return {
+				...baseOutput,
+				variant,
+				name: elbResource.LoadBalancerName ?? baseOutput.name,
+				vpc: elbResource.VpcId ?? null,
+				availabilityZones: elbResource.AvailabilityZones?.map((az) => az.ZoneName).filter(Boolean) as string[],
+				subnets: elbResource.AvailabilityZones?.map((az) => az.SubnetId).filter(Boolean) as string[],
+				securityGroups: elbResource.SecurityGroups ?? [],
+			}
+		}
+
+		// ELBv1 Load Balancers
+		const elbResource = resource as ELBv1.LoadBalancerDescription
+		return {
+			...baseOutput,
+			name: elbResource.LoadBalancerName ?? baseOutput.name,
+			vpc: elbResource.VPCId ?? null,
+			availabilityZones: elbResource.AvailabilityZones ?? [],
+			subnets: elbResource.Subnets ?? [],
+			securityGroups: elbResource.SecurityGroups ?? [],
 		}
 	}
 
@@ -139,6 +252,17 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		}
 	}
 
+	// Lambda Functions
+	if (service === 'lambda' && type === 'function') {
+		const lambdaResource = resource as Lambda.FunctionConfiguration
+		return {
+			...baseOutput,
+			vpc: lambdaResource.VpcConfig?.VpcId ?? null,
+			subnets: lambdaResource.VpcConfig?.SubnetIds ?? [],
+			securityGroups: lambdaResource.VpcConfig?.SecurityGroupIds ?? [],
+		}
+	}
+
 	// Redshift Clusters
 	if (service === 'redshift' && type === 'cluster') {
 		const redshiftCluster = resource as Redshift.Cluster
@@ -155,6 +279,7 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 		return {
 			...baseOutput,
 			vpc: ec2Acl.VpcId ?? null,
+			subnets: ec2Acl.Associations?.map((assoc) => assoc.SubnetId).filter(Boolean) as string[],
 		}
 	}
 
