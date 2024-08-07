@@ -1,26 +1,21 @@
 import {ProcessedData, Resources} from '@/types'
-import {getResourcePlacementData} from './getResourcePlacementData'
+import {getPlacementData} from './getPlacementData'
+import {ResourcePlacementData} from './types'
 
 export const getProcessedData = async (resources: Resources): Promise<ProcessedData> => {
-	const processedResources: ProcessedData['resources'] = {}
+	const placementData = getPlacementData(resources)
 
-	// Fill out the processed resources
-	for (const arn in resources) {
-		try {
-			const processedResource = getResourcePlacementData(arn, resources[arn])
-			if (processedResource) {
-				processedResources[arn] = {
-					name: processedResource.name,
-					type: processedResource.type,
-				}
-			}
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	const unique = Object.values(placementData).reduce(
+		(acc, data) => {
+			const key = `${data.service}-${data.type}-${data.variant}`
+			acc[key] = data
+			return acc
+		},
+		{} as {[key: string]: ResourcePlacementData},
+	)
 
 	return {
-		resources: processedResources,
+		resources: unique,
 		connections: [],
 		containers: {
 			accounts: {},
