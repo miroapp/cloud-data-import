@@ -11,7 +11,7 @@ export async function getEC2NatGateways(
 ): Promise<Resources<NatGateway>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeNatGatewaysCommand = new DescribeNatGatewaysCommand({})
 	const describeNatGatewaysResponse = await rateLimiter.throttle(() => client.send(describeNatGatewaysCommand))

@@ -11,7 +11,7 @@ export async function getEC2RouteTables(
 ): Promise<Resources<RouteTable>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeRouteTablesCommand = new DescribeRouteTablesCommand({})
 	const describeRouteTablesResponse = await rateLimiter.throttle(() => client.send(describeRouteTablesCommand))

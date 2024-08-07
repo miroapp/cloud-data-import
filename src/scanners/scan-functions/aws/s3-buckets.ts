@@ -11,7 +11,7 @@ export async function getS3Buckets(
 ): Promise<Resources<Bucket>> {
 	const client = new S3Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const listBucketsCommand = new ListBucketsCommand({})
 	const listBucketsResponse = await rateLimiter.throttle(() => client.send(listBucketsCommand))

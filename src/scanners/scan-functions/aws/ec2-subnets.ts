@@ -11,7 +11,7 @@ export async function getEC2Subnets(
 ): Promise<Resources<Subnet>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeSubnetsCommand = new DescribeSubnetsCommand({})
 	const describeSubnetsResponse = await rateLimiter.throttle(() => client.send(describeSubnetsCommand))

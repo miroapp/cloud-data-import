@@ -10,7 +10,7 @@ export async function getRedshiftClusters(
 	region: string,
 ): Promise<Resources<Cluster>> {
 	const client = new RedshiftClient({credentials, region})
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 	const resources: {[arn: string]: Cluster} = {}
 
 	let marker: string | undefined

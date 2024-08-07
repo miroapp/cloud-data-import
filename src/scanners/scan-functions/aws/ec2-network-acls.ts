@@ -11,7 +11,7 @@ export async function getEC2NetworkAcls(
 ): Promise<Resources<NetworkAcl>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeNetworkAclsCommand = new DescribeNetworkAclsCommand({})
 	const describeSubnetsResponse = await rateLimiter.throttle(() => client.send(describeNetworkAclsCommand))

@@ -11,7 +11,7 @@ export async function getEC2NetworkInterfaces(
 ): Promise<Resources<NetworkInterface>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const resources: Resources<NetworkInterface> = {}
 	let nextToken: string | undefined

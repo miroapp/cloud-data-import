@@ -11,7 +11,7 @@ export async function getEC2Instances(
 ): Promise<Resources<Instance>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeInstancesCommand = new DescribeInstancesCommand({})
 	const describeInstancesResponse = await rateLimiter.throttle(() => client.send(describeInstancesCommand))

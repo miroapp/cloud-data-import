@@ -11,7 +11,7 @@ export async function getEC2InternetGateways(
 ): Promise<Resources<InternetGateway>> {
 	const client = new EC2Client({credentials, region})
 
-	const accountId = await getAwsAccountId()
+	const accountId = await getAwsAccountId(credentials)
 
 	const describeInternetGatewaysCommand = new DescribeInternetGatewaysCommand({})
 	const describeInternetGatewaysResponse = await rateLimiter.throttle(() =>
