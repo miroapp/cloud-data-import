@@ -14,9 +14,10 @@ import {PlacementData, ResourcePlacementData} from './types'
 import {getArnInfo} from './common/getArnInfo'
 
 export const getResourcePlacementData = (arn: string, resource: ResourceDescription): ResourcePlacementData => {
-	const {name, region, service, type} = getArnInfo(arn)
+	const {name, region, service, type, account} = getArnInfo(arn)
 
 	const baseOutput: ResourcePlacementData = {
+		account,
 		name,
 		region,
 		service,

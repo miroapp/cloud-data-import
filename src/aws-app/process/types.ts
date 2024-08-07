@@ -1,6 +1,7 @@
 import {ProcessedData} from '@/types'
 
 export type ResourcePlacementData = {
+	account: string
 	name: string
 	region: string
 	service: string
