@@ -1,22 +1,34 @@
 import {ProcessedData, Resources} from '@/types'
-import {getProcessedResource} from './getProcessedResource'
+import {getResourcePlacementData} from './getResourcePlacementData'
 
 export const getProcessedData = async (resources: Resources): Promise<ProcessedData> => {
-	const processed: ProcessedData = {
-		resources: {},
-	}
+	const processedResources: ProcessedData['resources'] = {}
 
 	// Fill out the processed resources
 	for (const arn in resources) {
 		try {
-			const processedResource = getProcessedResource(arn, resources[arn])
+			const processedResource = getResourcePlacementData(arn, resources[arn])
 			if (processedResource) {
-				processed.resources[arn] = processedResource
+				processedResources[arn] = {
+					name: processedResource.name,
+					type: processedResource.type,
+				}
 			}
 		} catch (error) {
 			console.log(error)
 		}
 	}
 
-	return processed
+	return {
+		resources: processedResources,
+		connections: [],
+		containers: {
+			accounts: {},
+			regions: {},
+			vpcs: {},
+			availabilityZones: {},
+			securityGroups: {},
+			subnets: {},
+		},
+	}
 }

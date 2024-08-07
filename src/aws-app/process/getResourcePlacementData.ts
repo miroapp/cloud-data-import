@@ -1,4 +1,4 @@
-import {ResourceDescription, ProcessedResource} from '@/types'
+import type {ResourceDescription} from '@/types'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
 import type * as Lambda from '@aws-sdk/client-lambda'
@@ -8,6 +8,14 @@ import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as Athena from '@aws-sdk/client-athena'
 
 import {parse} from '@aws-sdk/util-arn-parser'
+
+type ResourcePlacementData = {
+	name: string
+	region: string
+	type: string
+	vpc?: string
+	availabilityZones?: string[]
+}
 
 const getResourceType = (service: string, resource: string): string => {
 	if (service === 'sns') return 'topic'
@@ -23,7 +31,7 @@ const getResourceName = (resourceFullName: string, resourceType: string): string
 	return resourceFullName
 }
 
-export const getProcessedResource = (arn: string, resource: ResourceDescription): ProcessedResource | null => {
+export const getResourcePlacementData = (arn: string, resource: ResourceDescription): ResourcePlacementData | null => {
 	const arnData = parse(arn)
 
 	if (!arnData) throw new Error('No ARN data found for the provided ARN.')
@@ -31,7 +39,7 @@ export const getProcessedResource = (arn: string, resource: ResourceDescription)
 	const resourceType = getResourceType(arnData.service, arnData.resource)
 	const name = getResourceName(arnData.resource, resourceType)
 
-	const baseOutput: ProcessedResource = {
+	const baseOutput: ResourcePlacementData = {
 		name,
 		region: arnData.region,
 		type: `${arnData.service}:${resourceType}`,
