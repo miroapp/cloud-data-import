@@ -17,7 +17,7 @@ export const getProcessedContainers = (placementData: PlacementData, resources: 
 		// Account Container Creation
 		if (account && !uniqueAccounts[account]) {
 			uniqueAccounts[account] = {
-				name: account,
+				name: `Account-${account}`,
 				children: {
 					resources: [],
 					regions: [],
