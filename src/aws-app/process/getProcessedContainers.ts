@@ -66,8 +66,10 @@ export const getProcessedContainers = (placementData: PlacementData, resources: 
 
 		// AvailabilityZone Container Creation
 		for (const az of availabilityZones) {
-			if (az && !uniqueAvailabilityZones[az]) {
-				uniqueAvailabilityZones[az] = {
+			const azIdentifier = `${account}/${az}`
+
+			if (az && !uniqueAvailabilityZones[azIdentifier]) {
+				uniqueAvailabilityZones[azIdentifier] = {
 					name: az,
 					children: {
 						resources: [],
@@ -78,8 +80,8 @@ export const getProcessedContainers = (placementData: PlacementData, resources: 
 
 				const connectedRegion = uniqueRegions[regionIdentifier]
 
-				if (connectedRegion && !connectedRegion.children.availabilityZones.includes(az)) {
-					connectedRegion.children.availabilityZones.push(az)
+				if (connectedRegion && !connectedRegion.children.availabilityZones.includes(azIdentifier)) {
+					connectedRegion.children.availabilityZones.push(azIdentifier)
 				}
 			}
 		}
@@ -105,7 +107,9 @@ export const getProcessedContainers = (placementData: PlacementData, resources: 
 
 				for (const az of availabilityZones) {
 					if (az) {
-						const connectedAz = uniqueAvailabilityZones[az]
+						const azIdentifier = `${account}/${az}`
+
+						const connectedAz = uniqueAvailabilityZones[azIdentifier]
 
 						if (connectedAz && !connectedAz.children.securityGroups.includes(sg)) {
 							connectedAz.children.securityGroups.push(sg)
@@ -148,10 +152,12 @@ export const getProcessedContainers = (placementData: PlacementData, resources: 
 				}
 
 				if (subnetDescription.AvailabilityZone) {
-					const connectedAz = uniqueAvailabilityZones[subnetDescription.AvailabilityZone]
+					const azIdentifier = `${account}/${subnetDescription.AvailabilityZone}`
+
+					const connectedAz = uniqueAvailabilityZones[azIdentifier]
 
 					if (!connectedAz) {
-						throw new Error(`Availability Zone ${subnetDescription.AvailabilityZone} not found for subnet ${subnet}`)
+						throw new Error(`Availability Zone ${azIdentifier} not found for subnet ${subnet}`)
 					}
 
 					if (!connectedAz.children.subnets.includes(subnet)) {

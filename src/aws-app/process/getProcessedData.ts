@@ -1,29 +1,16 @@
 import {ProcessedData, Resources} from '@/types'
 import {getPlacementData} from './getPlacementData'
-import {ResourcePlacementData} from './types'
+import {getProcessedContainers} from './getProcessedContainers'
+import {assignResourcesToContainers} from './assignResourcesToContainers'
 
-export const getProcessedData = async (resources: Resources): Promise<ProcessedData> => {
+export const getProcessedData = (resources: Resources): ProcessedData => {
 	const placementData = getPlacementData(resources)
-
-	const unique = Object.values(placementData).reduce(
-		(acc, data) => {
-			const key = `${data.service}-${data.type}-${data.variant}`
-			acc[key] = data
-			return acc
-		},
-		{} as {[key: string]: ResourcePlacementData},
-	)
+	const emptyContainers = getProcessedContainers(placementData, resources)
+	const containers = assignResourcesToContainers(placementData, emptyContainers)
 
 	return {
-		resources: unique,
+		resources: {},
 		connections: [],
-		containers: {
-			accounts: {},
-			regions: {},
-			vpcs: {},
-			availabilityZones: {},
-			securityGroups: {},
-			subnets: {},
-		},
+		containers,
 	}
 }
