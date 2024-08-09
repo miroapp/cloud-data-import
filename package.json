@@ -22,7 +22,7 @@
 		"access": "public"
 	},
 	"engines": {
-		"node": ">=20.x"
+		"node": ">=18.x"
 	},
 	"scripts": {
 		"start": "node -r tsconfig-paths/register dist/cli.js",
