@@ -1,5 +1,16 @@
 # @mirohq/cloud-data-import
 
+## 0.5.0
+
+### Minor Changes
+
+- 2830ed3: chore: update node version from 20 to 18 in package.json
+
+### Patch Changes
+
+- 53fde69: Exported the scanner types
+- b052d19: fix: when using the module, ARN's accountId is generated correctly
+
 ## 0.4.1
 
 ### Patch Changes
