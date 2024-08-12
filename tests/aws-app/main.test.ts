@@ -31,6 +31,53 @@ describe('main function', () => {
 	let config: any
 	let mockedDate: ReturnType<typeof mockDate>
 
+	const mockedProcessedData: ProcessedData = {
+		resources: {
+			'dummy:arn:1': {
+				name: '1',
+				type: 'dummy:instance',
+			},
+			'dummy:arn:2': {
+				name: '2',
+				type: 'dummy:table',
+			},
+		},
+		connections: [],
+		containers: {
+			accounts: {
+				'123456789012': {
+					name: '123456789012',
+					children: {
+						resources: [],
+						regions: ['us-east-1', 'eu-west-1'],
+					},
+				},
+			},
+			regions: {
+				'123456789012/us-east-1': {
+					name: 'us-east-1',
+					children: {
+						resources: ['dummy:arn:1'],
+						vpcs: [],
+						availabilityZones: [],
+					},
+				},
+				'123456789012/eu-west-1': {
+					name: 'eu-west-1',
+					children: {
+						resources: ['dummy:arn:2'],
+						vpcs: [],
+						availabilityZones: [],
+					},
+				},
+			},
+			vpcs: {},
+			availabilityZones: {},
+			securityGroups: {},
+			subnets: {},
+		},
+	}
+
 	beforeEach(() => {
 		consoleLogSpy = jest.spyOn(console, 'log').mockImplementation()
 		consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
@@ -50,12 +97,7 @@ describe('main function', () => {
 		;(getConfig as jest.Mock).mockResolvedValue(config)
 		;(createRateLimiterFactory as jest.Mock).mockReturnValue(jest.fn())
 		;(getAwsAccountId as jest.Mock).mockResolvedValue('123456789012')
-		;(getProcessedData as jest.Mock).mockResolvedValue({
-			resources: {
-				'dummy:arn:1': 'dummy:info',
-				'dummy:arn:2': 'dummy:info',
-			},
-		})
+		;(getProcessedData as jest.Mock).mockResolvedValue(mockedProcessedData)
 
 		mockScanners = [
 			jest.fn().mockResolvedValue({
@@ -119,12 +161,7 @@ describe('main function', () => {
 				'dummy:arn:1': 'dummy:raw:info',
 				'dummy:arn:2': 'dummy:raw:info',
 			} as unknown as Resources,
-			processed: {
-				resources: {
-					'dummy:arn:1': 'dummy:info',
-					'dummy:arn:2': 'dummy:info',
-				},
-			} as unknown as ProcessedData,
+			processed: mockedProcessedData,
 			errors: [],
 			metadata: {
 				account: '123456789012',
