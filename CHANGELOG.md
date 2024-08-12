@@ -1,5 +1,20 @@
 # @mirohq/cloud-data-import
 
+## 0.5.0
+
+### Minor Changes
+
+- 2830ed3: chore: update node version from 20 to 18 in package.json
+
+### Patch Changes
+
+- 2df71db: chore(deps): bump @aws-sdk/client-elastic-load-balancing-v2 from 3.621.0 to 3.624.0
+- 6c3b8a0: chore(deps): bump @aws-sdk/client-sts from 3.621.0 to 3.624.0
+- 53fde69: Exported the scanner types
+- f3f1824: chore(deps): bump @aws-sdk/client-route-53 from 3.621.0 to 3.624.0
+- dd7c249: chore(deps): bump @aws-sdk/client-lambda from 3.621.0 to 3.624.0
+- b052d19: fix: when using the module, ARN's accountId is generated correctly
+
 ## 0.4.1
 
 ### Patch Changes
