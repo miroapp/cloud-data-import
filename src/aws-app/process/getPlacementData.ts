@@ -11,10 +11,10 @@ import type * as Athena from '@aws-sdk/client-athena'
 import type * as ECS from '@aws-sdk/client-ecs'
 
 import {PlacementData, ResourcePlacementData} from './types'
-import {getArnInfo} from './common/getArnInfo'
+import {ARNInfo, getArnInfo} from './utils/getArnInfo'
 
-export const getResourcePlacementData = (arn: string, resource: ResourceDescription): ResourcePlacementData => {
-	const {name, region, service, type, account} = getArnInfo(arn)
+export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDescription): ResourcePlacementData => {
+	const {name, region, service, type, account} = arnInfo
 
 	const baseOutput: ResourcePlacementData = {
 		account,
@@ -287,11 +287,27 @@ export const getResourcePlacementData = (arn: string, resource: ResourceDescript
 	return baseOutput
 }
 
+export const isContainerAndShouldBeIgnored = (service: string, type: string): boolean => {
+	const isVPC = service === 'ec2' && type === 'vpc'
+	const isSubnet = service === 'ec2' && type === 'subnet'
+	const isSecurityGroup = service === 'ec2' && type === 'security-group'
+	const isAvailabilityZone = service === 'ec2' && type === 'availability-zone'
+
+	return isVPC || isSubnet || isSecurityGroup || isAvailabilityZone
+}
+
 export const getPlacementData = (resources: Resources): PlacementData => {
 	const placementData: PlacementData = {}
 
 	for (const [arn, resource] of Object.entries(resources)) {
-		const data = getResourcePlacementData(arn, resource)
+		const arnInfo = getArnInfo(arn)
+
+		// Skip VPC, Subnet, Security Group, and Availability Zone resources
+		if (isContainerAndShouldBeIgnored(arnInfo.service, arnInfo.type)) {
+			continue
+		}
+
+		const data = getResourcePlacementData(arnInfo, resource)
 
 		placementData[arn] = data
 	}

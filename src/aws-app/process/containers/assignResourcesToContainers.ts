@@ -1,10 +1,10 @@
-import {PlacementData, ProcessedContainers} from './types'
+import {PlacementData, ProcessedContainers} from '../types'
 
 export const assignResourcesToContainers = (
 	placementData: PlacementData,
-	processedContainers: ProcessedContainers,
+	emptyContainers: ProcessedContainers,
 ): ProcessedContainers => {
-	const containers = JSON.parse(JSON.stringify(processedContainers)) as ProcessedContainers
+	const containers = JSON.parse(JSON.stringify(emptyContainers)) as ProcessedContainers
 
 	for (const [arn, placement] of Object.entries(placementData)) {
 		// Subnet and Security Group placement

@@ -1,0 +1,1 @@
+export {getProcessedResources} from './processResources'

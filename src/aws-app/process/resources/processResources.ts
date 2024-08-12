@@ -1,4 +1,4 @@
-import {PlacementData, ProcessedResources} from './types'
+import {PlacementData, ProcessedResources} from '../types'
 
 export const getProcessedResources = (placementData: PlacementData): ProcessedResources => {
 	const processedResources = {} as ProcessedResources

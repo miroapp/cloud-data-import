@@ -5,7 +5,7 @@ import {ProcessedData, Resources, StandardOutputSchema} from '@/types'
 import {saveAsJson} from '@/aws-app/utils/saveAsJson'
 import * as cliMessages from '@/aws-app/cliMessages'
 import {openDirectoryAndFocusFile} from '@/aws-app/utils/openDirectoryAndFocusFile'
-import {getProcessedData} from '@/aws-app/process/getProcessedData'
+import {getProcessedData} from '@/aws-app/process'
 import {getConfig} from '@/aws-app/config'
 import {createRateLimiterFactory} from '@/aws-app/utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
@@ -17,7 +17,7 @@ jest.mock('@/scanners')
 jest.mock('@/aws-app/utils/saveAsJson')
 jest.mock('@/aws-app/cliMessages')
 jest.mock('@/aws-app/utils/openDirectoryAndFocusFile')
-jest.mock('@/aws-app/process/getProcessedData')
+jest.mock('@/aws-app/process')
 jest.mock('@/aws-app/config')
 jest.mock('@/aws-app/utils/createRateLimiterFactory')
 jest.mock('@/scanners/scan-functions/aws/common/getAwsAccountId')

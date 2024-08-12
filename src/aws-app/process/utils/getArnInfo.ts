@@ -16,7 +16,7 @@ const getName = (resourceFullName: string, resourceType: string): string => {
 	return resourceFullName
 }
 
-type ARNInfo = {
+export type ARNInfo = {
 	name: string
 	account: string
 	service: string
