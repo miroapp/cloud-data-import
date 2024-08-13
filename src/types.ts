@@ -117,18 +117,59 @@ export interface Config {
 	'regional-only': boolean
 }
 
-export type ProcessedResource = {
+export type BaseContainer<AdditionalChildren extends Record<string, any> = {}> = {
 	name: string
-	region?: string
-	type: string
-	vpc?: string
-	availabilityZones?: string[]
-	account?: string
+	children: {
+		resources: string[] // resource arns
+	} & AdditionalChildren
 }
+
+export type AccountContainer = BaseContainer<{
+	regions: string[] // region ids
+}>
+
+export type RegionContainer = BaseContainer<{
+	vpcs: string[] // vpc arns
+	availabilityZones: string[] // availability zone ids
+}>
+
+export type VpcContainer = BaseContainer<{
+	subnets: string[] // subnet arns
+	securityGroups: string[] // security group arns
+}>
+
+export type AvailabilityZoneContainer = BaseContainer<{
+	subnets: string[] // subnet arns
+	securityGroups: string[] // security group arns
+}>
+
+export type SecurityGroupContainer = BaseContainer
+
+export type SubnetContainer = BaseContainer & {
+	type: 'public' | 'private'
+}
+
+export type ConnectionType = 'TBD'
 
 export interface ProcessedData {
 	resources: {
-		[arn: string]: ProcessedResource
+		[arn: string]: {
+			name: string
+			type: string
+		}
+	}
+	connections: {
+		from: string // resource arn
+		to: string // resource arn
+		type: ConnectionType
+	}[]
+	containers: {
+		accounts: {[accountId: string]: AccountContainer}
+		regions: {[regionId: string]: RegionContainer}
+		vpcs: {[arn: string]: VpcContainer}
+		availabilityZones: {[arn: string]: AvailabilityZoneContainer}
+		securityGroups: {[arn: string]: SecurityGroupContainer}
+		subnets: {[arn: string]: SubnetContainer}
 	}
 }
 
