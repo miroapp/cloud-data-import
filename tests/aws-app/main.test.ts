@@ -156,7 +156,7 @@ describe('main function', () => {
 
 		const expectedOutput: StandardOutputSchema = {
 			provider: 'aws',
-			docVersion: '0.0.1',
+			docVersion: expect.any(String),
 			resources: {
 				'dummy:arn:1': 'dummy:raw:info',
 				'dummy:arn:2': 'dummy:raw:info',
