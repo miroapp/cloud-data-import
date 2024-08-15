@@ -1,16 +1,11 @@
-import {PlacementData, ProcessedContainers} from '../types'
+import {ErrorManager, PlacementData, ProcessedContainers} from '../types'
 
 export const assignResourcesToContainers = (
 	placementData: PlacementData,
 	emptyContainers: ProcessedContainers,
+	errorManager: ErrorManager,
 ): ProcessedContainers => {
 	const containers = JSON.parse(JSON.stringify(emptyContainers)) as ProcessedContainers
-	const errors: Record<string, string[]> = {}
-
-	const addError = (arn: string, message: string) => {
-		if (!errors[arn]) errors[arn] = []
-		errors[arn].push(message)
-	}
 
 	for (const [arn, placement] of Object.entries(placementData)) {
 		// Subnet and Security Group placement
@@ -20,7 +15,7 @@ export const assignResourcesToContainers = (
 				if (containers.subnets[subnetId]) {
 					containers.subnets[subnetId].children.resources.push(arn)
 				} else {
-					addError(arn, `Could not assign to ${subnetId}. Subnet not found`)
+					errorManager.log(arn, `Could not assign to ${subnetId}. Subnet not found`)
 				}
 			}
 
@@ -29,7 +24,7 @@ export const assignResourcesToContainers = (
 				if (containers.securityGroups[securityGroupId]) {
 					containers.securityGroups[securityGroupId].children.resources.push(arn)
 				} else {
-					addError(arn, `Could not assign to ${securityGroupId}. Security Group not found`)
+					errorManager.log(arn, `Could not assign to ${securityGroupId}. Security Group not found`)
 				}
 			}
 
@@ -44,7 +39,7 @@ export const assignResourcesToContainers = (
 				if (containers.vpcs[placement.vpc]) {
 					containers.vpcs[placement.vpc].children.resources.push(arn)
 				} else {
-					addError(arn, `Could not assign to ${placement.vpc}. VPC not found`)
+					errorManager.log(arn, `Could not assign to ${placement.vpc}. VPC not found`)
 				}
 			}
 
@@ -55,7 +50,7 @@ export const assignResourcesToContainers = (
 				if (containers.availabilityZones[azIdentifier]) {
 					containers.availabilityZones[azIdentifier].children.resources.push(arn)
 				} else {
-					addError(arn, `Could not assign to ${azIdentifier}. Availability Zone not found`)
+					errorManager.log(arn, `Could not assign to ${azIdentifier}. Availability Zone not found`)
 				}
 			}
 
@@ -70,7 +65,7 @@ export const assignResourcesToContainers = (
 			if (containers.regions[regionIdentifier]) {
 				containers.regions[regionIdentifier].children.resources.push(arn)
 			} else {
-				addError(arn, `Could not assign to ${regionIdentifier}. Region not found`)
+				errorManager.log(arn, `Could not assign to ${regionIdentifier}. Region not found`)
 			}
 
 			// If the resource can be place in a region, we can skip the rest of the loop
@@ -82,7 +77,7 @@ export const assignResourcesToContainers = (
 			if (containers.accounts[placement.account]) {
 				containers.accounts[placement.account].children.resources.push(arn)
 			} else {
-				addError(arn, `Could not assign to ${placement.account}. Account not found`)
+				errorManager.log(arn, `Could not assign to ${placement.account}. Account not found`)
 			}
 
 			// If the resource can be place in an account, we can skip the rest of the loop
@@ -90,16 +85,7 @@ export const assignResourcesToContainers = (
 		}
 
 		// If the resource cannot be placed in any container, we can throw an error
-		addError(arn, 'Cannot be placed in any container')
-	}
-
-	// Log errors
-	if (Object.keys(errors).length > 0) {
-		console.error('\n\nNon-critical errors occurred while processing scanned resources:')
-		for (const [arn, messages] of Object.entries(errors)) {
-			console.error(`Resource "${arn}":`)
-			messages.forEach((message) => console.error(`  - ${message}`))
-		}
+		errorManager.log(arn, 'Cannot be placed in any container')
 	}
 
 	return containers

@@ -1,4 +1,4 @@
-import {blueBright, yellowBright} from 'colorette'
+import {blueBright, yellowBright, redBright} from 'colorette'
 
 export const getIntro = () => `
 
@@ -32,4 +32,16 @@ ${blueBright(`Resource discovery completed successfully! 🚀`)}
 
 Happy visualizing!
 
+`
+
+export const getProcessingErrorMessage = (errors: Record<string, string[]>) => `
+🚨 Some errors occurred while processing following containers and resources:
+
+${redBright(
+	Object.entries(errors)
+		.map(([arn, errors]) => `- ${arn}\n${errors.map((err) => `    - ${err}`).join('\n')}`)
+		.join('\n\n'),
+)}
+
+${redBright('This might cause mentioned resources to be missing in the visualization.')}
 `
