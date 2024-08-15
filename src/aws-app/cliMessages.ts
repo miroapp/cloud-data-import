@@ -35,6 +35,9 @@ Happy visualizing!
 `
 
 export const getProcessingErrorMessage = (errors: Record<string, string[]>) => `
+
+--
+
 🚨 Some errors occurred while processing following containers and resources:
 
 ${redBright(
