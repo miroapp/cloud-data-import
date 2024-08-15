@@ -54,7 +54,7 @@ export default async () => {
 	// create output
 	const output: StandardOutputSchema = {
 		provider: 'aws',
-		docVersion: '0.0.1',
+		docVersion: '0.1.0',
 		resources: config.raw ? resources : {},
 		processed: await getProcessedData(resources),
 		errors,
