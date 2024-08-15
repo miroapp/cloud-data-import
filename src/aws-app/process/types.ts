@@ -17,6 +17,11 @@ export type PlacementData = {
 	[arn: string]: ResourcePlacementData
 }
 
+export interface ErrorManager {
+	log: (topic: string, message: string) => void
+	render: () => void
+}
+
 export type ProcessedResources = ProcessedData['resources']
 export type ProcessedConnections = ProcessedData['connections']
 export type ProcessedContainers = ProcessedData['containers']

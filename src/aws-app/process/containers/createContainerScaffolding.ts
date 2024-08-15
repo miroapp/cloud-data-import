@@ -1,4 +1,4 @@
-import type {PlacementData, ProcessedContainers} from '../types'
+import type {ErrorManager, PlacementData, ProcessedContainers} from '../types'
 import type {Resources} from '@/types'
 import type {Subnet} from '@aws-sdk/client-ec2'
 import {
@@ -20,7 +20,11 @@ const findSubnetArnById = (resources: Resources, subnetId: string): string | und
  * Get the container scaffolding from the placement data.
  * In this step we only create empty containers and later we will assign resources to them.
  */
-export const createContainerScaffolding = (placementData: PlacementData, resources: Resources): ProcessedContainers => {
+export const createContainerScaffolding = (
+	placementData: PlacementData,
+	resources: Resources,
+	errorManager: ErrorManager,
+): ProcessedContainers => {
 	const containers: ProcessedContainers = {
 		accounts: {},
 		regions: {},
@@ -84,7 +88,7 @@ export const createContainerScaffolding = (placementData: PlacementData, resourc
 
 					if (subnetDescription.VpcId) {
 						if (!containers.vpcs[subnetDescription.VpcId]) {
-							throw new Error(`VPC ${subnetDescription.VpcId} not found for subnet ${subnet}`)
+							errorManager.log(subnet, `could not assign to VPC ${subnetDescription.VpcId}! VPC not found.`)
 						}
 						containers.vpcs[subnetDescription.VpcId].children.subnets.push(subnet)
 					}
@@ -92,7 +96,7 @@ export const createContainerScaffolding = (placementData: PlacementData, resourc
 					if (subnetDescription.AvailabilityZone) {
 						const azIdentifier = generateContainerIdentifier(account, subnetDescription.AvailabilityZone)
 						if (!containers.availabilityZones[azIdentifier]) {
-							throw new Error(`Availability Zone ${azIdentifier} not found for subnet ${subnet}`)
+							errorManager.log(subnet, `could not assign to AZ ${subnetDescription.AvailabilityZone}! AZ not found.`)
 						}
 						containers.availabilityZones[azIdentifier].children.subnets.push(subnet)
 					}
