@@ -1,5 +1,16 @@
 # @mirohq/cloud-data-import
 
+## 0.6.0
+
+### Minor Changes
+
+- 0553197: chore: updated visualization data schema (`proccessed` field in the output)
+- ddcd8d1: Bumped docVersion to 0.1.0
+
+### Patch Changes
+
+- 5e41b47: Changed processing errors types to non-blockers
+
 ## 0.5.0
 
 ### Minor Changes
