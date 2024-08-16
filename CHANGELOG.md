@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.6.1
+
+### Patch Changes
+
+- 7f48aad: fix: container-scaffolding-creation error fixed
+
 ## 0.6.0
 
 ### Minor Changes
