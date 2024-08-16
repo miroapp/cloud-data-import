@@ -73,7 +73,15 @@ export const createContainerScaffolding = (
 				}
 				for (const az of availabilityZones) {
 					const azIdentifier = generateContainerIdentifier(account, az)
-					containers.availabilityZones[azIdentifier].children.securityGroups.push(sg)
+					try {
+						if (!containers.availabilityZones[azIdentifier]) {
+							containers.availabilityZones[azIdentifier] = createAvailabilityZoneContainer(az)
+							containers.regions[regionIdentifier].children.availabilityZones.push(azIdentifier)
+						}
+						containers.availabilityZones[azIdentifier].children.securityGroups.push(sg)
+					} catch (e) {
+						errorManager.log(sg, `could not assign to AZ ${az}! AZ not found.`)
+					}
 				}
 			}
 		}
@@ -87,18 +95,30 @@ export const createContainerScaffolding = (
 					containers.subnets[subnet] = createSubnetContainer(subnet, subnetDescription)
 
 					if (subnetDescription.VpcId) {
-						if (!containers.vpcs[subnetDescription.VpcId]) {
+						try {
+							if (!containers.vpcs[subnetDescription.VpcId]) {
+								containers.vpcs[subnetDescription.VpcId] = createVpcContainer(subnetDescription.VpcId)
+								containers.regions[regionIdentifier].children.vpcs.push(subnetDescription.VpcId)
+							}
+							containers.vpcs[subnetDescription.VpcId].children.subnets.push(subnet)
+						} catch (e) {
 							errorManager.log(subnet, `could not assign to VPC ${subnetDescription.VpcId}! VPC not found.`)
 						}
-						containers.vpcs[subnetDescription.VpcId].children.subnets.push(subnet)
 					}
 
 					if (subnetDescription.AvailabilityZone) {
 						const azIdentifier = generateContainerIdentifier(account, subnetDescription.AvailabilityZone)
-						if (!containers.availabilityZones[azIdentifier]) {
+						try {
+							if (!containers.availabilityZones[azIdentifier]) {
+								containers.availabilityZones[azIdentifier] = createAvailabilityZoneContainer(
+									subnetDescription.AvailabilityZone,
+								)
+								containers.regions[regionIdentifier].children.availabilityZones.push(azIdentifier)
+							}
+							containers.availabilityZones[azIdentifier].children.subnets.push(subnet)
+						} catch (e) {
 							errorManager.log(subnet, `could not assign to AZ ${subnetDescription.AvailabilityZone}! AZ not found.`)
 						}
-						containers.availabilityZones[azIdentifier].children.subnets.push(subnet)
 					}
 				}
 			}
