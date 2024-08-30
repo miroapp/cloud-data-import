@@ -1,6 +1,6 @@
 // This list is extracted from https://docs.aws.amazon.com/general/latest/gr/rande.html
 // Tip: check git history to see when was the last time this list was updated
-export const awsRegionIds: string[] = [
+export const awsRegionIds = [
 	'us-east-2',
 	'us-east-1',
 	'us-west-1',
@@ -32,4 +32,4 @@ export const awsRegionIds: string[] = [
 	'sa-east-1',
 	'us-gov-east-1',
 	'us-gov-west-1',
-]
+] as const
