@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.7.0
+
+### Minor Changes
+
+- b31f5be: Exported more functionality including awsRegionsId, experimental_getProcessedData() and more types
+
 ## 0.6.1
 
 ### Patch Changes
