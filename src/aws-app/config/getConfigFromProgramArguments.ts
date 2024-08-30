@@ -1,4 +1,4 @@
-import {Config} from '@/types'
+import {AwsRegionId, Config} from '@/types'
 import {awsRegionIds} from '@/constants'
 import {getDefaultOutputName} from './getDefaultOutputName'
 import {SUPPORTED_ENV_VARS, getEnvConfig} from './getEnvConfig'
@@ -28,7 +28,7 @@ export const getConfigFromProgramArguments = (): Config => {
 					return awsRegionIds
 				}
 
-				const invalidRegions = arg.filter((region) => !awsRegionIds.includes(region))
+				const invalidRegions = arg.filter((region) => !awsRegionIds.includes(region as AwsRegionId))
 				if (invalidRegions.length) {
 					throw new Error(
 						`[ERROR] Invalid region(s): ${invalidRegions.join(', ')}. Valid regions are: ${awsRegionIds.join(', ')}`,

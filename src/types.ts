@@ -21,8 +21,11 @@ import type * as Athena from '@aws-sdk/client-athena'
 
 import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
+import {awsRegionIds} from './constants'
 
 export type SQSQueue = NonNullable<SQS.GetQueueAttributesResult['Attributes']>
+
+export type AwsRegionId = (typeof awsRegionIds)[number]
 
 export type ResourceDescription =
 	| Athena.NamedQuery
@@ -177,7 +180,7 @@ export interface StandardOutputSchema {
 	provider: 'aws'
 	docVersion: string
 	resources: Resources
-	processed: ProcessedData
+	processed?: ProcessedData
 	errors: ScannerError[]
 	metadata: {
 		account: string
