@@ -18,6 +18,18 @@ const regionPrompt = async (defaultRegions?: string[]): Promise<string[]> => {
 	return regions.includes('all') ? awsRegionIds : regions
 }
 
+const profilePrompt = async (defaultProfile?: string): Promise<string> => {
+	const {profile} = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'profile',
+			message: 'AWS profile:',
+			default: defaultProfile,
+		},
+	])
+	return profile
+}
+
 const outputPathPrompt = async (defaultPath: string): Promise<string> => {
 	const {output} = await inquirer.prompt([
 		{
@@ -67,21 +79,44 @@ const scanGlobalPrompt = async (defaultScanGlobal: boolean): Promise<boolean> =>
 	return scanGlobal
 }
 
-export const getConfigViaGui = async (): Promise<Config> => {
-	const defaultRegions = getEnvConfig(SUPPORTED_ENV_VARS.REGIONS)?.split(',')
-	const defaultRegionalOnly = getEnvConfig(SUPPORTED_ENV_VARS.REGIONAL_ONLY) === 'true'
-	const defaultOutput = getEnvConfig(SUPPORTED_ENV_VARS.OUTPUT) || getDefaultOutputName()
-	const defaultCallRate = parseInt(getEnvConfig(SUPPORTED_ENV_VARS.CALL_RATE_RPS) || '') || 10
-	const defaultCompressed = getEnvConfig(SUPPORTED_ENV_VARS.COMPRESSED) === 'true'
-
-	const regions = await regionPrompt(defaultRegions)
-	const scanGlobal = await scanGlobalPrompt(!defaultRegionalOnly)
-	const output = await outputPathPrompt(defaultOutput)
-	const callRateRps = await callRatePrompt(defaultCallRate)
-	const compressed = await compressedPrompt(defaultCompressed)
+export const getDefaultConfigValues = (): {
+	output: string
+	regions: any
+	profile: string
+	regionalOnly: boolean
+	callRate: number
+	compressed: boolean
+} => {
+	const regions = getEnvConfig(SUPPORTED_ENV_VARS.REGIONS)?.split(',')
+	const profile = getEnvConfig(SUPPORTED_ENV_VARS.PROFILE) || process.env.AWS_PROFILE || 'default'
+	const regionalOnly = getEnvConfig(SUPPORTED_ENV_VARS.REGIONAL_ONLY) === 'true'
+	const output = getEnvConfig(SUPPORTED_ENV_VARS.OUTPUT) || getDefaultOutputName()
+	const callRate = parseInt(getEnvConfig(SUPPORTED_ENV_VARS.CALL_RATE_RPS) || '') || 10
+	const compressed = getEnvConfig(SUPPORTED_ENV_VARS.COMPRESSED) === 'true'
 
 	return {
 		regions,
+		profile,
+		regionalOnly,
+		output,
+		callRate,
+		compressed,
+	}
+}
+
+export const getConfigViaGui = async (): Promise<Config> => {
+	const defaults = getDefaultConfigValues()
+
+	const regions = await regionPrompt(defaults.regions)
+	const profile = await profilePrompt(defaults.profile)
+	const scanGlobal = await scanGlobalPrompt(!defaults.regionalOnly)
+	const output = await outputPathPrompt(defaults.output)
+	const callRateRps = await callRatePrompt(defaults.callRate)
+	const compressed = await compressedPrompt(defaults.compressed)
+
+	return {
+		regions,
+		profile,
 		output,
 		'call-rate-rps': callRateRps,
 		compressed,

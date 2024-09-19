@@ -38,6 +38,12 @@ export const getConfigFromProgramArguments = (): Config => {
 				return arg
 			},
 		})
+		.option('profile', {
+			alias: 'p',
+			type: 'string',
+			description: 'Specify the AWS profile to use (takes priority over the AWS_PROFILE environment variable).',
+			default: getEnvConfig(SUPPORTED_ENV_VARS.PROFILE) || process.env.AWS_PROFILE || 'default',
+		})
 		.option('output', {
 			alias: 'o',
 			type: 'string',
