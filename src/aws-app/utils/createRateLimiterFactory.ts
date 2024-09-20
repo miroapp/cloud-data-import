@@ -1,5 +1,6 @@
-import {RateLimiter, createRateLimiter} from '@/scanners'
+import {createRateLimiter} from '@/scanners'
 import {GetRateLimiterFunction} from '@/scanners/types'
+import {RateLimiter} from '@/types'
 
 /**
  * Returns the getRateLimiter function for a given service and region

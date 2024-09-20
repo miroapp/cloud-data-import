@@ -1,6 +1,5 @@
-import {S3Client, ListBucketsCommand, GetBucketLocationCommand, Bucket} from '@aws-sdk/client-s3'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {S3Client, ListBucketsCommand, Bucket} from '@aws-sdk/client-s3'
+import {Credentials, Resources, RateLimiter} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 

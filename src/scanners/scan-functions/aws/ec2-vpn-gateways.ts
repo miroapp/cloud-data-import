@@ -1,6 +1,5 @@
 import {EC2Client, DescribeVpnGatewaysCommand, VpnGateway} from '@aws-sdk/client-ec2'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
-import {Credentials, Resources} from '@/types'
+import {Credentials, Resources, RateLimiter} from '@/types'
 import {getAwsAccountId} from './common/getAwsAccountId'
 import {buildARN} from './common/buildArn'
 

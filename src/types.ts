@@ -19,7 +19,6 @@ import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as CloudWatch from '@aws-sdk/client-cloudwatch'
 import type * as Athena from '@aws-sdk/client-athena'
 
-import type {RateLimiter} from './scanners/common/RateLimiter'
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
 import {awsRegionIds} from './constants'
 
@@ -71,6 +70,16 @@ export type Resources<T extends ResourceDescription = ResourceDescription> = {
 }
 
 export type Credentials = AwsCredentialIdentity | undefined
+
+export interface RateLimiter {
+	throttle<U>(fn: () => Promise<U>): Promise<U>
+	pause(): void
+	resume(): void
+	abort(): void
+	readonly queueSize: number
+	readonly isPaused: boolean
+	readonly rate: number
+}
 
 export type RegionalScanFunction<T extends ResourceDescription> = (
 	credentials: Credentials,

@@ -1,6 +1,5 @@
 import {EFSClient, DescribeFileSystemsCommand, FileSystemDescription} from '@aws-sdk/client-efs'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getEFSFileSystems(
 	credentials: Credentials,

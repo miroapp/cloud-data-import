@@ -1,6 +1,5 @@
 import {LambdaClient, ListFunctionsCommand, GetFunctionCommand, FunctionConfiguration} from '@aws-sdk/client-lambda'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getLambdaFunctions(
 	credentials: Credentials,

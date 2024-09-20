@@ -1,6 +1,5 @@
 import {EC2Client, DescribeNetworkInterfacesCommand, NetworkInterface} from '@aws-sdk/client-ec2'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
-import {Credentials, Resources} from '@/types'
+import {Credentials, Resources, RateLimiter} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
