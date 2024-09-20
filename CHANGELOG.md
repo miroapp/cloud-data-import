@@ -1,5 +1,20 @@
 # @mirohq/cloud-data-import
 
+## 0.8.0
+
+### Minor Changes
+
+- 01223ed: Add AWS profile parameter support
+
+### Patch Changes
+
+- 7f90266: chore(deps): bump @aws-sdk/client-cloudwatch from 3.621.0 to 3.654.0
+- 6d3ba3e: chore(deps): bump @aws-sdk/client-dynamodb from 3.621.0 to 3.654.0
+- 3d97fe9: chore(deps): bump @aws-sdk/client-efs from 3.621.0 to 3.654.0
+- ffe45a0: Add .npmrc to set registry
+- 5e5d6bb: chore(deps): bump @aws-sdk/client-redshift from 3.621.0 to 3.654.0
+- fe121c3: chore(deps): bump @aws-sdk/client-sts from 3.624.0 to 3.654.0
+
 ## 0.7.0
 
 ### Minor Changes
