@@ -1,6 +1,6 @@
-import {RetryOptions, RetryStrategy} from './RetryStrategy'
+import {RetryOptions, RetryStrategy} from '@/scanners/common/RetryStrategy'
 
-export class AWSRateLimitExhaustionStrategy extends RetryStrategy {
+export class AWSRateLimitExhaustionRetryStrategy extends RetryStrategy {
 	constructor(options: Partial<RetryOptions> = {}) {
 		super({
 			maxRetries: 5,

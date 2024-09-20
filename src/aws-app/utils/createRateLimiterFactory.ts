@@ -1,4 +1,5 @@
 import {createRateLimiter} from '@/scanners'
+import {RetryStrategy} from '@/scanners/common/RetryStrategy'
 import {GetRateLimiterFunction} from '@/scanners/types'
 import {RateLimiter} from '@/types'
 
@@ -7,7 +8,7 @@ import {RateLimiter} from '@/types'
  *
  * this also handles the shared rate limiters for services like `ec2` and `ec2/volumes` or `rds/clusters` and `rds/db-instances`
  */
-export const createRateLimiterFactory = (callRateRps: number): GetRateLimiterFunction => {
+export const createRateLimiterFactory = (callRateRps: number, retryStrategy: RetryStrategy): GetRateLimiterFunction => {
 	const rateLimiters = new Map<string, RateLimiter>()
 
 	return (service: string, region?: string) => {
@@ -15,7 +16,7 @@ export const createRateLimiterFactory = (callRateRps: number): GetRateLimiterFun
 		const key = region ? `${quotaServiceName}-${region}` : quotaServiceName
 
 		if (!rateLimiters.has(key)) {
-			rateLimiters.set(key, createRateLimiter(callRateRps))
+			rateLimiters.set(key, createRateLimiter(callRateRps, retryStrategy))
 		}
 
 		return rateLimiters.get(key) as RateLimiter

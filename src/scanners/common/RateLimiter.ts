@@ -100,4 +100,5 @@ export class RateLimiterImpl implements RateLimiter {
 	}
 }
 
-export const createRateLimiter = (rate: number) => new RateLimiterImpl(rate)
+export const createRateLimiter = (rate: number, retryStrategy?: RetryStrategy) =>
+	new RateLimiterImpl(rate, retryStrategy)
