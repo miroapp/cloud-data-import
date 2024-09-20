@@ -98,7 +98,7 @@ export const getAwsScanners = ({
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
 		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
-		createRegionalScanner('s3/buckets', getS3Buckets, regions, options),
+		createGlobalScanner('s3/buckets', getS3Buckets, options),
 		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 		createRegionalScanner('sqs/queues', getSQSQueues, regions, options),
 	]

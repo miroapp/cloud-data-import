@@ -92,11 +92,6 @@ describe('getAwsScanners', () => {
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
 		})
-		expect(createRegionalScannerSpy).toHaveBeenCalledWith('s3/buckets', getS3Buckets, regions, {
-			credentials: mockCredentials,
-			getRateLimiter: mockGetRateLimiter,
-			hooks: mockHooks,
-		})
 	})
 
 	it('should call createGlobalScanner with correct arguments if global services are included', () => {
@@ -109,6 +104,12 @@ describe('getAwsScanners', () => {
 		})
 
 		// Sample calls to createGlobalScanner
+		expect(createGlobalScannerSpy).toHaveBeenCalledWith('s3/buckets', getS3Buckets, {
+			credentials: mockCredentials,
+			getRateLimiter: mockGetRateLimiter,
+			hooks: mockHooks,
+		})
+
 		expect(createGlobalScannerSpy).toHaveBeenCalledWith('cloudfront/distributions', getCloudFrontDistributions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
