@@ -9,6 +9,7 @@ import {getProcessedData} from './process'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
+import {buildCredentialIdentity} from '@/aws-app/utils/buildCredentialIdentity'
 
 export default async () => {
 	console.log(cliMessages.getIntro())
@@ -20,7 +21,7 @@ export default async () => {
 
 	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'])
 
-	const credentials = undefined // assume that the credentials are already set in the environment
+	const credentials = await buildCredentialIdentity(config.profile)
 
 	// prepare scanners
 	const scanners = getAwsScanners({

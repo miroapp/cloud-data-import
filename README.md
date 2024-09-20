@@ -26,6 +26,7 @@ The script accepts several arguments to customize the data import process:
 | Argument                   | Description                                                                                    |
 | -------------------------- | ---------------------------------------------------------------------------------------------- |
 | `-r, --regions`            | Specify the AWS regions to scan. Use `"all"` to scan all available regions.                    |
+| `-p, --profile`            | Specify the AWS profile to use (takes priority over the AWS_PROFILE environment variable).     |
 | `-o, --output`             | Define the output file path for the imported data. Must be a `.json` file.                     |
 | `--rps, --call-rate-rps`   | Set the maximum number of API calls to make per second. Default is 10.                         |
 | `-c, --compressed`         | Enable output compression.                                                                     |
