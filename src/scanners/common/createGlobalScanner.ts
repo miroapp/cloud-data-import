@@ -1,6 +1,12 @@
-import {Resources, ResourceDescription, GlobalScanFunction, Credentials, ScannerLifecycleHook} from '@/types'
+import {
+	Resources,
+	ResourceDescription,
+	GlobalScanFunction,
+	Credentials,
+	ScannerLifecycleHook,
+	RateLimiter,
+} from '@/types'
 import {CreateGlobalScannerFunction, GetRateLimiterFunction} from '@/scanners/types'
-import {RateLimiter} from './RateLimiter'
 
 type GlobalScanResult<T extends ResourceDescription> = {
 	resources: Resources<T>

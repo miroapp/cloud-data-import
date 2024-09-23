@@ -1,6 +1,5 @@
 import {CloudFrontClient, ListDistributionsCommand, DistributionSummary} from '@aws-sdk/client-cloudfront'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getCloudFrontDistributions(
 	credentials: Credentials,

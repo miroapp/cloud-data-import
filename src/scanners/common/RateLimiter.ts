@@ -1,120 +1,104 @@
-const BASE_RETRY_DELAY = 1000 // 1 second
-const MAX_RETRIES = 6 // last attempt will take 64 seconds (2^6 = 64 * base retry delay) and overall will take 127 seconds for all retries to complete, before giving up
-const CAPACITY_USAGE_PERCENTAGE = 0.6
+import {RateLimiter} from '@/types'
+import {RetryStrategy} from './RetryStrategy'
 
-const ONE_SECOND = 1000
+export class RateLimiterImpl implements RateLimiter {
+	private executionTimesMs: number[] = []
+	private pendingQueue: (() => void)[] = []
+	private timeoutId: NodeJS.Timeout | null = null
+	private _isPaused = false
+	private readonly intervalMs: number
+	private retryStrategy: RetryStrategy | null
 
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-export interface RateLimiter {
-	throttle<U>(fn: () => Promise<U>): Promise<U>
-}
-
-class RateLimiterImpl implements RateLimiter {
-	private allowance: number
-	private lastCheck: number
-	private maxUsage: number
-	private queue: (() => void)[]
-
-	constructor(rate: number) {
-		this.maxUsage = rate * CAPACITY_USAGE_PERCENTAGE
-		this.allowance = this.maxUsage
-		this.lastCheck = Date.now()
-		this.queue = []
+	constructor(
+		private _rate: number,
+		retryStrategy: RetryStrategy | null = null,
+	) {
+		if (!Number.isFinite(_rate) || _rate <= 0) {
+			throw new TypeError('Expected `rate` to be a positive finite number')
+		}
+		this.intervalMs = 1000 / _rate
+		this.retryStrategy = retryStrategy
 	}
 
-	// Acquire permission to proceed with a function call
-	private async acquire() {
-		const current = Date.now()
-		const timePassed = current - this.lastCheck
-		this.lastCheck = current
-		this.allowance += (timePassed / ONE_SECOND) * this.maxUsage
-
-		if (this.allowance > this.maxUsage) {
-			this.allowance = this.maxUsage
+	private scheduleNextExecution(): void {
+		if (this.timeoutId) {
+			clearTimeout(this.timeoutId)
 		}
 
-		// If allowance is insufficient, wait for more capacity
-		if (this.allowance < 1) {
-			const waitTime = (1 - this.allowance) * (ONE_SECOND / this.maxUsage)
-			await sleep(waitTime)
-			this.allowance = 0
-		} else {
-			this.allowance -= 1
+		if (this._isPaused || this.pendingQueue.length === 0) {
+			return
 		}
+
+		const now = Date.now()
+		let delay = 0
+
+		if (this.executionTimesMs.length > 0) {
+			const nextExecutionTime = this.executionTimesMs[this.executionTimesMs.length - 1] + this.intervalMs
+			delay = Math.max(0, nextExecutionTime - now)
+		}
+
+		this.timeoutId = setTimeout(() => {
+			const fn = this.pendingQueue.shift()
+			if (fn) {
+				this.executionTimesMs.push(Date.now())
+				if (this.executionTimesMs.length > 10) {
+					this.executionTimesMs.shift()
+				}
+				fn()
+			}
+			this.scheduleNextExecution()
+		}, delay)
 	}
 
-	// Throttle function execution
-	async throttle<U>(fn: () => Promise<U>): Promise<U> {
+	throttle<U>(fn: () => Promise<U>): Promise<U> {
 		return new Promise<U>((resolve, reject) => {
-			const execute = async () => {
-				try {
-					await this.acquire()
-					resolve(await fn())
-				} catch (error: any) {
-					if (this.isRequestLimitError(error)) {
-						this.retry(fn, resolve, reject, 1)
-					} else {
-						reject(error)
-					}
+			const wrappedFn = () => {
+				if (this.retryStrategy) {
+					this.retryStrategy.retry(fn).then(resolve).catch(reject)
+				} else {
+					fn().then(resolve).catch(reject)
 				}
 			}
 
-			this.queue.push(execute)
-
-			// If it's the only function in the queue, it means that we just added it. So we should start the process.
-			// But, if it's more in the queue, it means that we are already processing the queue, and the function will be processed when it's its turn.
-			if (this.queue.length === 1) {
-				this.dequeue()
-			}
+			this.pendingQueue.push(wrappedFn)
+			this.scheduleNextExecution()
 		})
 	}
 
-	// Retry function with exponential backoff
-	private async retry<U>(
-		fn: () => Promise<U>,
-		resolve: (value: U | PromiseLike<U>) => void,
-		reject: (reason?: any) => void,
-		attempt: number,
-	) {
-		if (attempt < MAX_RETRIES) {
-			// Exponential backoff
-			// https://en.wikipedia.org/wiki/Exponential_backoff
-			await sleep(BASE_RETRY_DELAY * Math.pow(2, attempt))
-			try {
-				// acquire permission to proceed and add enough sleep time
-				await this.acquire()
-				resolve(await fn())
-			} catch (error: any) {
-				if (this.isRequestLimitError(error)) {
-					this.retry(fn, resolve, reject, attempt + 1)
-				} else {
-					reject(error)
-				}
-			}
-		} else {
-			reject(new Error('Max retries reached'))
+	pause(): void {
+		this._isPaused = true
+		if (this.timeoutId) {
+			clearTimeout(this.timeoutId)
+			this.timeoutId = null
 		}
 	}
 
-	// Check if error is a request limit error
-	private isRequestLimitError(error: Error) {
-		return [
-			'TooManyRequestsException',
-			'ThrottlingException',
-			'ProvisionedThroughputExceededException',
-			'RequestLimitExceeded',
-		].includes(error.name)
+	resume(): void {
+		this._isPaused = false
+		this.scheduleNextExecution()
 	}
 
-	// Process the queue of function calls
-	// @idea Maybe we can add some lifecycle hooks here in the future?
-	private async dequeue() {
-		while (this.queue.length > 0) {
-			const fn = this.queue.shift()
-			if (fn) await fn()
+	abort(): void {
+		this.pendingQueue = []
+		this.executionTimesMs = []
+		if (this.timeoutId) {
+			clearTimeout(this.timeoutId)
+			this.timeoutId = null
 		}
+	}
+
+	get queueSize(): number {
+		return this.pendingQueue.length
+	}
+
+	get isPaused(): boolean {
+		return this._isPaused
+	}
+
+	get rate(): number {
+		return this._rate
 	}
 }
 
-export const createRateLimiter = (rate: number): RateLimiter => new RateLimiterImpl(rate)
+export const createRateLimiter = (rate: number, retryStrategy?: RetryStrategy) =>
+	new RateLimiterImpl(rate, retryStrategy)

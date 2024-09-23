@@ -3,8 +3,7 @@ import {
 	DescribeLoadBalancersCommand,
 	LoadBalancer,
 } from '@aws-sdk/client-elastic-load-balancing-v2'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getELBv2LoadBalancers(
 	credentials: Credentials,

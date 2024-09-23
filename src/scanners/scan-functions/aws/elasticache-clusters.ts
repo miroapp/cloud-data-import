@@ -1,6 +1,5 @@
 import {ElastiCacheClient, DescribeCacheClustersCommand, CacheCluster} from '@aws-sdk/client-elasticache'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getElastiCacheClusters(
 	credentials: Credentials,

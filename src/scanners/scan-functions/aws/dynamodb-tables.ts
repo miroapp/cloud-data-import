@@ -1,6 +1,5 @@
 import {DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription} from '@aws-sdk/client-dynamodb'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getDynamoDBTables(
 	credentials: Credentials,

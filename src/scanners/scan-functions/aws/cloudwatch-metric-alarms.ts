@@ -1,6 +1,5 @@
 import {CloudWatchClient, DescribeAlarmsCommand, MetricAlarm} from '@aws-sdk/client-cloudwatch'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
-import {Credentials, Resources} from '@/types'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getCloudWatchMetricAlarms(
 	credentials: Credentials,

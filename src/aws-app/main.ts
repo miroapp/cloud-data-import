@@ -10,6 +10,7 @@ import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 import {buildCredentialIdentity} from '@/aws-app/utils/buildCredentialIdentity'
+import {AWSRateLimitExhaustionRetryStrategy} from './utils/AWSRateLimitExhaustionRetryStrategy'
 
 export default async () => {
 	console.log(cliMessages.getIntro())
@@ -19,7 +20,7 @@ export default async () => {
 	// setting the AWS_REGION explicitly to meet SDK requirements
 	process.env.AWS_REGION = config.regions[0]
 
-	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'])
+	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'], new AWSRateLimitExhaustionRetryStrategy())
 
 	const credentials = await buildCredentialIdentity(config.profile)
 

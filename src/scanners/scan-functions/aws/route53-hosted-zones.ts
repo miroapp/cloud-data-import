@@ -1,6 +1,5 @@
 import {Route53Client, ListHostedZonesCommand, GetHostedZoneCommand, HostedZone} from '@aws-sdk/client-route-53'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 

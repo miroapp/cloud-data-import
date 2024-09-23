@@ -1,6 +1,5 @@
 import {ListTopicsCommand, SNSClient, Topic} from '@aws-sdk/client-sns'
-import {Credentials, Resources} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getSNSTopics(
 	credentials: Credentials,

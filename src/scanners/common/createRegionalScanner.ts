@@ -5,9 +5,9 @@ import {
 	RegionalScanFunction,
 	Credentials,
 	ScannerLifecycleHook,
+	RateLimiter,
 } from '@/types'
 import {CreateRegionalScannerFunction, GetRateLimiterFunction} from '@/scanners/types'
-import {RateLimiter} from './RateLimiter'
 
 type RegionScanResult<T extends ResourceDescription> = {
 	region: string

@@ -1,7 +1,6 @@
 import {EC2Client, DescribeNatGatewaysCommand, NatGateway} from '@aws-sdk/client-ec2'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
 import {buildARN} from './common/buildArn'
-import {Credentials, Resources} from '@/types'
+import {Credentials, Resources, RateLimiter} from '@/types'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getEC2NatGateways(

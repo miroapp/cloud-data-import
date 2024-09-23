@@ -6,6 +6,8 @@ export type * from '@/types'
 
 export {awsRegionIds} from '@/constants'
 
+export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
+
 /**
  * @public
  * @experimental This export is experimental and may change or be removed in future versions.

@@ -1,6 +1,5 @@
 import {CloudWatchClient, ListMetricStreamsCommand, MetricStreamEntry} from '@aws-sdk/client-cloudwatch'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
-import {Credentials, Resources} from '@/types'
+import {Credentials, Resources, RateLimiter} from '@/types'
 
 export async function getCloudWatchMetricStreams(
 	credentials: Credentials,

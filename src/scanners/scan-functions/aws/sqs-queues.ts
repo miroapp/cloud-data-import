@@ -1,11 +1,5 @@
-import {
-	SQSClient,
-	ListQueuesCommand,
-	GetQueueAttributesCommand,
-	GetQueueAttributesCommandOutput,
-} from '@aws-sdk/client-sqs'
-import {Credentials, Resources, SQSQueue} from '@/types'
-import {RateLimiter} from '@/scanners/common/RateLimiter'
+import {SQSClient, ListQueuesCommand, GetQueueAttributesCommand} from '@aws-sdk/client-sqs'
+import {Credentials, Resources, SQSQueue, RateLimiter} from '@/types'
 
 export async function getSQSQueues(
 	credentials: Credentials,

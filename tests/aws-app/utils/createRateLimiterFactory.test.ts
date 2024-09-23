@@ -1,4 +1,5 @@
 import {createRateLimiterFactory} from '@/aws-app/utils/createRateLimiterFactory'
+import {AWSRateLimitExhaustionRetryStrategy} from '@/lib'
 import {createRateLimiter} from '@/scanners'
 
 jest.mock('@/scanners', () => ({
@@ -8,10 +9,11 @@ jest.mock('@/scanners', () => ({
 }))
 
 describe('createRateLimiterFactory', () => {
+	const retryStrategy = new AWSRateLimitExhaustionRetryStrategy()
 	let getRateLimiter: ReturnType<typeof createRateLimiterFactory>
 
 	beforeEach(() => {
-		getRateLimiter = createRateLimiterFactory(10)
+		getRateLimiter = createRateLimiterFactory(10, retryStrategy)
 	})
 
 	afterEach(() => {
@@ -23,7 +25,7 @@ describe('createRateLimiterFactory', () => {
 		const region = 'us-east-1'
 		const rateLimiter = getRateLimiter(service, region)
 
-		expect(createRateLimiter).toHaveBeenCalledWith(10)
+		expect(createRateLimiter).toHaveBeenCalledWith(10, retryStrategy)
 		expect(rateLimiter).toBeDefined()
 	})
 
