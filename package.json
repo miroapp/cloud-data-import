@@ -45,7 +45,7 @@
 		"@changesets/cli": "^2.27.8",
 		"@types/inquirer": "^9.0.7",
 		"@types/jest": "^29.5.12",
-		"@types/node": "^20.14.12",
+		"@types/node": "^22.7.1",
 		"@types/spinnies": "^0.5.3",
 		"@types/yargs": "^17.0.33",
 		"eslint": "^9.7.0",
