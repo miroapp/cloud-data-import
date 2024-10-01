@@ -1,5 +1,23 @@
 # @mirohq/cloud-data-import
 
+## 0.9.0
+
+### Minor Changes
+
+- b240bf1: - (RateLimiter) Implemented strict throttling instead of windowed throttling
+  - (RateLimiter) Added pause, resume, and abort functionality to rate-limiter
+  - (RateLimiter) Introduced RetryStrategy concept for customizable retry logic
+  - (RateLimiter) Created AWSRateLimitExhaustionRetryStrategy based on RetryStrategy
+  - (lib) Integrated new retry strategy in CLI and exposed via library
+
+### Patch Changes
+
+- 9fa6a92: Changed the app name to "Cloud View"
+- ca51530: chore(deps): bump @aws-sdk/client-lambda from 3.655.0 to 3.659.0
+- 289bfba: chore(deps): bump @aws-sdk/client-dynamodb from 3.654.0 to 3.658.1
+- dd02463: fix: rate-limiter import build issue fixed
+- e95a19c: chore(deps): bump @aws-sdk/client-rds from 3.654.0 to 3.658.1
+
 ## 0.8.0
 
 ### Minor Changes
