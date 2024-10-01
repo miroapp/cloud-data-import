@@ -1,5 +1,11 @@
-import {ResourceDescription, Scanner, RegionalScanFunction, GlobalScanFunction, Credentials} from '../types'
-import {RateLimiter} from './common/RateLimiter'
+import {
+	ResourceDescription,
+	Scanner,
+	RegionalScanFunction,
+	GlobalScanFunction,
+	Credentials,
+	RateLimiter,
+} from '../types'
 import {ScannerLifecycleHook} from '../types'
 
 // get rate limiter function for global and regional scanners
