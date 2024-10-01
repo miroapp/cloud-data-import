@@ -65,7 +65,7 @@
 		"@aws-sdk/client-cloudfront": "^3.621.0",
 		"@aws-sdk/client-cloudtrail": "^3.621.0",
 		"@aws-sdk/client-cloudwatch": "^3.654.0",
-		"@aws-sdk/client-dynamodb": "^3.654.0",
+		"@aws-sdk/client-dynamodb": "^3.658.1",
 		"@aws-sdk/client-ec2": "^3.621.0",
 		"@aws-sdk/client-ecs": "^3.621.0",
 		"@aws-sdk/client-efs": "^3.654.0",
