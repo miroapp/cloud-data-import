@@ -28,7 +28,7 @@ ${blueBright(`Resource discovery completed successfully! 🚀`)}
 
 📦 Your resources are saved at ${yellowBright(
 	pathname,
-)}. Now open the "AWS Data Import" app in Miro and upload the JSON file to visualize your cloud resources.
+)}. Now open the "AWS Cloud View" app in Miro and upload the JSON file to visualize your cloud resources.
 
 Happy visualizing!
 
