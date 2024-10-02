@@ -27,6 +27,7 @@ export type SQSQueue = NonNullable<SQS.GetQueueAttributesResult['Attributes']>
 export type AwsRegionId = (typeof awsRegionIds)[number]
 
 export type EnrichedBucket = S3.Bucket & {
+	Account: string
 	Location: string
 }
 

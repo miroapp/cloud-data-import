@@ -285,10 +285,13 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 	}
 
 	// S3 Buckets
-	if (service === 's3' && type === 'bucket') {
+	if (service === 's3') {
 		const s3Bucket = resource as EnrichedBucket
 		return {
 			...baseOutput,
+			type: 'bucket',
+			name: s3Bucket.Name || baseOutput.name,
+			account: s3Bucket.Account,
 			region: s3Bucket.Location,
 		}
 	}
