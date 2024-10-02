@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.10.0
+
+### Minor Changes
+
+- 8b588ef: Updated S3 bucket region configuration
+
 ## 0.9.0
 
 ### Minor Changes
