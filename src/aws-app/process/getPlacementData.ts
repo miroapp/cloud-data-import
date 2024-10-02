@@ -1,4 +1,4 @@
-import type {ResourceDescription, Resources} from '@/types'
+import type {EnrichedBucket, ResourceDescription, Resources} from '@/types'
 import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
@@ -281,6 +281,18 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 			...baseOutput,
 			vpc: ec2Acl.VpcId ?? null,
 			subnets: ec2Acl.Associations?.map((assoc) => assoc.SubnetId).filter(Boolean) as string[],
+		}
+	}
+
+	// S3 Buckets
+	if (service === 's3') {
+		const s3Bucket = resource as EnrichedBucket
+		return {
+			...baseOutput,
+			type: 'bucket',
+			name: s3Bucket.Name || baseOutput.name,
+			account: s3Bucket.Account,
+			region: s3Bucket.Location,
 		}
 	}
 

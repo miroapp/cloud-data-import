@@ -26,10 +26,15 @@ export type SQSQueue = NonNullable<SQS.GetQueueAttributesResult['Attributes']>
 
 export type AwsRegionId = (typeof awsRegionIds)[number]
 
+export type EnrichedBucket = S3.Bucket & {
+	Account: string
+	Location: string
+}
+
 export type ResourceDescription =
 	| Athena.NamedQuery
 	| AutoScaling.AutoScalingGroup
-	| S3.Bucket
+	| EnrichedBucket
 	| CloudFront.DistributionSummary
 	| CloudWatch.MetricAlarm
 	| CloudWatch.MetricStreamEntry
