@@ -202,8 +202,8 @@ export interface StandardOutputSchema {
 	provider: 'aws'
 	docVersion: string
 	resources: Resources
-	tags: ResourceTags
 	processed?: ProcessedData
+	tags: ResourceTags
 	errors: ScannerError[]
 	metadata: {
 		account: string
