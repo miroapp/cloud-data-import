@@ -28,7 +28,6 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 		subnets: [],
 		securityGroups: [],
 		tags: {},
-		// tags: resource.tags,
 	}
 
 	// Athena Named Queries

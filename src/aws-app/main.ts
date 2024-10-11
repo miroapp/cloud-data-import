@@ -48,10 +48,12 @@ export default async () => {
 		return {...acc, ...resources}
 	}, {})
 
+	// aggregate tags
 	const tags = result.reduce((acc, {tags}) => {
 		return {...acc, ...tags}
 	}, {})
 
+	// aggregate errors
 	const errors = result.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
 	}, [] as ScannerError[])
