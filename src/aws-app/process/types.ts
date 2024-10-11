@@ -11,6 +11,7 @@ export type ResourcePlacementData = {
 	availabilityZones: string[]
 	subnets: string[]
 	securityGroups: string[]
+	tags: {[key: string]: number}
 }
 
 export type PlacementData = {

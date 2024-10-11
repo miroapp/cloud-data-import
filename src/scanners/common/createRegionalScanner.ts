@@ -6,12 +6,15 @@ import {
 	Credentials,
 	ScannerLifecycleHook,
 	RateLimiter,
+	ResourceTags,
 } from '@/types'
 import {CreateRegionalScannerFunction, GetRateLimiterFunction} from '@/scanners/types'
+import {fetchTags} from '@/scanners/common/fetchTags'
 
 type RegionScanResult<T extends ResourceDescription> = {
 	region: string
 	resources: Resources<T> | null
+	tags?: ResourceTags
 	error: Error | null
 }
 
@@ -30,11 +33,14 @@ async function scanRegion<T extends ResourceDescription>(
 		// Perform scan
 		const resources = await scanFunction(credentials, rateLimiter, region)
 
+		// Fetch tags
+		const tags = await fetchTags(Object.keys(resources), rateLimiter)
+
 		// onComplete hook
 		hooks.forEach((hook) => hook.onComplete?.(resources, service, region))
 
 		// Return resources
-		return {region, resources, error: null}
+		return {region, resources, tags, error: null}
 	} catch (error) {
 		// onError hook
 		hooks.forEach((hook) => hook.onError?.(error as Error, service, region))
@@ -73,6 +79,14 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
 			return acc
 		}, {} as Resources<T>)
 
+		// Aggregate resource tags
+		const tags = scanResults.reduce((acc, {tags}) => {
+			if (tags) {
+				Object.assign(acc, tags)
+			}
+			return acc
+		}, {} as ResourceTags)
+
 		// Extract errors
 		const errors: ScannerError[] = scanResults
 			.map(({region, error}) => {
@@ -81,6 +95,6 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
 			.filter(Boolean) as ScannerError[]
 
 		// Return the combined resources and errors
-		return {resources, errors}
+		return {resources, tags, errors}
 	}
 }

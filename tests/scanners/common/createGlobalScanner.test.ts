@@ -58,7 +58,7 @@ describe('createGlobalScanner', () => {
 		const result = await scanner()
 
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
-		expect(result).toEqual({resources: mockResources, errors: []})
+		expect(result).toEqual({resources: mockResources, tags: {}, errors: []})
 	})
 
 	it('should return errors if scan fails', async () => {
