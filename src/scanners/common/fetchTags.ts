@@ -1,38 +1,40 @@
 import {RateLimiter, ResourceTags} from '@/types'
 import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/client-resource-groups-tagging-api'
 
-export const fetchTags = async (
-	resourceARNList: string[],
-	rateLimiter: RateLimiter,
-): Promise<ResourceTags | undefined> => {
+export const fetchTags = async (resourceARNList: string[], rateLimiter: RateLimiter): Promise<ResourceTags> => {
 	if (!resourceARNList.length) {
-		return undefined
+		return {}
 	}
 
 	const client = new ResourceGroupsTaggingAPIClient()
-
 	const tagResult: Record<string, Record<string, string | undefined>> = {}
 
 	try {
-		const command = new GetResourcesCommand({
-			ResourceARNList: resourceARNList,
-		})
+		let paginationToken: string | undefined = undefined
 
-		const response = await rateLimiter.throttle(() => client.send(command))
+		do {
+			const command: GetResourcesCommand = new GetResourcesCommand({
+				ResourceARNList: resourceARNList,
+				PaginationToken: paginationToken,
+			})
 
-		for (const resourceData of response.ResourceTagMappingList ?? []) {
-			for (const tagData of resourceData.Tags ?? []) {
-				if (!resourceData.ResourceARN || !tagData.Key) {
-					continue
+			const response = await rateLimiter.throttle(() => client.send(command))
+			paginationToken = response.PaginationToken
+
+			for (const resourceData of response.ResourceTagMappingList ?? []) {
+				for (const tagData of resourceData.Tags ?? []) {
+					if (!resourceData.ResourceARN || !tagData.Key) {
+						continue
+					}
+
+					if (!tagResult[resourceData.ResourceARN]) {
+						tagResult[resourceData.ResourceARN] = {}
+					}
+
+					tagResult[resourceData.ResourceARN][tagData.Key] = tagData.Value
 				}
-
-				if (!tagResult[resourceData.ResourceARN]) {
-					tagResult[resourceData.ResourceARN] = {}
-				}
-
-				tagResult[resourceData.ResourceARN][tagData.Key] = tagData.Value
 			}
-		}
+		} while (paginationToken)
 	} catch (error) {
 		console.error('Error fetching tag resources:', error)
 	}

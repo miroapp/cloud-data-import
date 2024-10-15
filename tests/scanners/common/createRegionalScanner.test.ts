@@ -7,6 +7,7 @@ import {createMockedHook} from 'tests/mocks/hookMock'
 describe('createRegionalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
+	let mockTagsRateLimiter: RateLimiterMockImpl
 	let mockHooks: ScannerLifecycleHook[]
 	let mockCredentials: Credentials
 	let mockScanFunction: jest.Mock
@@ -15,6 +16,7 @@ describe('createRegionalScanner', () => {
 	beforeEach(() => {
 		mockRateLimiter = new RateLimiterMockImpl()
 		mockGetRateLimiter = jest.fn().mockReturnValue(mockRateLimiter)
+		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
@@ -27,6 +29,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -37,6 +40,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -56,6 +60,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -77,6 +82,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -94,6 +100,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -123,6 +130,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -142,6 +150,7 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 

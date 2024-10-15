@@ -7,6 +7,7 @@ import {createMockedHook} from 'tests/mocks/hookMock'
 describe('createGlobalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
+	let mockTagsRateLimiter: RateLimiterMockImpl
 	let mockHooks: ScannerLifecycleHook[]
 	let mockCredentials: Credentials
 	let mockScanFunction: jest.Mock
@@ -14,6 +15,7 @@ describe('createGlobalScanner', () => {
 	beforeEach(() => {
 		mockRateLimiter = new RateLimiterMockImpl()
 		mockGetRateLimiter = jest.fn().mockReturnValue(mockRateLimiter)
+		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
@@ -25,6 +27,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -35,6 +38,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -52,6 +56,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -68,6 +73,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -77,6 +83,7 @@ describe('createGlobalScanner', () => {
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
 		expect(result).toEqual({
 			resources: {} as Resources<never>,
+			tags: {},
 			errors: [{service: 'mockService', message: mockError.message}],
 		})
 	})
@@ -91,6 +98,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -113,6 +121,7 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner('mockService', mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 

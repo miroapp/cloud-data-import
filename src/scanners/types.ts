@@ -16,6 +16,7 @@ interface CreateScannerOptions {
 	credentials: Credentials
 	hooks: ScannerLifecycleHook[]
 	getRateLimiter: GetRateLimiterFunction
+	tagsRateLimiter: RateLimiter
 }
 
 export type CreateRegionalScannerFunction = <T extends ResourceDescription>(

@@ -5,6 +5,7 @@ import {getCloudFrontDistributions} from '@/scanners/scan-functions/aws/cloudfro
 import {getEC2Instances} from '@/scanners/scan-functions/aws/ec2-instances'
 import {getS3Buckets} from '@/scanners/scan-functions/aws/s3-buckets'
 import {createMockedHook} from 'tests/mocks/hookMock'
+import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 
 jest.mock('@/scanners/scan-functions/aws/autoscaling-groups')
 jest.mock('@/scanners/scan-functions/aws/cloudfront-distributions')
@@ -14,6 +15,8 @@ jest.mock('@/scanners/scan-functions/aws/s3-buckets')
 describe('getAwsScanners', () => {
 	let mockCredentials: Credentials
 	let mockGetRateLimiter: jest.Mock
+	let mockTagsRateLimiter: RateLimiterMockImpl
+
 	let mockHooks: ScannerLifecycleHook[]
 	let regions: string[]
 
@@ -23,6 +26,7 @@ describe('getAwsScanners', () => {
 	beforeEach(() => {
 		mockCredentials = {accessKeyId: 'mockAccessKeyId', secretAccessKey: 'mockSecretAccessKey'}
 		mockGetRateLimiter = jest.fn()
+		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		regions = ['us-east-1', 'eu-west-1']
 
@@ -36,6 +40,7 @@ describe('getAwsScanners', () => {
 		const scanners = getAwsScanners({
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 			regions,
 			shouldIncludeGlobalServices: false,
@@ -52,6 +57,7 @@ describe('getAwsScanners', () => {
 		const regionalScanners = getAwsScanners({
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 			regions,
 			shouldIncludeGlobalServices: false,
@@ -60,6 +66,7 @@ describe('getAwsScanners', () => {
 		const allScanners = getAwsScanners({
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 			regions,
 			shouldIncludeGlobalServices: true,
@@ -76,6 +83,7 @@ describe('getAwsScanners', () => {
 		getAwsScanners({
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 			regions,
 			shouldIncludeGlobalServices: false,
@@ -85,11 +93,13 @@ describe('getAwsScanners', () => {
 		expect(createRegionalScannerSpy).toHaveBeenCalledWith('autoscaling/groups', getAutoScalingResources, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 		expect(createRegionalScannerSpy).toHaveBeenCalledWith('ec2/instances', getEC2Instances, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 	})
@@ -98,6 +108,7 @@ describe('getAwsScanners', () => {
 		getAwsScanners({
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 			regions,
 			shouldIncludeGlobalServices: true,
@@ -107,12 +118,14 @@ describe('getAwsScanners', () => {
 		expect(createGlobalScannerSpy).toHaveBeenCalledWith('s3/buckets', getS3Buckets, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
 		expect(createGlobalScannerSpy).toHaveBeenCalledWith('cloudfront/distributions', getCloudFrontDistributions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 	})

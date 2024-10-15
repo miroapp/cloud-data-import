@@ -1,4 +1,4 @@
-import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
+import {Credentials, RateLimiter, Scanner, ScannerLifecycleHook} from '@/types'
 import {GetRateLimiterFunction} from './types'
 import {createRegionalScanner, createGlobalScanner} from '.'
 
@@ -41,6 +41,7 @@ import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 export interface GetAwsScannersArguments {
 	credentials?: Credentials
 	getRateLimiter: GetRateLimiterFunction
+	tagsRateLimiter: RateLimiter
 	hooks?: ScannerLifecycleHook[]
 	regions: string[]
 	shouldIncludeGlobalServices: boolean
@@ -50,12 +51,14 @@ export const getAwsScanners = ({
 	credentials,
 	hooks,
 	getRateLimiter,
+	tagsRateLimiter,
 	regions,
 	shouldIncludeGlobalServices,
 }: GetAwsScannersArguments): Scanner[] => {
 	const options = {
 		credentials,
 		getRateLimiter,
+		tagsRateLimiter,
 		hooks: hooks || [],
 	}
 

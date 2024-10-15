@@ -24,6 +24,7 @@ async function scanRegion<T extends ResourceDescription>(
 	region: string,
 	credentials: Credentials,
 	rateLimiter: RateLimiter,
+	tagsRateLimiter: RateLimiter,
 	hooks: ScannerLifecycleHook[],
 ): Promise<RegionScanResult<T>> {
 	try {
@@ -34,7 +35,7 @@ async function scanRegion<T extends ResourceDescription>(
 		const resources = await scanFunction(credentials, rateLimiter, region)
 
 		// Fetch tags
-		const tags = await fetchTags(Object.keys(resources), rateLimiter)
+		const tags = await fetchTags(Object.keys(resources), tagsRateLimiter)
 
 		// onComplete hook
 		hooks.forEach((hook) => hook.onComplete?.(resources, service, region))
@@ -57,17 +58,18 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends R
 	options: {
 		credentials: Credentials
 		getRateLimiter: GetRateLimiterFunction
+		tagsRateLimiter: RateLimiter
 		hooks: ScannerLifecycleHook[]
 	},
 ) => {
 	return async () => {
-		const {credentials, getRateLimiter, hooks} = options
+		const {credentials, getRateLimiter, tagsRateLimiter, hooks} = options
 
 		// Scan each region in parallel
 		const scanResults = await Promise.all(
 			regions.map((region) => {
 				const rateLimiter = getRateLimiter(service, region)
-				return scanRegion(service, scanFunction, region, credentials, rateLimiter, hooks)
+				return scanRegion(service, scanFunction, region, credentials, rateLimiter, tagsRateLimiter, hooks)
 			}),
 		)
 
