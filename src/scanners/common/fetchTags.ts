@@ -1,12 +1,16 @@
-import {RateLimiter, ResourceTags} from '@/types'
+import {Credentials, RateLimiter, ResourceTags} from '@/types'
 import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/client-resource-groups-tagging-api'
 
-export const fetchTags = async (resourceARNList: string[], rateLimiter: RateLimiter): Promise<ResourceTags> => {
+export const fetchTags = async (
+	resourceARNList: string[],
+	credentials: Credentials,
+	rateLimiter: RateLimiter,
+): Promise<ResourceTags> => {
 	if (!resourceARNList.length) {
 		return {}
 	}
 
-	const client = new ResourceGroupsTaggingAPIClient()
+	const client = new ResourceGroupsTaggingAPIClient({credentials})
 	const tagResult: Record<string, Record<string, string | undefined>> = {}
 
 	try {
