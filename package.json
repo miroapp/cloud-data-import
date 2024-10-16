@@ -21,6 +21,14 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/miroapp/cloud-data-import.git"
+	},
+	"bugs": {
+		"url": "https://github.com/miroapp/cloud-data-import/issues"
+	},
+	"homepage": "https://github.com/miroapp/cloud-data-import#readme",
 	"engines": {
 		"node": ">=18.x"
 	},
