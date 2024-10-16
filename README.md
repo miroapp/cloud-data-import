@@ -1,6 +1,8 @@
 ## Cloud Data Import for Miro
 
-Welcome to the Cloud Data Import for Miro repository! This script is designed to facilitate the visualization of AWS infrastructure data within Miro by importing cloud infrastructure snapshots directly into your Miro boards. This tool is ideal for cloud practitioners who want to leverage Miro's visualization capabilities to visualize and optimize their cloud infrastructure.
+![Miro Cloud View](/assets/images/cloudview-banner.gif)
+
+Welcome to the Cloud Data Import for Miro! This script is designed to facilitate the visualization of AWS infrastructure data within Miro by importing cloud infrastructure snapshots directly into your Miro boards. The tool is an integral part of [Cloud View](https://help.miro.com/hc/en-us/articles/19893178414226-AWS-Cloud-View-BETA), an app in Miro that allows you to visualize and optimize your cloud infrastructure. Ideal for cloud practitioners, CloudView leverages Miro's powerful visualization capabilities to help you gain insights and improve your cloud management strategies.
 
 ### 🛠 Prerequisites
 
