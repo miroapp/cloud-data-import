@@ -22,12 +22,6 @@ export default async () => {
 
 	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'], new AWSRateLimitExhaustionRetryStrategy())
 
-	const tagsRateLimiterFactory = createRateLimiterFactory(
-		config['call-rate-rps'],
-		new AWSRateLimitExhaustionRetryStrategy(),
-	)
-	const tagsRateLimiter = tagsRateLimiterFactory('tags')
-
 	const credentials = await buildCredentialIdentity(config.profile)
 
 	// prepare scanners
@@ -35,7 +29,6 @@ export default async () => {
 		credentials,
 		regions: config.regions,
 		getRateLimiter,
-		tagsRateLimiter,
 		shouldIncludeGlobalServices: !config['regional-only'],
 		hooks: [
 			new Logger(), // log scanning progress

@@ -41,7 +41,6 @@ import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 export interface GetAwsScannersArguments {
 	credentials?: Credentials
 	getRateLimiter: GetRateLimiterFunction
-	tagsRateLimiter: RateLimiter
 	hooks?: ScannerLifecycleHook[]
 	regions: string[]
 	shouldIncludeGlobalServices: boolean
@@ -51,10 +50,11 @@ export const getAwsScanners = ({
 	credentials,
 	hooks,
 	getRateLimiter,
-	tagsRateLimiter,
 	regions,
 	shouldIncludeGlobalServices,
 }: GetAwsScannersArguments): Scanner[] => {
+	const tagsRateLimiter = getRateLimiter('resource-groups-tagging')
+
 	const options = {
 		credentials,
 		getRateLimiter,
