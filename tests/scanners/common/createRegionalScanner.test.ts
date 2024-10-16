@@ -3,6 +3,9 @@ import {Resources, ResourceDescription, Credentials, ScannerLifecycleHook} from 
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
+import {fetchTags} from '@/scanners/common/fetchTags'
+
+jest.mock('@/scanners/common/fetchTags')
 
 describe('createRegionalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
@@ -20,6 +23,7 @@ describe('createRegionalScanner', () => {
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
+		;(fetchTags as jest.Mock).mockResolvedValue({})
 		regions = ['eu-west-1', 'eu-west-2', 'us-east-1']
 
 		jest.clearAllMocks()

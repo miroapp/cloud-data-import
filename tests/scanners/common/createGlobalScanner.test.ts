@@ -3,6 +3,9 @@ import {Resources, ResourceDescription, Credentials, ScannerLifecycleHook} from 
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
+import {fetchTags} from '@/scanners/common/fetchTags'
+
+jest.mock('@/scanners/common/fetchTags')
 
 describe('createGlobalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
@@ -19,6 +22,7 @@ describe('createGlobalScanner', () => {
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
+		;(fetchTags as jest.Mock).mockResolvedValue({})
 
 		jest.clearAllMocks()
 	})
