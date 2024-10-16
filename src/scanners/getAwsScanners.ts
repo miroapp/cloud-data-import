@@ -1,4 +1,4 @@
-import {Credentials, RateLimiter, Scanner, ScannerLifecycleHook} from '@/types'
+import {Credentials, Scanner, ScannerLifecycleHook} from '@/types'
 import {GetRateLimiterFunction} from './types'
 import {createRegionalScanner, createGlobalScanner} from '.'
 

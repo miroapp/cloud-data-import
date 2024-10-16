@@ -5,7 +5,6 @@ import {getCloudFrontDistributions} from '@/scanners/scan-functions/aws/cloudfro
 import {getEC2Instances} from '@/scanners/scan-functions/aws/ec2-instances'
 import {getS3Buckets} from '@/scanners/scan-functions/aws/s3-buckets'
 import {createMockedHook} from 'tests/mocks/hookMock'
-import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 
 jest.mock('@/scanners/scan-functions/aws/autoscaling-groups')
 jest.mock('@/scanners/scan-functions/aws/cloudfront-distributions')
