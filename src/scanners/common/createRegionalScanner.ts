@@ -35,7 +35,7 @@ async function scanRegion<T extends ResourceDescription>(
 		const resources = await scanFunction(credentials, rateLimiter, region)
 
 		// Fetch tags
-		const tags = await fetchTags(Object.keys(resources), credentials, tagsRateLimiter)
+		const tags = await fetchTags(credentials, tagsRateLimiter)
 
 		// onComplete hook
 		hooks.forEach((hook) => hook.onComplete?.(resources, service, region))
