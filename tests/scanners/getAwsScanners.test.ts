@@ -14,7 +14,6 @@ jest.mock('@/scanners/scan-functions/aws/s3-buckets')
 describe('getAwsScanners', () => {
 	let mockCredentials: Credentials
 	let mockGetRateLimiter: jest.Mock
-
 	let mockHooks: ScannerLifecycleHook[]
 	let regions: string[]
 

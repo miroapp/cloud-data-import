@@ -34,7 +34,5 @@ export const fetchTags = async (credentials: Credentials, rateLimiter: RateLimit
 		console.error('Error fetching tag resources:', error)
 	}
 
-	console.log(tagResult)
-
 	return tagResult
 }
