@@ -1,5 +1,12 @@
 # @mirohq/cloud-data-import
 
+## 0.11.0
+
+### Minor Changes
+
+- a9ae20c: Fix credentials fetching
+- 0b1e46c: Add tag support
+
 ## 0.10.0
 
 ### Minor Changes
