@@ -37,10 +37,12 @@ describe('main function', () => {
 			'dummy:arn:1': {
 				name: '1',
 				type: 'dummy:instance',
+				tags: {},
 			},
 			'dummy:arn:2': {
 				name: '2',
 				type: 'dummy:table',
+				tags: {},
 			},
 		},
 		connections: [],
@@ -77,6 +79,7 @@ describe('main function', () => {
 			securityGroups: {},
 			subnets: {},
 		},
+		tags: {},
 	}
 
 	beforeEach(() => {
@@ -180,6 +183,7 @@ describe('main function', () => {
 				startedAt: expectedStartedAt,
 				finishedAt: expectedFinishedAt,
 			},
+			tags: {},
 		}
 
 		expect(saveAsJson).toHaveBeenCalledWith(

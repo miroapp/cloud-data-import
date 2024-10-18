@@ -53,9 +53,12 @@ export const getAwsScanners = ({
 	regions,
 	shouldIncludeGlobalServices,
 }: GetAwsScannersArguments): Scanner[] => {
+	const tagsRateLimiter = getRateLimiter('resource-groups-tagging')
+
 	const options = {
 		credentials,
 		getRateLimiter,
+		tagsRateLimiter,
 		hooks: hooks || [],
 	}
 

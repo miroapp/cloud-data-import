@@ -27,6 +27,7 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 		availabilityZones: [],
 		subnets: [],
 		securityGroups: [],
+		tags: {},
 	}
 
 	// Athena Named Queries
@@ -319,9 +320,7 @@ export const getPlacementData = (resources: Resources): PlacementData => {
 			continue
 		}
 
-		const data = getResourcePlacementData(arnInfo, resource)
-
-		placementData[arn] = data
+		placementData[arn] = getResourcePlacementData(arnInfo, resource)
 	}
 
 	return placementData

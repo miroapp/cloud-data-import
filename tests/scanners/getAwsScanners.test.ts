@@ -85,11 +85,13 @@ describe('getAwsScanners', () => {
 		expect(createRegionalScannerSpy).toHaveBeenCalledWith('autoscaling/groups', getAutoScalingResources, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockGetRateLimiter('resource-groups-tagging'),
 			hooks: mockHooks,
 		})
 		expect(createRegionalScannerSpy).toHaveBeenCalledWith('ec2/instances', getEC2Instances, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
+			tagsRateLimiter: mockGetRateLimiter('resource-groups-tagging'),
 			hooks: mockHooks,
 		})
 	})

@@ -74,6 +74,10 @@ export type Resources<T extends ResourceDescription = ResourceDescription> = {
 	[arn: string]: T
 }
 
+export type Tags = Record<string, string | undefined>
+
+export type ResourceTags = Record<string, Tags>
+
 export type Credentials = AwsCredentialIdentity | undefined
 
 export interface RateLimiter {
@@ -106,6 +110,7 @@ export type ScannerError = {
 
 export type ScannerResult<T extends ResourceDescription = ResourceDescription> = {
 	resources: Resources<T>
+	tags?: ResourceTags
 	errors: ScannerError[]
 }
 
@@ -174,6 +179,7 @@ export interface ProcessedData {
 		[arn: string]: {
 			name: string
 			type: string
+			tags: {[key: string]: string | undefined}
 		}
 	}
 	connections: {
@@ -189,6 +195,7 @@ export interface ProcessedData {
 		securityGroups: {[arn: string]: SecurityGroupContainer}
 		subnets: {[arn: string]: SubnetContainer}
 	}
+	tags: {[key: string]: string[]}
 }
 
 export interface StandardOutputSchema {
@@ -196,6 +203,7 @@ export interface StandardOutputSchema {
 	docVersion: string
 	resources: Resources
 	processed?: ProcessedData
+	tags: ResourceTags
 	errors: ScannerError[]
 	metadata: {
 		account: string

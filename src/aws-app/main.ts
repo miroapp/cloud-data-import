@@ -52,6 +52,11 @@ export default async () => {
 		return {...acc, ...resources}
 	}, {})
 
+	// aggregate tags
+	const tags = result.reduce((acc, {tags}) => {
+		return {...acc, ...tags}
+	}, {})
+
 	// aggregate errors
 	const errors = result.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
@@ -62,7 +67,8 @@ export default async () => {
 		provider: 'aws',
 		docVersion: '0.1.0',
 		resources: config.raw ? resources : {},
-		processed: await getProcessedData(resources),
+		processed: await getProcessedData(resources, tags),
+		tags: tags,
 		errors,
 		metadata: {
 			account: await getAwsAccountId(credentials),
