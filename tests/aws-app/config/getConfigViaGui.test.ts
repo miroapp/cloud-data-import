@@ -7,7 +7,7 @@ describe('getConfigViaGui', () => {
 	const defaultConfigResponse = {
 		output: 'dummyOutputName',
 		regions: undefined,
-		profile: expect.any(String),
+		profile: undefined,
 		regionalOnly: false,
 		callRate: 10,
 		compressed: false,

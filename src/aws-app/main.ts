@@ -20,7 +20,7 @@ export default async () => {
 	process.env.AWS_REGION = config.regions[0]
 
 	// set the profile explicitly if provided
-	if (config.profile) {
+	if (config.profile !== undefined) {
 		process.env.AWS_PROFILE = config.profile
 	}
 
