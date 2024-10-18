@@ -9,7 +9,6 @@ import {getProcessedData} from '@/aws-app/process'
 import {getConfig} from '@/aws-app/config'
 import {createRateLimiterFactory} from '@/aws-app/utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
-import {buildCredentialIdentity} from '@/aws-app/utils/buildCredentialIdentity'
 import {AwsCredentialIdentity} from '@aws-sdk/types'
 
 import {mockDate} from '../mocks/dateMock'
@@ -17,7 +16,6 @@ import {mockDate} from '../mocks/dateMock'
 jest.mock('@/aws-app/hooks/Logger')
 jest.mock('@/scanners')
 jest.mock('@/aws-app/utils/saveAsJson')
-jest.mock('@/aws-app/utils/buildCredentialIdentity')
 jest.mock('@/aws-app/cliMessages')
 jest.mock('@/aws-app/utils/openDirectoryAndFocusFile')
 jest.mock('@/aws-app/process')
@@ -33,12 +31,6 @@ describe('main function', () => {
 	let mockScanners: jest.Mock[]
 	let config: any
 	let mockedDate: ReturnType<typeof mockDate>
-
-	const mockCredentials: AwsCredentialIdentity = {
-		accessKeyId: 'mockAccessKeyId',
-		secretAccessKey: 'mockSecretAccessKey',
-		sessionToken: 'mockSessionToken',
-	}
 
 	const mockedProcessedData: ProcessedData = {
 		resources: {
@@ -94,7 +86,6 @@ describe('main function', () => {
 		getOutroSpy = jest.spyOn(cliMessages, 'getOutro').mockReturnValue('Outro message')
 
 		mockedDate = mockDate(15000) // 15 seconds between Date.now() calls
-		;(buildCredentialIdentity as jest.Mock).mockResolvedValue(mockCredentials)
 		config = {
 			regions: ['us-east-1', 'eu-west-1'],
 			profile: 'default',
@@ -146,7 +137,7 @@ describe('main function', () => {
 		const main = (await import('@/aws-app/main')).default
 		await main()
 		expect(getAwsScanners).toHaveBeenCalledWith({
-			credentials: mockCredentials,
+			credentials: undefined,
 			regions: config.regions,
 			getRateLimiter: expect.any(Function),
 			shouldIncludeGlobalServices: true,
@@ -162,7 +153,6 @@ describe('main function', () => {
 		;(getConfig as jest.Mock).mockResolvedValue(dummyConfig)
 		const main = (await import('@/aws-app/main')).default
 		await main()
-		expect(buildCredentialIdentity as jest.Mock).toHaveBeenCalledWith('dummyProfile')
 	})
 
 	it('should aggregate resources and errors correctly', async () => {

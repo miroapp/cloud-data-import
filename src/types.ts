@@ -126,7 +126,7 @@ export type Scanner<T extends ResourceDescription = ResourceDescription> = () =>
 
 export interface Config {
 	regions: string[]
-	profile: string
+	profile: string | undefined
 	output: string
 	compressed: boolean
 	raw: boolean

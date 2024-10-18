@@ -9,7 +9,6 @@ import {getProcessedData} from './process'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
-import {buildCredentialIdentity} from '@/aws-app/utils/buildCredentialIdentity'
 import {AWSRateLimitExhaustionRetryStrategy} from './utils/AWSRateLimitExhaustionRetryStrategy'
 
 export default async () => {
@@ -20,9 +19,14 @@ export default async () => {
 	// setting the AWS_REGION explicitly to meet SDK requirements
 	process.env.AWS_REGION = config.regions[0]
 
+	// set the profile explicitly if provided
+	if (config.profile !== undefined) {
+		process.env.AWS_PROFILE = config.profile
+	}
+
 	const getRateLimiter = createRateLimiterFactory(config['call-rate-rps'], new AWSRateLimitExhaustionRetryStrategy())
 
-	const credentials = await buildCredentialIdentity(config.profile)
+	const credentials = undefined
 
 	// prepare scanners
 	const scanners = getAwsScanners({

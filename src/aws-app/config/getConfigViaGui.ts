@@ -18,7 +18,7 @@ const regionPrompt = async (defaultRegions?: string[]): Promise<string[]> => {
 	return regions.includes('all') ? awsRegionIds : regions
 }
 
-const profilePrompt = async (defaultProfile?: string): Promise<string> => {
+const profilePrompt = async (defaultProfile?: string): Promise<string | undefined> => {
 	const {profile} = await inquirer.prompt([
 		{
 			type: 'input',
@@ -82,13 +82,13 @@ const scanGlobalPrompt = async (defaultScanGlobal: boolean): Promise<boolean> =>
 export const getDefaultConfigValues = (): {
 	output: string
 	regions: any
-	profile: string
+	profile: string | undefined
 	regionalOnly: boolean
 	callRate: number
 	compressed: boolean
 } => {
 	const regions = getEnvConfig(SUPPORTED_ENV_VARS.REGIONS)?.split(',')
-	const profile = getEnvConfig(SUPPORTED_ENV_VARS.PROFILE) || process.env.AWS_PROFILE || 'default'
+	const profile = getEnvConfig(SUPPORTED_ENV_VARS.PROFILE) || process.env.AWS_PROFILE || undefined
 	const regionalOnly = getEnvConfig(SUPPORTED_ENV_VARS.REGIONAL_ONLY) === 'true'
 	const output = getEnvConfig(SUPPORTED_ENV_VARS.OUTPUT) || getDefaultOutputName()
 	const callRate = parseInt(getEnvConfig(SUPPORTED_ENV_VARS.CALL_RATE_RPS) || '') || 10
