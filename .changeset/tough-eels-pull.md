@@ -2,4 +2,4 @@
 '@mirohq/cloud-data-import': patch
 ---
 
-Fix tag fetching
+Tags are now fetched by ARN, significantly speeding up the discovery process
