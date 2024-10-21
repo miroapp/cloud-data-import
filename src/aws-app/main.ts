@@ -67,8 +67,8 @@ export default async () => {
 		provider: 'aws',
 		docVersion: '0.1.0',
 		resources: config.raw ? resources : {},
+		tags: config.raw ? tags : {},
 		processed: await getProcessedData(resources, tags),
-		tags: tags,
 		errors,
 		metadata: {
 			account: await getAwsAccountId(credentials),
