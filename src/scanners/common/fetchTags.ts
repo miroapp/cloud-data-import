@@ -1,7 +1,11 @@
 import {Credentials, RateLimiter, ResourceTags} from '@/types'
 import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/client-resource-groups-tagging-api'
 
-export const fetchTags = async (credentials: Credentials, rateLimiter: RateLimiter): Promise<ResourceTags> => {
+export const fetchTags = async (
+	arnList: string[],
+	credentials: Credentials,
+	rateLimiter: RateLimiter,
+): Promise<ResourceTags> => {
 	const client = new ResourceGroupsTaggingAPIClient({credentials})
 	const tagResult: Record<string, Record<string, string | undefined>> = {}
 
@@ -11,9 +15,16 @@ export const fetchTags = async (credentials: Credentials, rateLimiter: RateLimit
 		do {
 			const command: GetResourcesCommand = new GetResourcesCommand({
 				PaginationToken: paginationToken,
+				ResourceARNList: arnList,
 			})
 
-			const response = await rateLimiter.throttle(() => client.send(command))
+			let response
+			try {
+				response = await rateLimiter.throttle(() => client.send(command))
+			} catch {
+				return {}
+			}
+
 			paginationToken = response.PaginationToken
 
 			for (const resourceData of response.ResourceTagMappingList ?? []) {
