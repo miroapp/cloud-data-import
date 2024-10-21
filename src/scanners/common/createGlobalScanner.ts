@@ -32,7 +32,7 @@ async function performGlobalScan<T extends ResourceDescription>(
 		const resources = await scanFunction(credentials, rateLimiter)
 
 		// Fetch tags
-		const tags = await fetchTags(credentials, tagsRateLimiter)
+		const tags = await fetchTags(Object.keys(resources), credentials, tagsRateLimiter)
 
 		// onComplete hook
 		hooks.forEach((hook) => hook.onComplete?.(resources, service))

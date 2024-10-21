@@ -1,4 +1,4 @@
-import type {EnrichedBucket, ResourceDescription, Resources} from '@/types'
+import type {EnrichedBucket, EnrichedHostedZone, ResourceDescription, Resources} from '@/types'
 import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
@@ -282,6 +282,16 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 			...baseOutput,
 			vpc: ec2Acl.VpcId ?? null,
 			subnets: ec2Acl.Associations?.map((assoc) => assoc.SubnetId).filter(Boolean) as string[],
+		}
+	}
+
+	// Hosted Zones
+	if (service === 'route53' && type === 'hostedzone') {
+		const hostedZone = resource as EnrichedHostedZone
+		return {
+			...baseOutput,
+			account: hostedZone.Account,
+			name: hostedZone.Name ?? baseOutput.name,
 		}
 	}
 
