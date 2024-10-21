@@ -31,6 +31,10 @@ export type EnrichedBucket = S3.Bucket & {
 	Location: string
 }
 
+export type EnrichedHostedZone = Route53.HostedZone & {
+	Account: string
+}
+
 export type ResourceDescription =
 	| Athena.NamedQuery
 	| AutoScaling.AutoScalingGroup
@@ -67,7 +71,7 @@ export type ResourceDescription =
 	| ELBv2.TargetGroup
 	| ElastiCache.CacheCluster
 	| Redshift.Cluster
-	| Route53.HostedZone
+	| EnrichedHostedZone
 	| SQSQueue
 
 export type Resources<T extends ResourceDescription = ResourceDescription> = {

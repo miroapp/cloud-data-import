@@ -1,18 +1,17 @@
-import {Route53Client, ListHostedZonesCommand, GetHostedZoneCommand, HostedZone} from '@aws-sdk/client-route-53'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {Route53Client, ListHostedZonesCommand, GetHostedZoneCommand} from '@aws-sdk/client-route-53'
+import {Credentials, Resources, RateLimiter, EnrichedHostedZone} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getHostedZones(
 	credentials: Credentials,
 	rateLimiter: RateLimiter,
-	region: string,
-): Promise<Resources<HostedZone>> {
-	const client = new Route53Client({credentials, region})
+): Promise<Resources<EnrichedHostedZone>> {
+	const client = new Route53Client({credentials})
 
 	const accountId = await getAwsAccountId(credentials)
 
-	const hostedZones: Resources<HostedZone> = {}
+	const hostedZones: Resources<EnrichedHostedZone> = {}
 
 	let marker: string | undefined
 	do {
@@ -34,13 +33,14 @@ export async function getHostedZones(
 				if (getHostedZoneResponse.HostedZone) {
 					const arn = buildARN({
 						service: 'route53',
-						region,
-						accountId,
+						region: '', // Route53 is a global service
+						accountId: '', // Route53 does not use account ID in ARN
 						resource: `hostedzone/${hostedZone.Id.split('/').pop()}`,
 					})
-						.replace(region, '')
-						.replace(accountId, '')
-					hostedZones[arn] = getHostedZoneResponse.HostedZone
+					hostedZones[arn] = {
+						Account: accountId,
+						...getHostedZoneResponse.HostedZone,
+					}
 				}
 			}
 		}

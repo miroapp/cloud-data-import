@@ -69,7 +69,7 @@ export const getAwsScanners = ({
 	 */
 
 	// Regional scanners
-	const scanners: Scanner[] = [
+	let scanners: Scanner[] = [
 		createRegionalScanner('athena/named-queries', getAthenaNamedQueries, regions, options),
 		createRegionalScanner('autoscaling/groups', getAutoScalingResources, regions, options),
 		createRegionalScanner('cloudtrail/trails', getCloudTrailTrails, regions, options),
@@ -100,7 +100,6 @@ export const getAwsScanners = ({
 		createRegionalScanner('rds/instances', getRDSInstances, regions, options),
 		createRegionalScanner('rds/clusters', getRDSClusters, regions, options),
 		createRegionalScanner('rds/proxies', getRDSProxies, regions, options),
-		createRegionalScanner('route53/hosted-zones', getHostedZones, regions, options),
 		createGlobalScanner('s3/buckets', getS3Buckets, options),
 		createRegionalScanner('sns/topics', getSNSTopics, regions, options),
 		createRegionalScanner('sqs/queues', getSQSQueues, regions, options),
@@ -108,7 +107,11 @@ export const getAwsScanners = ({
 
 	// Global scanners
 	if (shouldIncludeGlobalServices) {
-		scanners.push(createGlobalScanner('cloudfront/distributions', getCloudFrontDistributions, options))
+		scanners = [
+			...scanners,
+			createGlobalScanner('route53/hosted-zones', getHostedZones, options),
+			createGlobalScanner('cloudfront/distributions', getCloudFrontDistributions, options),
+		]
 	}
 
 	return scanners
