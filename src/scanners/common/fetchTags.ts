@@ -30,7 +30,9 @@ export const fetchTags = async (
 				let response
 				try {
 					response = await rateLimiter.throttle(() => client.send(command))
-				} catch {
+				} catch (error) {
+					console.error('Error while executing GetResourcesCommand command:', error)
+
 					return {}
 				}
 
