@@ -36,8 +36,10 @@ export async function getHostedZones(
 						service: 'route53',
 						region,
 						accountId,
-						resource: `hostedzone:${hostedZone.Id.split('/').pop()}`,
+						resource: `hostedzone/${hostedZone.Id.split('/').pop()}`,
 					})
+						.replace(region, '')
+						.replace(accountId, '')
 					hostedZones[arn] = getHostedZoneResponse.HostedZone
 				}
 			}
