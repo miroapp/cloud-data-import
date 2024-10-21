@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.11.1
+
+### Patch Changes
+
+- 67bf143: Tags are now fetched by ARN, significantly speeding up the discovery process
+
 ## 0.11.0
 
 ### Minor Changes
