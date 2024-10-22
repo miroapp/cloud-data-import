@@ -77,7 +77,7 @@
 		"@aws-sdk/client-ec2": "^3.621.0",
 		"@aws-sdk/client-ecs": "^3.621.0",
 		"@aws-sdk/client-efs": "^3.654.0",
-		"@aws-sdk/client-eks": "^3.621.0",
+		"@aws-sdk/client-eks": "^3.677.0",
 		"@aws-sdk/client-elastic-load-balancing": "^3.621.0",
 		"@aws-sdk/client-elastic-load-balancing-v2": "^3.624.0",
 		"@aws-sdk/client-elasticache": "^3.624.0",
