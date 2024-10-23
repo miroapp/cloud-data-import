@@ -1,10 +1,10 @@
 import {ResourceExplorer2Client, ListIndexesCommand, ListViewsCommand} from '@aws-sdk/client-resource-explorer-2'
-import {Credentials} from '@/types'
+import {AwsCredentials} from '@/types'
 import {awsRegionIds} from '@/constants'
 
-const memoizedClients = new Map<Credentials, ResourceExplorer2Client>()
+const memoizedClients = new Map<AwsCredentials, ResourceExplorer2Client>()
 
-export async function getResourceExplorerClient(credentials: Credentials): Promise<ResourceExplorer2Client> {
+export async function getResourceExplorerClient(credentials: AwsCredentials): Promise<ResourceExplorer2Client> {
 	if (memoizedClients.has(credentials)) {
 		return memoizedClients.get(credentials)!
 	}
@@ -14,7 +14,7 @@ export async function getResourceExplorerClient(credentials: Credentials): Promi
 	return client
 }
 
-async function findValidClient(credentials: Credentials): Promise<ResourceExplorer2Client> {
+async function findValidClient(credentials: AwsCredentials): Promise<ResourceExplorer2Client> {
 	const clientPromises = awsRegionIds.map((region) => checkRegion(credentials, region))
 	const clients = await Promise.all(clientPromises)
 	const validClient = clients.find((client) => client !== null)
@@ -26,7 +26,7 @@ async function findValidClient(credentials: Credentials): Promise<ResourceExplor
 	throw new Error("Resource Explorer is not enabled or 'all-resources' view not found in any region")
 }
 
-async function checkRegion(credentials: Credentials, region: string): Promise<ResourceExplorer2Client | null> {
+async function checkRegion(credentials: AwsCredentials, region: string): Promise<ResourceExplorer2Client | null> {
 	const client = new ResourceExplorer2Client({credentials, region})
 
 	try {

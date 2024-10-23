@@ -1,7 +1,7 @@
 import Spinnies from 'spinnies'
-import {Resources, ScannerLifecycleHook} from '@/types'
+import {AwsResources, AwsScannerLifecycleHook} from '@/types'
 
-export class Logger implements ScannerLifecycleHook {
+export class Logger implements AwsScannerLifecycleHook {
 	private spinnies = new Spinnies()
 
 	getLegend(service: string, region?: string): string {
@@ -20,7 +20,7 @@ export class Logger implements ScannerLifecycleHook {
 		this.spinnies.add(spinnerKey, {text: `${legend}: scanning...`})
 	}
 
-	onComplete(resources: Resources, service: string, region?: string): void {
+	onComplete(resources: AwsResources, service: string, region?: string): void {
 		const spinnerKey = this.getSpinnerKey(service, region)
 		const legend = this.getLegend(service, region)
 		this.spinnies.succeed(spinnerKey, {text: `${legend}: discovered ${Object.keys(resources).length} resources.`})

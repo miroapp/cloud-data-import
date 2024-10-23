@@ -1,14 +1,15 @@
-import {RDSClient, DescribeDBClustersCommand, DBCluster} from '@aws-sdk/client-rds'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {RDSClient, DescribeDBClustersCommand} from '@aws-sdk/client-rds'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getRDSClusters(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<DBCluster>> {
+): Promise<AwsResources<AwsServices.RDS_CLUSTERS>> {
 	const client = new RDSClient({credentials, region})
 
-	const dbClusters: Resources<DBCluster> = {}
+	const dbClusters: AwsResources<AwsServices.RDS_CLUSTERS> = {}
 
 	let marker: string | undefined
 	do {

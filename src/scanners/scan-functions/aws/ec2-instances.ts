@@ -1,23 +1,24 @@
-import {EC2Client, DescribeInstancesCommand, Instance} from '@aws-sdk/client-ec2'
+import {EC2Client, DescribeInstancesCommand} from '@aws-sdk/client-ec2'
 import {buildARN} from './common/buildArn'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getEC2Instances(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<Instance>> {
+): Promise<AwsResources<AwsServices.EC2_INSTANCES>> {
 	const client = new EC2Client({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
 
 	const describeInstancesCommand = new DescribeInstancesCommand({})
 	const describeInstancesResponse = await rateLimiter.throttle(() => client.send(describeInstancesCommand))
-	const instances: Instance[] =
-		describeInstancesResponse.Reservations?.flatMap((reservation) => reservation.Instances || []) || []
+	const instances = describeInstancesResponse.Reservations?.flatMap((reservation) => reservation.Instances || []) || []
 
-	const resources: {[arn: string]: Instance} = {}
+	const resources: AwsResources<AwsServices.EC2_INSTANCES> = {}
+
 	for (const instance of instances) {
 		if (instance.InstanceId) {
 			const arn = buildARN({

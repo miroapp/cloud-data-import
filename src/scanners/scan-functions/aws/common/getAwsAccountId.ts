@@ -1,10 +1,10 @@
-import {Credentials} from '@/types'
+import {AwsCredentials} from '@/types'
 import {STSClient, GetCallerIdentityCommand} from '@aws-sdk/client-sts'
 
 export const getAwsAccountId = (() => {
-	const accountIdMap = new Map<Credentials, string>()
+	const accountIdMap = new Map<AwsCredentials, string>()
 
-	return async (credentials: Credentials): Promise<string> => {
+	return async (credentials: AwsCredentials): Promise<string> => {
 		if (!accountIdMap.has(credentials)) {
 			const stsClient = new STSClient({credentials})
 			const command = new GetCallerIdentityCommand({})

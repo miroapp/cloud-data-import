@@ -1,11 +1,11 @@
-import type {ProcessedData, Resources, ResourceTags} from '@/types'
+import type {AwsProcessedData, AwsResources, AwsTags} from '@/types'
 
 import {getPlacementData} from './getPlacementData'
 import {getProcessedResources} from './resources'
 import {getProcessedContainers} from './containers'
 import {ProcessingErrorManager} from './utils/ProcessingErrorManager'
 
-export const getProcessedData = (resources: Resources, resourceTags: ResourceTags): ProcessedData => {
+export const getAwsProcessedData = (resources: AwsResources, resourceTags: AwsTags): AwsProcessedData => {
 	const processingErrorsManager = new ProcessingErrorManager()
 
 	// Get the placement data which is a simplified version of the resources focusing on the location of the resources

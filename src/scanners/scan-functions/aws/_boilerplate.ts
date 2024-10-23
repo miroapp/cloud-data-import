@@ -1,5 +1,6 @@
 import {DBInstance} from '@aws-sdk/client-rds'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsAwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 /**
  * 0️⃣ I put DBInstance just as an example of a real aws type.
@@ -9,10 +10,10 @@ import {Credentials, Resources, RateLimiter} from '@/types'
 type SampleInstance = DBInstance
 
 export async function getSampleInstances(
-	credentials: Credentials,
+	credentials: AwsAwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<SampleInstance>> {
+): Promise<AwsResources<AwsServices.DYNAMODB_TABLES>> {
 	/**
 	 * 1️⃣ Create an client via the given credentials and region
 	 *

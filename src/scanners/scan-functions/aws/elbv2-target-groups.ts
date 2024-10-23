@@ -1,18 +1,15 @@
-import {
-	ElasticLoadBalancingV2Client,
-	DescribeTargetGroupsCommand,
-	TargetGroup,
-} from '@aws-sdk/client-elastic-load-balancing-v2'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {ElasticLoadBalancingV2Client, DescribeTargetGroupsCommand} from '@aws-sdk/client-elastic-load-balancing-v2'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getELBv2TargetGroups(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<TargetGroup>> {
+): Promise<AwsResources<AwsServices.ELBV2_TARGET_GROUPS>> {
 	const client = new ElasticLoadBalancingV2Client({credentials, region})
 
-	const resources: {[arn: string]: TargetGroup} = {}
+	const resources: AwsResources<AwsServices.ELBV2_TARGET_GROUPS> = {}
 
 	let marker: string | undefined
 	do {

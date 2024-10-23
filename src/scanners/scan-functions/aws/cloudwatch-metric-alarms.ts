@@ -1,14 +1,15 @@
-import {CloudWatchClient, DescribeAlarmsCommand, MetricAlarm} from '@aws-sdk/client-cloudwatch'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {CloudWatchClient, DescribeAlarmsCommand} from '@aws-sdk/client-cloudwatch'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getCloudWatchMetricAlarms(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<MetricAlarm>> {
+): Promise<AwsResources<AwsServices.CLOUDWATCH_METRIC_ALARMS>> {
 	const client = new CloudWatchClient({credentials, region})
 
-	const resources: {[arn: string]: MetricAlarm} = {}
+	const resources: AwsResources<AwsServices.CLOUDWATCH_METRIC_ALARMS> = {}
 
 	let nextToken: string | undefined
 	do {

@@ -1,7 +1,7 @@
-import {getProcessedData} from '@/aws-app/process'
-import {createRateLimiter, getAwsScanners} from '@/scanners'
+import {getAwsProcessedData} from '@/aws-app/process'
+import {createRateLimiter, getAllAwsScanners, getAwsScanner} from '@/scanners'
 
-export type {GetAwsScannersArguments} from '@/scanners'
+export type {GetAwsScannerArguments, GetAllAwsScannersArguments} from '@/scanners'
 export type * from '@/types'
 
 export {awsRegionIds} from '@/constants'
@@ -34,7 +34,7 @@ export const experimental_createRateLimiter = createRateLimiter
  * - Always check the changelog before updating, even for non-major versions.
  * - If you depend on this feature, consider pinning your package version to avoid unexpected breaks.
  */
-export const experimental_getAwsScanner = getAwsScanners
+export const experimental_getAllAwsScanners = getAllAwsScanners
 
 /**
  * @public
@@ -48,4 +48,18 @@ export const experimental_getAwsScanner = getAwsScanners
  * - Always check the changelog before updating, even for non-major versions.
  * - If you depend on this feature, consider pinning your package version to avoid unexpected breaks.
  */
-export const experimental_getProcessedData = getProcessedData
+export const experimental_getAwsScanner = getAwsScanner
+
+/**
+ * @public
+ * @experimental This export is experimental and may change or be removed in future versions.
+ * Use with caution.
+ * @remarks
+ * WARNING: This is an experimental API. It may undergo significant changes or be removed entirely in non-major version updates.
+ * Before using this in production, please consider the following:
+ * - This API is not covered by semantic versioning guarantees.
+ * - Breaking changes may occur in minor or patch releases.
+ * - Always check the changelog before updating, even for non-major versions.
+ * - If you depend on this feature, consider pinning your package version to avoid unexpected breaks.
+ */
+export const experimental_getAwsProcessedData = getAwsProcessedData

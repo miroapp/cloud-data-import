@@ -1,11 +1,11 @@
 import path from 'path'
 import {Logger} from './hooks/Logger'
-import {getAwsScanners} from '@/scanners'
-import {StandardOutputSchema, ScannerError} from '@/types'
+import {getAllAwsScanners} from '@/scanners'
+import {StandardOutputSchema, AwsScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
-import {getProcessedData} from './process'
+import {getAwsProcessedData} from './process'
 import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
@@ -29,7 +29,7 @@ export default async () => {
 	const credentials = undefined
 
 	// prepare scanners
-	const scanners = getAwsScanners({
+	const scanners = getAllAwsScanners({
 		credentials,
 		regions: config.regions,
 		getRateLimiter,
@@ -60,7 +60,7 @@ export default async () => {
 	// aggregate errors
 	const errors = result.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
-	}, [] as ScannerError[])
+	}, [] as AwsScannerError[])
 
 	// create output
 	const output: StandardOutputSchema = {
@@ -68,7 +68,7 @@ export default async () => {
 		docVersion: '0.1.0',
 		resources: config.raw ? resources : {},
 		tags: config.raw ? tags : {},
-		processed: await getProcessedData(resources, tags),
+		processed: await getAwsProcessedData(resources, tags),
 		errors,
 		metadata: {
 			account: await getAwsAccountId(credentials),

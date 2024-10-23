@@ -1,14 +1,15 @@
-import {DynamoDBClient, ListTablesCommand, DescribeTableCommand, TableDescription} from '@aws-sdk/client-dynamodb'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {DynamoDBClient, ListTablesCommand, DescribeTableCommand} from '@aws-sdk/client-dynamodb'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getDynamoDBTables(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<TableDescription>> {
+): Promise<AwsResources<AwsServices.DYNAMODB_TABLES>> {
 	const client = new DynamoDBClient({credentials, region})
 
-	const resources: {[arn: string]: TableDescription} = {}
+	const resources: AwsResources<AwsServices.DYNAMODB_TABLES> = {}
 
 	let lastEvaluatedTableName: string | undefined
 	do {

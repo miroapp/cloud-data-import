@@ -1,14 +1,15 @@
 import {SQSClient, ListQueuesCommand, GetQueueAttributesCommand} from '@aws-sdk/client-sqs'
-import {Credentials, Resources, SQSQueue, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getSQSQueues(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<SQSQueue>> {
+): Promise<AwsResources<AwsServices.SQS_QUEUES>> {
 	const client = new SQSClient({credentials, region})
 
-	const resources: {[arn: string]: SQSQueue} = {}
+	const resources: AwsResources<AwsServices.SQS_QUEUES> = {}
 
 	let nextToken: string | undefined
 	do {
@@ -22,7 +23,7 @@ export async function getSQSQueues(
 			const getQueueAttributesCommand = new GetQueueAttributesCommand({QueueUrl: queueUrl, AttributeNames: ['All']})
 			const queueAttributes = await rateLimiter.throttle(() => client.send(getQueueAttributesCommand))
 
-			const attributes = queueAttributes.Attributes as SQSQueue
+			const attributes = queueAttributes.Attributes
 
 			if (attributes) {
 				const queueArn = attributes.QueueArn

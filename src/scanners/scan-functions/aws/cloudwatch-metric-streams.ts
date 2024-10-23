@@ -1,14 +1,15 @@
-import {CloudWatchClient, ListMetricStreamsCommand, MetricStreamEntry} from '@aws-sdk/client-cloudwatch'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {CloudWatchClient, ListMetricStreamsCommand} from '@aws-sdk/client-cloudwatch'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getCloudWatchMetricStreams(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<MetricStreamEntry>> {
+): Promise<AwsResources<AwsServices.CLOUDWATCH_METRIC_STREAMS>> {
 	const client = new CloudWatchClient({credentials, region})
 
-	const resources: {[arn: string]: MetricStreamEntry} = {}
+	const resources: AwsResources<AwsServices.CLOUDWATCH_METRIC_STREAMS> = {}
 
 	let nextToken: string | undefined
 	do {

@@ -1,14 +1,15 @@
-import {LambdaClient, ListFunctionsCommand, GetFunctionCommand, FunctionConfiguration} from '@aws-sdk/client-lambda'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {LambdaClient, ListFunctionsCommand} from '@aws-sdk/client-lambda'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getLambdaFunctions(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<FunctionConfiguration>> {
+): Promise<AwsResources<AwsServices.LAMBDA_FUNCTIONS>> {
 	const client = new LambdaClient({credentials, region})
 
-	const resources: {[arn: string]: FunctionConfiguration} = {}
+	const resources: AwsResources<AwsServices.LAMBDA_FUNCTIONS> = {}
 
 	let marker: string | undefined
 	do {

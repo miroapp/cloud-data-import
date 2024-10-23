@@ -1,16 +1,13 @@
-import {
-	ElasticLoadBalancingClient,
-	DescribeLoadBalancersCommand,
-	LoadBalancerDescription,
-} from '@aws-sdk/client-elastic-load-balancing'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {ElasticLoadBalancingClient, DescribeLoadBalancersCommand} from '@aws-sdk/client-elastic-load-balancing'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getELBv1LoadBalancers(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<LoadBalancerDescription>> {
+): Promise<AwsResources<AwsServices.ELBV1_LOAD_BALANCERS>> {
 	const client = new ElasticLoadBalancingClient({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
@@ -18,7 +15,8 @@ export async function getELBv1LoadBalancers(
 	const describeLoadBalancersCommand = new DescribeLoadBalancersCommand({})
 	const describeLoadBalancersResponse = await rateLimiter.throttle(() => client.send(describeLoadBalancersCommand))
 
-	const resources: {[arn: string]: LoadBalancerDescription} = {}
+	const resources: AwsResources<AwsServices.ELBV1_LOAD_BALANCERS> = {}
+
 	for (const loadBalancer of describeLoadBalancersResponse.LoadBalancerDescriptions || []) {
 		if (loadBalancer.LoadBalancerName) {
 			const arn = `arn:aws:elasticloadbalancing:${region}:${accountId}:loadbalancer/${loadBalancer.LoadBalancerName}`
