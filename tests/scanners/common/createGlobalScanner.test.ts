@@ -1,9 +1,10 @@
 import {createGlobalScanner} from '@/scanners'
-import {Resources, ResourceDescription, Credentials, ScannerLifecycleHook} from '@/types'
+import {AwsResources, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
 import {fetchTags} from '@/scanners/common/fetchTags'
+import {AwsServices} from '@/constants'
 
 jest.mock('@/scanners/common/fetchTags')
 
@@ -11,8 +12,8 @@ describe('createGlobalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
 	let mockTagsRateLimiter: RateLimiterMockImpl
-	let mockHooks: ScannerLifecycleHook[]
-	let mockCredentials: Credentials
+	let mockHooks: AwsScannerLifecycleHook[]
+	let mockCredentials: AwsCredentials
 	let mockScanFunction: jest.Mock
 
 	beforeEach(() => {
@@ -21,14 +22,14 @@ describe('createGlobalScanner', () => {
 		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
-		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
+		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResources<never>)
 		;(fetchTags as jest.Mock).mockResolvedValue({})
 
 		jest.clearAllMocks()
 	})
 
 	it('should return a function', () => {
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -39,7 +40,7 @@ describe('createGlobalScanner', () => {
 	})
 
 	it('should get rate limiter with the correct service name', () => {
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -48,16 +49,22 @@ describe('createGlobalScanner', () => {
 
 		scanner()
 
-		expect(mockGetRateLimiter).toHaveBeenCalledWith('mockService')
+		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
 	})
 
 	it('should return resources and no errors when scan is successful', async () => {
-		const mockResources: Resources<ResourceDescription> = {
-			resource1: {id: 'resource1', name: 'Resource 1'},
+		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+			resource1: {
+				Name: 'Resource 1',
+				Description: 'Resource 1 Description',
+				WorkGroup: 'WorkGroup 1',
+				Database: 'Database 1',
+				QueryString: 'SELECT * FROM table1',
+			},
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -74,7 +81,7 @@ describe('createGlobalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -83,23 +90,35 @@ describe('createGlobalScanner', () => {
 
 		const result = await scanner()
 
-		expect(mockGetRateLimiter).toHaveBeenCalledWith('mockService')
+		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
 		expect(result).toEqual({
-			resources: {} as Resources<never>,
+			resources: {} as AwsResources<never>,
 			tags: {},
-			errors: [{service: 'mockService', message: mockError.message}],
+			errors: [{service: AwsServices.ATHENA_NAMED_QUERIES, message: mockError.message}],
 		})
 	})
 
 	it('should call hooks appropriately during the scan', async () => {
-		const mockResources: Resources<ResourceDescription> = {
-			resource1: {id: 'resource1', name: 'Resource 1'},
-			resource2: {id: 'resource2', name: 'Resource 2'},
+		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+			resource1: {
+				Name: 'Resource 1',
+				Description: 'Resource 1 Description',
+				WorkGroup: 'WorkGroup 1',
+				Database: 'Database 1',
+				QueryString: 'SELECT * FROM table1',
+			},
+			resource2: {
+				Name: 'Resource 2',
+				Description: 'Resource 2 Description',
+				WorkGroup: 'WorkGroup 2',
+				Database: 'Database 2',
+				QueryString: 'SELECT * FROM table2',
+			},
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -113,8 +132,8 @@ describe('createGlobalScanner', () => {
 			expect(hook.onComplete).toHaveBeenCalledTimes(1)
 			expect(hook.onError).not.toHaveBeenCalled()
 
-			expect(hook.onStart).toHaveBeenCalledWith('mockService')
-			expect(hook.onComplete).toHaveBeenCalledWith(mockResources, 'mockService')
+			expect(hook.onStart).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
+			expect(hook.onComplete).toHaveBeenCalledWith(mockResources, AwsServices.ATHENA_NAMED_QUERIES)
 		})
 	})
 
@@ -122,7 +141,7 @@ describe('createGlobalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createGlobalScanner('mockService', mockScanFunction, {
+		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -136,8 +155,8 @@ describe('createGlobalScanner', () => {
 			expect(hook.onComplete).not.toHaveBeenCalled()
 			expect(hook.onError).toHaveBeenCalledTimes(1)
 
-			expect(hook.onStart).toHaveBeenCalledWith('mockService')
-			expect(hook.onError).toHaveBeenCalledWith(mockError, 'mockService')
+			expect(hook.onStart).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
+			expect(hook.onError).toHaveBeenCalledWith(mockError, AwsServices.ATHENA_NAMED_QUERIES)
 		})
 	})
 })

@@ -1,4 +1,4 @@
-import type {EnrichedBucket, EnrichedHostedZone, ResourceDescription, Resources} from '@/types'
+import type {AwsResourceDescriptionMap, AwsResources} from '@/types'
 import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
@@ -12,8 +12,12 @@ import type * as ECS from '@aws-sdk/client-ecs'
 
 import {PlacementData, ResourcePlacementData} from './types'
 import {ARNInfo, getArnInfo} from './utils/getArnInfo'
+import {AwsServices} from '@/constants'
 
-export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDescription): ResourcePlacementData => {
+export const getResourcePlacementData = (
+	arnInfo: ARNInfo,
+	resource: AwsResourceDescriptionMap[AwsServices],
+): ResourcePlacementData => {
 	const {name, region, service, type, account} = arnInfo
 
 	const baseOutput: ResourcePlacementData = {
@@ -287,7 +291,7 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 
 	// Hosted Zones
 	if (service === 'route53' && type === 'hostedzone') {
-		const hostedZone = resource as EnrichedHostedZone
+		const hostedZone = resource as AwsResourceDescriptionMap[AwsServices.ROUTE53_HOSTED_ZONES]
 		return {
 			...baseOutput,
 			account: hostedZone.Account,
@@ -297,7 +301,7 @@ export const getResourcePlacementData = (arnInfo: ARNInfo, resource: ResourceDes
 
 	// S3 Buckets
 	if (service === 's3') {
-		const s3Bucket = resource as EnrichedBucket
+		const s3Bucket = resource as AwsResourceDescriptionMap[AwsServices.S3_BUCKETS]
 		return {
 			...baseOutput,
 			type: 'bucket',
@@ -319,7 +323,7 @@ export const isContainerAndShouldBeIgnored = (service: string, type: string): bo
 	return isVPC || isSubnet || isSecurityGroup || isAvailabilityZone
 }
 
-export const getPlacementData = (resources: Resources): PlacementData => {
+export const getPlacementData = (resources: AwsResources): PlacementData => {
 	const placementData: PlacementData = {}
 
 	for (const [arn, resource] of Object.entries(resources)) {

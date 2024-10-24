@@ -1,28 +1,28 @@
 import {
-	Resources,
-	ResourceDescription,
-	GlobalScanFunction,
-	Credentials,
-	ScannerLifecycleHook,
+	AwsGlobalScanFunction,
+	AwsCredentials,
+	AwsScannerLifecycleHook,
 	RateLimiter,
-	ResourceTags,
+	AwsTags,
+	AwsResources,
 } from '@/types'
-import {CreateGlobalScannerFunction, GetRateLimiterFunction} from '@/scanners/types'
+import {CreateGlobalScannerFunction, CreateScannerOptions, GetRateLimiterFunction} from '@/scanners/types'
 import {fetchTags} from '@/scanners/common/fetchTags'
+import {AwsServices} from '@/constants'
 
-type GlobalScanResult<T extends ResourceDescription> = {
-	resources: Resources<T>
-	tags: ResourceTags
+type GlobalScanResult<T extends AwsServices> = {
+	resources: AwsResources<T>
+	tags: AwsTags
 	error: Error | null
 }
 
-async function performGlobalScan<T extends ResourceDescription>(
-	service: string,
-	scanFunction: GlobalScanFunction<T>,
-	credentials: Credentials,
+async function performGlobalScan<T extends AwsServices>(
+	service: T,
+	scanFunction: AwsGlobalScanFunction<T>,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	tagsRateLimiter: RateLimiter,
-	hooks: ScannerLifecycleHook[],
+	hooks: AwsScannerLifecycleHook[],
 ): Promise<GlobalScanResult<T>> {
 	try {
 		// onStart hook
@@ -44,19 +44,14 @@ async function performGlobalScan<T extends ResourceDescription>(
 		hooks.forEach((hook) => hook.onError?.(error as Error, service))
 
 		// Return error
-		return {resources: {} as Resources<never>, tags: {}, error: error as Error}
+		return {resources: {}, tags: {}, error: error as Error}
 	}
 }
 
-export const createGlobalScanner: CreateGlobalScannerFunction = <T extends ResourceDescription>(
-	service: string,
-	scanFunction: GlobalScanFunction<T>,
-	options: {
-		credentials: Credentials
-		getRateLimiter: GetRateLimiterFunction
-		tagsRateLimiter: RateLimiter
-		hooks: ScannerLifecycleHook[]
-	},
+export const createGlobalScanner: CreateGlobalScannerFunction = <T extends AwsServices>(
+	service: T,
+	scanFunction: AwsGlobalScanFunction<T>,
+	options: CreateScannerOptions,
 ) => {
 	return async () => {
 		const {credentials, getRateLimiter, tagsRateLimiter, hooks} = options

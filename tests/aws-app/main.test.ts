@@ -1,15 +1,14 @@
 import path from 'path'
 import {Logger} from '@/aws-app/hooks/Logger'
-import {getAwsScanners} from '@/scanners'
-import {ProcessedData, Resources, StandardOutputSchema} from '@/types'
+import {getAllAwsScanners} from '@/scanners'
+import {AwsProcessedData, AwsResources, StandardOutputSchema} from '@/types'
 import {saveAsJson} from '@/aws-app/utils/saveAsJson'
 import * as cliMessages from '@/aws-app/cliMessages'
 import {openDirectoryAndFocusFile} from '@/aws-app/utils/openDirectoryAndFocusFile'
-import {getProcessedData} from '@/aws-app/process'
+import {getAwsProcessedData} from '@/aws-app/process'
 import {getConfig} from '@/aws-app/config'
 import {createRateLimiterFactory} from '@/aws-app/utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
-import {AwsCredentialIdentity} from '@aws-sdk/types'
 
 import {mockDate} from '../mocks/dateMock'
 
@@ -32,7 +31,7 @@ describe('main function', () => {
 	let config: any
 	let mockedDate: ReturnType<typeof mockDate>
 
-	const mockedProcessedData: ProcessedData = {
+	const mockedAwsProcessedData: AwsProcessedData = {
 		resources: {
 			'dummy:arn:1': {
 				name: '1',
@@ -101,7 +100,7 @@ describe('main function', () => {
 		;(getConfig as jest.Mock).mockResolvedValue(config)
 		;(createRateLimiterFactory as jest.Mock).mockReturnValue(jest.fn())
 		;(getAwsAccountId as jest.Mock).mockResolvedValue('123456789012')
-		;(getProcessedData as jest.Mock).mockResolvedValue(mockedProcessedData)
+		;(getAwsProcessedData as jest.Mock).mockResolvedValue(mockedAwsProcessedData)
 
 		mockScanners = [
 			jest.fn().mockResolvedValue({
@@ -112,7 +111,7 @@ describe('main function', () => {
 				errors: [],
 			}),
 		]
-		;(getAwsScanners as jest.Mock).mockReturnValue(mockScanners)
+		;(getAllAwsScanners as jest.Mock).mockReturnValue(mockScanners)
 
 		jest.clearAllMocks()
 	})
@@ -136,10 +135,10 @@ describe('main function', () => {
 		expect(process.env.AWS_REGION).toBe('us-east-1')
 	})
 
-	it('should call getAwsScanners with correct parameters', async () => {
+	it('should call getAllAwsScanners with correct parameters', async () => {
 		const main = (await import('@/aws-app/main')).default
 		await main()
-		expect(getAwsScanners).toHaveBeenCalledWith({
+		expect(getAllAwsScanners).toHaveBeenCalledWith({
 			credentials: undefined,
 			regions: config.regions,
 			getRateLimiter: expect.any(Function),
@@ -148,7 +147,7 @@ describe('main function', () => {
 		})
 	})
 
-	it('should call getAwsScanners with the correct AWS profile', async () => {
+	it('should call getAllAwsScanners with the correct AWS profile', async () => {
 		const dummyConfig = {
 			...config,
 			profile: 'dummyProfile',
@@ -174,8 +173,8 @@ describe('main function', () => {
 			resources: {
 				'dummy:arn:1': 'dummy:raw:info',
 				'dummy:arn:2': 'dummy:raw:info',
-			} as unknown as Resources,
-			processed: mockedProcessedData,
+			} as unknown as AwsResources,
+			processed: mockedAwsProcessedData,
 			errors: [],
 			metadata: {
 				account: '123456789012',

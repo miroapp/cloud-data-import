@@ -1,14 +1,15 @@
-import {RDSClient, DescribeDBInstancesCommand, DBInstance} from '@aws-sdk/client-rds'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {RDSClient, DescribeDBInstancesCommand} from '@aws-sdk/client-rds'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getRDSInstances(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<DBInstance>> {
+): Promise<AwsResources<AwsServices.RDS_INSTANCES>> {
 	const client = new RDSClient({credentials, region})
 
-	const dbInstances: Resources<DBInstance> = {}
+	const dbInstances: AwsResources<AwsServices.RDS_INSTANCES> = {}
 
 	let marker: string | undefined
 	do {

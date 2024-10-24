@@ -1,4 +1,4 @@
-import {ProcessedData} from '@/types'
+import {AwsProcessedData} from '@/types'
 
 export type ResourcePlacementData = {
 	account: string
@@ -23,6 +23,6 @@ export interface ErrorManager {
 	render: () => void
 }
 
-export type ProcessedResources = ProcessedData['resources']
-export type ProcessedConnections = ProcessedData['connections']
-export type ProcessedContainers = ProcessedData['containers']
+export type ProcessedResources = AwsProcessedData['resources']
+export type ProcessedConnections = AwsProcessedData['connections']
+export type ProcessedContainers = AwsProcessedData['containers']

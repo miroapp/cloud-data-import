@@ -1,17 +1,18 @@
 import {AthenaClient, ListNamedQueriesCommand, GetNamedQueryCommand, NamedQuery} from '@aws-sdk/client-athena'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getAthenaNamedQueries(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<NamedQuery>> {
+): Promise<AwsResources<AwsServices.ATHENA_NAMED_QUERIES>> {
 	const client = new AthenaClient({credentials, region})
 	const accountId = await getAwsAccountId(credentials)
 
-	const resources: Resources<NamedQuery> = {}
+	const resources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {}
 	let nextToken: string | undefined
 
 	do {

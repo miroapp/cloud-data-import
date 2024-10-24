@@ -1,14 +1,15 @@
 import {EKSClient, ListClustersCommand, DescribeClusterCommand, Cluster} from '@aws-sdk/client-eks'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getEKSClusters(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<Cluster>> {
+): Promise<AwsResources<AwsServices.EKS_CLUSTERS>> {
 	const client = new EKSClient({credentials, region})
 
-	const resources: {[arn: string]: Cluster} = {}
+	const resources: AwsResources<AwsServices.EKS_CLUSTERS> = {}
 
 	let nextToken: string | undefined
 	do {

@@ -1,14 +1,15 @@
-import {RDSClient, DescribeDBProxiesCommand, DBProxy} from '@aws-sdk/client-rds'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {RDSClient, DescribeDBProxiesCommand} from '@aws-sdk/client-rds'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getRDSProxies(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<DBProxy>> {
+): Promise<AwsResources<AwsServices.RDS_PROXIES>> {
 	const client = new RDSClient({credentials, region})
 
-	const dbProxies: Resources<DBProxy> = {}
+	const dbProxies: AwsResources<AwsServices.RDS_PROXIES> = {}
 
 	let marker: string | undefined
 	do {

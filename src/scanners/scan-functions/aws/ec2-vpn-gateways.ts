@@ -1,17 +1,18 @@
 import {EC2Client, DescribeVpnGatewaysCommand, VpnGateway} from '@aws-sdk/client-ec2'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {getAwsAccountId} from './common/getAwsAccountId'
 import {buildARN} from './common/buildArn'
 
 export async function getEC2VpnGateways(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<VpnGateway>> {
+): Promise<AwsResources<AwsServices.EC2_VPN_GATEWAYS>> {
 	const client = new EC2Client({credentials, region})
 	const accountId = await getAwsAccountId(credentials)
 
-	const resources: Resources<VpnGateway> = {}
+	const resources: AwsResources<AwsServices.EC2_VPN_GATEWAYS> = {}
 
 	const describeVpnGatewaysCommand = new DescribeVpnGatewaysCommand({})
 

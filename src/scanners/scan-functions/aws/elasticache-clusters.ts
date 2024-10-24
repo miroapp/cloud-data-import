@@ -1,14 +1,15 @@
-import {ElastiCacheClient, DescribeCacheClustersCommand, CacheCluster} from '@aws-sdk/client-elasticache'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {ElastiCacheClient, DescribeCacheClustersCommand} from '@aws-sdk/client-elasticache'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 
 export async function getElastiCacheClusters(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<CacheCluster>> {
+): Promise<AwsResources<AwsServices.ELASTICACHE_CLUSTERS>> {
 	const client = new ElastiCacheClient({credentials, region})
 
-	const resources: {[arn: string]: CacheCluster} = {}
+	const resources: AwsResources<AwsServices.ELASTICACHE_CLUSTERS> = {}
 
 	let marker: string | undefined
 	do {

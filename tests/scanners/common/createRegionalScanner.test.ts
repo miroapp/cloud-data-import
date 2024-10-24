@@ -1,9 +1,10 @@
 import {createRegionalScanner} from '@/scanners'
-import {Resources, ResourceDescription, Credentials, ScannerLifecycleHook} from '@/types'
+import {AwsResources, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
 import {fetchTags} from '@/scanners/common/fetchTags'
+import {AwsServices} from '@/constants'
 
 jest.mock('@/scanners/common/fetchTags')
 
@@ -11,8 +12,8 @@ describe('createRegionalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
 	let mockTagsRateLimiter: RateLimiterMockImpl
-	let mockHooks: ScannerLifecycleHook[]
-	let mockCredentials: Credentials
+	let mockHooks: AwsScannerLifecycleHook[]
+	let mockCredentials: AwsCredentials
 	let mockScanFunction: jest.Mock
 	let regions: string[]
 
@@ -22,7 +23,7 @@ describe('createRegionalScanner', () => {
 		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
-		mockScanFunction = jest.fn().mockResolvedValue({} as Resources<never>)
+		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResources<never>)
 		;(fetchTags as jest.Mock).mockResolvedValue({})
 		regions = ['eu-west-1', 'eu-west-2', 'us-east-1']
 
@@ -30,7 +31,7 @@ describe('createRegionalScanner', () => {
 	})
 
 	it('should return a function', () => {
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -41,7 +42,7 @@ describe('createRegionalScanner', () => {
 	})
 
 	it('should get rate limiter with the correct service name and per region', () => {
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -51,17 +52,23 @@ describe('createRegionalScanner', () => {
 		scanner()
 
 		regions.forEach((region) => {
-			expect(mockGetRateLimiter).toHaveBeenCalledWith('mockService', region)
+			expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES, region)
 		})
 	})
 
 	it('should return resources and no errors when scan is successful', async () => {
-		const mockResources: Resources<ResourceDescription> = {
-			resource1: {id: 'resource1', name: 'Resource 1'},
+		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+			resource1: {
+				Name: 'Resource 1',
+				Description: 'Resource 1 Description',
+				WorkGroup: 'WorkGroup 1',
+				Database: 'Database 1',
+				QueryString: 'SELECT * FROM table1',
+			},
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -78,12 +85,18 @@ describe('createRegionalScanner', () => {
 	})
 
 	it('should call scan function per region', async () => {
-		const mockResources: Resources<ResourceDescription> = {
-			resource1: {id: 'resource1', name: 'Resource 1'},
+		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+			resource1: {
+				Name: 'Resource 1',
+				Description: 'Resource 1 Description',
+				WorkGroup: 'WorkGroup 1',
+				Database: 'Database 1',
+				QueryString: 'SELECT * FROM table1',
+			},
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -101,7 +114,7 @@ describe('createRegionalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -111,12 +124,12 @@ describe('createRegionalScanner', () => {
 		const results = await Promise.all(regions.map(scanner))
 
 		results.forEach((result, index) => {
-			expect(mockGetRateLimiter).toHaveBeenCalledWith('mockService', regions[index])
+			expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES, regions[index])
 			expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter, regions[index])
 			expect(result.resources).toEqual({})
 			expect(result.errors).toEqual(
 				regions.map((region) => ({
-					service: 'mockService',
+					service: AwsServices.ATHENA_NAMED_QUERIES,
 					message: mockError.message,
 					region,
 				})),
@@ -125,13 +138,25 @@ describe('createRegionalScanner', () => {
 	})
 
 	it('should call onStart and onComplete of hooks appropriately during the scan', async () => {
-		const mockResources: Resources<ResourceDescription> = {
-			resource1: {id: 'resource1', name: 'Resource 1'},
-			resource2: {id: 'resource2', name: 'Resource 2'},
+		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+			resource1: {
+				Name: 'Resource 1',
+				Description: 'Resource 1 Description',
+				WorkGroup: 'WorkGroup 1',
+				Database: 'Database 1',
+				QueryString: 'SELECT * FROM table1',
+			},
+			resource2: {
+				Name: 'Resource 2',
+				Description: 'Resource 2 Description',
+				WorkGroup: 'WorkGroup 2',
+				Database: 'Database 2',
+				QueryString: 'SELECT * FROM table2',
+			},
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,
@@ -151,7 +176,7 @@ describe('createRegionalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createRegionalScanner('mockService', mockScanFunction, regions, {
+		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			tagsRateLimiter: mockTagsRateLimiter,

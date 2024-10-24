@@ -1,6 +1,6 @@
-import {ScannerLifecycleHook} from '@/types'
+import {AwsScannerLifecycleHook} from '@/types'
 
-export const createMockedHook = (): ScannerLifecycleHook => ({
+export const createMockedHook = (): AwsScannerLifecycleHook => ({
 	onStart: jest.fn(),
 	onComplete: jest.fn(),
 	onError: jest.fn(),

@@ -1,22 +1,24 @@
-import {EC2Client, DescribeTransitGatewaysCommand, TransitGateway} from '@aws-sdk/client-ec2'
+import {EC2Client, DescribeTransitGatewaysCommand} from '@aws-sdk/client-ec2'
 import {buildARN} from './common/buildArn'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getEC2TransitGateways(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<TransitGateway>> {
+): Promise<AwsResources<AwsServices.EC2_TRANSIT_GATEWAYS>> {
 	const client = new EC2Client({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
 
 	const describeTransitGatewaysCommand = new DescribeTransitGatewaysCommand({})
 	const describeTransitGatewaysResponse = await rateLimiter.throttle(() => client.send(describeTransitGatewaysCommand))
-	const transitGateways: TransitGateway[] = describeTransitGatewaysResponse.TransitGateways || []
+	const transitGateways = describeTransitGatewaysResponse.TransitGateways || []
 
-	const resources: {[arn: string]: TransitGateway} = {}
+	const resources: AwsResources<AwsServices.EC2_TRANSIT_GATEWAYS> = {}
+
 	for (const transitGateway of transitGateways) {
 		if (transitGateway.TransitGatewayId) {
 			const arn = buildARN({

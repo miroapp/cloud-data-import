@@ -1,7 +1,7 @@
 import {PlacementData, ProcessedResources} from '../types'
-import {ResourceTags} from '@/types'
+import {AwsTags} from '@/types'
 
-export const getProcessedResources = (placementData: PlacementData, tags: ResourceTags): ProcessedResources => {
+export const getProcessedResources = (placementData: PlacementData, tags: AwsTags): ProcessedResources => {
 	const processedResources = {} as ProcessedResources
 
 	for (const [arn, {name, service, type, variant}] of Object.entries(placementData)) {

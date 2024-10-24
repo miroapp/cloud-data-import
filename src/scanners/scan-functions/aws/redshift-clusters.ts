@@ -1,16 +1,17 @@
-import {RedshiftClient, DescribeClustersCommand, Cluster} from '@aws-sdk/client-redshift'
+import {RedshiftClient, DescribeClustersCommand} from '@aws-sdk/client-redshift'
 import {buildARN} from './common/buildArn'
-import {Credentials, Resources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsServices} from '@/constants'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getRedshiftClusters(
-	credentials: Credentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<Resources<Cluster>> {
+): Promise<AwsResources<AwsServices.REDSHIFT_CLUSTERS>> {
 	const client = new RedshiftClient({credentials, region})
 	const accountId = await getAwsAccountId(credentials)
-	const resources: {[arn: string]: Cluster} = {}
+	const resources: AwsResources<AwsServices.REDSHIFT_CLUSTERS> = {}
 
 	let marker: string | undefined
 	do {
@@ -19,7 +20,7 @@ export async function getRedshiftClusters(
 		})
 
 		const describeClustersResponse = await rateLimiter.throttle(() => client.send(describeClustersCommand))
-		const clusters: Cluster[] = describeClustersResponse.Clusters || []
+		const clusters = describeClustersResponse.Clusters || []
 
 		for (const cluster of clusters) {
 			if (cluster.ClusterIdentifier) {
