@@ -50,13 +50,18 @@ interface GetAwsScannerArgumentsBase {
 	credentials?: AwsCredentials
 	getRateLimiter: GetRateLimiterFunction
 	hooks?: AwsScannerLifecycleHook[]
-	regions: string[]
 }
 
 export interface GetAwsScannerArguments<T extends AwsServices> extends GetAwsScannerArgumentsBase {
 	service: T
+	regions?: string[]
 }
 
 export interface GetAllAwsScannersArguments extends GetAwsScannerArgumentsBase {
 	shouldIncludeGlobalServices: boolean
+	regions: string[]
+}
+
+export interface GetAwsTagsScannerArguments extends GetAwsScannerArgumentsBase {
+	services: AwsServices[]
 }

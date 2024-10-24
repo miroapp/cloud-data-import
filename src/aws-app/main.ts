@@ -1,6 +1,6 @@
 import path from 'path'
 import {Logger} from './hooks/Logger'
-import {getAllAwsScanners} from '@/scanners'
+import {getAllAwsScanners, getTagsScanner} from '@/scanners'
 import {StandardOutputSchema, AwsScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
@@ -10,6 +10,7 @@ import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 import {AWSRateLimitExhaustionRetryStrategy} from './utils/AWSRateLimitExhaustionRetryStrategy'
+import {AwsServices} from '@/constants'
 
 export default async () => {
 	console.log(cliMessages.getIntro())
@@ -29,34 +30,49 @@ export default async () => {
 	const credentials = undefined
 
 	// prepare scanners
-	const scanners = getAllAwsScanners({
+	const hooks = [
+		new Logger(), // log scanning progress
+	]
+
+	const commonScannerOptions = {
 		credentials,
-		regions: config.regions,
 		getRateLimiter,
+		hooks,
+	}
+
+	const resourceScanners = getAllAwsScanners({
+		...commonScannerOptions,
+		regions: config.regions,
 		shouldIncludeGlobalServices: !config['regional-only'],
-		hooks: [
-			new Logger(), // log scanning progress
-		],
+	})
+
+	const scanResources = () => Promise.all(resourceScanners.map((scanner) => scanner()))
+	const scanTags = getTagsScanner({
+		...commonScannerOptions,
+		services: Object.values(AwsServices),
 	})
 
 	// run scanners
 	const startedAt = new Date()
-	const resourceScanResult = await Promise.all(scanners.map((scanner) => scanner()))
+	const [discoveredResources, discoveredTags] = await Promise.all([
+		scanResources(), // scan resources
+		scanTags(), // scan tags
+	])
 	const finishedAt = new Date()
 
 	// calculate duration
 	const duration = parseFloat(((finishedAt.getTime() - startedAt.getTime()) / 1000).toFixed(2))
 
 	// aggregate resources
-	const resources = resourceScanResult.reduce((acc, {results}) => {
+	const resources = discoveredResources.reduce((acc, {results}) => {
 		return {...acc, ...results}
 	}, {})
 
-	// aggregate tags
-	const tags = {}
+	// prepare tags
+	const tags = discoveredTags.results
 
 	// aggregate errors
-	const errors = resourceScanResult.reduce((acc, {errors}) => {
+	const errors = discoveredResources.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
 	}, [] as AwsScannerError[])
 
