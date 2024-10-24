@@ -3,15 +3,11 @@ import {AwsResources, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
-import {fetchTags} from '@/scanners/common/fetchTags'
 import {AwsServices} from '@/constants'
-
-jest.mock('@/scanners/common/fetchTags')
 
 describe('createGlobalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
-	let mockTagsRateLimiter: RateLimiterMockImpl
 	let mockHooks: AwsScannerLifecycleHook[]
 	let mockCredentials: AwsCredentials
 	let mockScanFunction: jest.Mock
@@ -19,11 +15,9 @@ describe('createGlobalScanner', () => {
 	beforeEach(() => {
 		mockRateLimiter = new RateLimiterMockImpl()
 		mockGetRateLimiter = jest.fn().mockReturnValue(mockRateLimiter)
-		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResources<never>)
-		;(fetchTags as jest.Mock).mockResolvedValue({})
 
 		jest.clearAllMocks()
 	})
@@ -32,7 +26,6 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -43,7 +36,6 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -67,14 +59,13 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
 		const result = await scanner()
 
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
-		expect(result).toEqual({resources: mockResources, tags: {}, errors: []})
+		expect(result).toEqual({results: mockResources, errors: []})
 	})
 
 	it('should return errors if scan fails', async () => {
@@ -84,7 +75,6 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -93,8 +83,7 @@ describe('createGlobalScanner', () => {
 		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
 		expect(result).toEqual({
-			resources: {} as AwsResources<never>,
-			tags: {},
+			results: {} as AwsResources<never>,
 			errors: [{service: AwsServices.ATHENA_NAMED_QUERIES, message: mockError.message}],
 		})
 	})
@@ -121,7 +110,6 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -144,7 +132,6 @@ describe('createGlobalScanner', () => {
 		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 

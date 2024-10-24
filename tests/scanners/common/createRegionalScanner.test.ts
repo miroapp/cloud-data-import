@@ -3,15 +3,11 @@ import {AwsResources, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
-import {fetchTags} from '@/scanners/common/fetchTags'
 import {AwsServices} from '@/constants'
-
-jest.mock('@/scanners/common/fetchTags')
 
 describe('createRegionalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
-	let mockTagsRateLimiter: RateLimiterMockImpl
 	let mockHooks: AwsScannerLifecycleHook[]
 	let mockCredentials: AwsCredentials
 	let mockScanFunction: jest.Mock
@@ -20,11 +16,9 @@ describe('createRegionalScanner', () => {
 	beforeEach(() => {
 		mockRateLimiter = new RateLimiterMockImpl()
 		mockGetRateLimiter = jest.fn().mockReturnValue(mockRateLimiter)
-		mockTagsRateLimiter = new RateLimiterMockImpl()
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
 		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResources<never>)
-		;(fetchTags as jest.Mock).mockResolvedValue({})
 		regions = ['eu-west-1', 'eu-west-2', 'us-east-1']
 
 		jest.clearAllMocks()
@@ -34,7 +28,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -45,7 +38,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -71,7 +63,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -79,7 +70,7 @@ describe('createRegionalScanner', () => {
 
 		results.forEach((result, index) => {
 			expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter, regions[index])
-			expect(result.resources).toEqual(mockResources)
+			expect(result.results).toEqual(mockResources)
 			expect(result.errors).toEqual([])
 		})
 	})
@@ -99,7 +90,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -117,7 +107,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -126,7 +115,7 @@ describe('createRegionalScanner', () => {
 		results.forEach((result, index) => {
 			expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES, regions[index])
 			expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter, regions[index])
-			expect(result.resources).toEqual({})
+			expect(result.results).toEqual({})
 			expect(result.errors).toEqual(
 				regions.map((region) => ({
 					service: AwsServices.ATHENA_NAMED_QUERIES,
@@ -159,7 +148,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
@@ -179,7 +167,6 @@ describe('createRegionalScanner', () => {
 		const scanner = createRegionalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, regions, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
-			tagsRateLimiter: mockTagsRateLimiter,
 			hooks: mockHooks,
 		})
 
