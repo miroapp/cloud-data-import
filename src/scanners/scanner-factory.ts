@@ -1,5 +1,5 @@
 import {AwsServices} from '@/constants'
-import {AwsScanner} from '@/types'
+import {AwsResources, AwsScanner} from '@/types'
 import {GetAllAwsScannersArguments, GetAwsScannerArguments} from './types'
 import {createGlobalScanner} from './common/createGlobalScanner'
 import {createRegionalScanner} from './common/createRegionalScanner'
@@ -18,7 +18,7 @@ export const getAwsScanner = <T extends AwsServices>({
 	getRateLimiter,
 	hooks = [],
 	regions,
-}: GetAwsScannerArguments<T>): AwsScanner<T> => {
+}: GetAwsScannerArguments<T>): AwsScanner<AwsResources<T>> => {
 	const tagsRateLimiter = getRateLimiter('resource-groups-tagging')
 
 	const options = {
@@ -43,7 +43,7 @@ export const getAllAwsScanners = ({
 	hooks = [],
 	regions,
 	shouldIncludeGlobalServices,
-}: GetAllAwsScannersArguments): AwsScanner<AwsServices>[] => {
+}: GetAllAwsScannersArguments): AwsScanner<AwsResources<AwsServices>>[] => {
 	const services = Object.values(AwsServices).filter(
 		(service) => shouldIncludeGlobalServices || !GLOBAL_SERVICES.includes(service as (typeof GLOBAL_SERVICES)[number]),
 	)

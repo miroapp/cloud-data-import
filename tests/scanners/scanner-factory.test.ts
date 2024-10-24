@@ -1,7 +1,7 @@
 import {AwsServices} from '@/constants'
 import {getAllAwsScanners, getAwsScanner} from '@/scanners'
 import {scannerConfigs} from '@/scanners/scanner-configs'
-import type {AwsCredentials, AwsScannerLifecycleHook, AwsScanner} from '@/types'
+import type {AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 import {createMockedHook} from 'tests/mocks/hookMock'
 
 // Mock the constants module

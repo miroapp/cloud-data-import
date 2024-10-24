@@ -104,7 +104,7 @@ describe('main function', () => {
 
 		mockScanners = [
 			jest.fn().mockResolvedValue({
-				resources: {
+				results: {
 					'dummy:arn:1': 'dummy:raw:info',
 					'dummy:arn:2': 'dummy:raw:info',
 				},

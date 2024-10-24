@@ -41,24 +41,22 @@ export default async () => {
 
 	// run scanners
 	const startedAt = new Date()
-	const result = await Promise.all(scanners.map((scanner) => scanner()))
+	const resourceScanResult = await Promise.all(scanners.map((scanner) => scanner()))
 	const finishedAt = new Date()
 
 	// calculate duration
 	const duration = parseFloat(((finishedAt.getTime() - startedAt.getTime()) / 1000).toFixed(2))
 
 	// aggregate resources
-	const resources = result.reduce((acc, {resources}) => {
-		return {...acc, ...resources}
+	const resources = resourceScanResult.reduce((acc, {results}) => {
+		return {...acc, ...results}
 	}, {})
 
 	// aggregate tags
-	const tags = result.reduce((acc, {tags}) => {
-		return {...acc, ...tags}
-	}, {})
+	const tags = {}
 
 	// aggregate errors
-	const errors = result.reduce((acc, {errors}) => {
+	const errors = resourceScanResult.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
 	}, [] as AwsScannerError[])
 

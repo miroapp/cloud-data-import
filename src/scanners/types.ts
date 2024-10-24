@@ -1,5 +1,12 @@
 import {AwsServices} from '@/constants'
-import {AwsScanner, AwsRegionalScanFunction, AwsGlobalScanFunction, AwsCredentials, RateLimiter} from '../types'
+import {
+	AwsScanner,
+	AwsRegionalScanFunction,
+	AwsGlobalScanFunction,
+	AwsCredentials,
+	RateLimiter,
+	AwsResources,
+} from '../types'
 import {AwsScannerLifecycleHook} from '../types'
 
 // get rate limiter function for global and regional scanners
@@ -10,7 +17,6 @@ export interface CreateScannerOptions {
 	credentials: AwsCredentials
 	hooks: AwsScannerLifecycleHook[]
 	getRateLimiter: GetRateLimiterFunction
-	tagsRateLimiter: RateLimiter
 }
 
 export type CreateRegionalScannerFunction = <T extends AwsServices>(
@@ -18,13 +24,13 @@ export type CreateRegionalScannerFunction = <T extends AwsServices>(
 	scanFunction: AwsRegionalScanFunction<T>,
 	regions: string[],
 	options: CreateScannerOptions,
-) => AwsScanner<T>
+) => AwsScanner<AwsResources<T>>
 
 export type CreateGlobalScannerFunction = <T extends AwsServices>(
 	service: T,
 	scanFunction: AwsGlobalScanFunction<T>,
 	options: CreateScannerOptions,
-) => AwsScanner<T>
+) => AwsScanner<AwsResources<T>>
 
 // Scanner config
 export type AwsScannerConfig<T extends AwsServices> =
