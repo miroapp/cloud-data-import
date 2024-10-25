@@ -1,6 +1,6 @@
 import path from 'path'
 import {Logger} from '@/aws-app/hooks/Logger'
-import {getAllAwsScanners} from '@/scanners'
+import {getAllAwsScanners, getTagsScanner} from '@/scanners'
 import {AwsProcessedData, AwsResources, StandardOutputSchema} from '@/types'
 import {saveAsJson} from '@/aws-app/utils/saveAsJson'
 import * as cliMessages from '@/aws-app/cliMessages'
@@ -28,6 +28,7 @@ describe('main function', () => {
 	let getIntroSpy: jest.SpyInstance
 	let getOutroSpy: jest.SpyInstance
 	let mockScanners: jest.Mock[]
+	let mockTagsScanner: jest.Mock
 	let config: any
 	let mockedDate: ReturnType<typeof mockDate>
 
@@ -104,7 +105,7 @@ describe('main function', () => {
 
 		mockScanners = [
 			jest.fn().mockResolvedValue({
-				resources: {
+				results: {
 					'dummy:arn:1': 'dummy:raw:info',
 					'dummy:arn:2': 'dummy:raw:info',
 				},
@@ -112,6 +113,21 @@ describe('main function', () => {
 			}),
 		]
 		;(getAllAwsScanners as jest.Mock).mockReturnValue(mockScanners)
+
+		mockTagsScanner = jest.fn().mockResolvedValue({
+			results: {
+				'dummy:arn:1': {
+					'dummy:tag': 'dummy:value',
+					'dummy:tag2': 'dummy:value2',
+				},
+				'dummy:arn:2': {
+					'dummy:tag': 'dummy:value',
+					'dummy:tag2': 'dummy:value3',
+				},
+			},
+			errors: [],
+		})
+		;(getTagsScanner as jest.Mock).mockReturnValue(mockTagsScanner)
 
 		jest.clearAllMocks()
 	})
@@ -182,7 +198,16 @@ describe('main function', () => {
 				startedAt: expectedStartedAt,
 				finishedAt: expectedFinishedAt,
 			},
-			tags: {},
+			tags: {
+				'dummy:arn:1': {
+					'dummy:tag': 'dummy:value',
+					'dummy:tag2': 'dummy:value2',
+				},
+				'dummy:arn:2': {
+					'dummy:tag': 'dummy:value',
+					'dummy:tag2': 'dummy:value3',
+				},
+			},
 		}
 
 		expect(saveAsJson).toHaveBeenCalledWith(

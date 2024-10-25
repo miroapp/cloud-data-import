@@ -110,9 +110,8 @@ export type AwsScannerError = {
 	region?: string
 }
 
-export type AwsScannerResult<T extends AwsServices = AwsServices> = {
-	resources: AwsResources<T>
-	tags?: AwsTags
+export type AwsScannerResult<Results extends object> = {
+	results: Results
 	errors: AwsScannerError[]
 }
 
@@ -129,7 +128,7 @@ export interface AwsScannerLifecycleHook<T extends AwsServices = AwsServices> {
 	onError?: (error: Error, service: T, region?: string) => void
 }
 
-export type AwsScanner<T extends AwsServices = AwsServices> = () => Promise<AwsScannerResult<T>>
+export type AwsScanner<Results extends object> = () => Promise<AwsScannerResult<Results>>
 
 export interface Config {
 	regions: string[]
