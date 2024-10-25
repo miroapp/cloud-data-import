@@ -89,7 +89,7 @@
 		"@aws-sdk/client-route-53": "^3.679.0",
 		"@aws-sdk/client-s3": "^3.621.0",
 		"@aws-sdk/client-sns": "^3.621.0",
-		"@aws-sdk/client-sqs": "^3.621.0",
+		"@aws-sdk/client-sqs": "^3.679.0",
 		"@aws-sdk/client-sts": "^3.654.0",
 		"@aws-sdk/credential-providers": "3.654.0",
 		"@aws-sdk/smithy-client": "^3.374.0",
