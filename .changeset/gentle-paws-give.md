@@ -2,4 +2,5 @@
 "@mirohq/cloud-data-import": minor
 ---
 
-Decoupled tags scanning from resource scanning
+- Separated tags scanning from main resource discovery pipeline
+- Exposed new `getTagsScanner` function from the module
