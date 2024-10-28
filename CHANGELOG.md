@@ -1,5 +1,28 @@
 # @mirohq/cloud-data-import
 
+## 0.12.0
+
+### Minor Changes
+
+- 8888163: - Separated tags scanning from main resource discovery pipeline
+  - Exposed new `getTagsScanner` function from the module
+- 0643917: - Decoupled service names to support future feature development
+  - Added new AWS scanning capabilities to the module:
+    - `getAwsScanner` for single/multiple service scanning
+    - `getAllAwsScanners` to retrieve all available scanners
+  - Enhanced type safety for scanner implementations
+  - Reorganized ECS-related components (clusters, tasks, services) into separate files
+  - Added AWS prefix to core types and operations for better clarity
+
+### Patch Changes
+
+- 3e8cace: Fixed the small typing error in boilerplate file
+- 47f2108: chore(deps): bump @aws-sdk/client-cloudwatch from 3.654.0 to 3.679.0
+- 61ebb32: chore(deps): bump @aws-sdk/client-route-53 from 3.654.0 to 3.679.0
+- 45111f5: chore(deps): bump @aws-sdk/client-elasticache from 3.654.0 to 3.679.0
+- 9e2e0e9: chore(deps): bump @aws-sdk/client-elastic-load-balancing-v2 from 3.654.0 to 3.679.0
+- cf5e43d: chore(deps): bump @aws-sdk/client-eks from 3.654.0 to 3.679.0
+
 ## 0.11.1
 
 ### Patch Changes
