@@ -1,5 +1,5 @@
 import {DBInstance} from '@aws-sdk/client-rds'
-import {AwsAwsCredentials, AwsResources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
 import {AwsServices} from '@/constants'
 
 /**
@@ -10,7 +10,7 @@ import {AwsServices} from '@/constants'
 type SampleInstance = DBInstance
 
 export async function getSampleInstances(
-	credentials: AwsAwsCredentials,
+	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
 ): Promise<AwsResources<AwsServices.DYNAMODB_TABLES>> {
