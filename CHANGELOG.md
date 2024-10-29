@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.12.1
+
+### Patch Changes
+
+- d668d36: chore(deps): bump the aws-sdk packages with 20 updates
+
 ## 0.12.0
 
 ### Minor Changes
