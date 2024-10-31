@@ -69,7 +69,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-athena": "^3.682.0",
-		"@aws-sdk/client-auto-scaling": "^3.682.0",
+		"@aws-sdk/client-auto-scaling": "^3.684.0",
 		"@aws-sdk/client-cloudfront": "^3.682.0",
 		"@aws-sdk/client-cloudtrail": "^3.682.0",
 		"@aws-sdk/client-cloudwatch": "^3.682.0",
@@ -79,7 +79,7 @@
 		"@aws-sdk/client-efs": "^3.682.0",
 		"@aws-sdk/client-eks": "^3.682.0",
 		"@aws-sdk/client-elastic-load-balancing": "^3.682.0",
-		"@aws-sdk/client-elastic-load-balancing-v2": "^3.682.0",
+		"@aws-sdk/client-elastic-load-balancing-v2": "^3.684.0",
 		"@aws-sdk/client-elasticache": "^3.682.0",
 		"@aws-sdk/client-lambda": "^3.682.0",
 		"@aws-sdk/client-rds": "^3.682.0",
