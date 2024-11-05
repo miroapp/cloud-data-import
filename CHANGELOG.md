@@ -1,5 +1,13 @@
 # @mirohq/cloud-data-import
 
+## 0.12.2
+
+### Patch Changes
+
+- e340fd8: Export the AwsServices type
+- 35257b0: chore(deps): bump the aws-sdk group across 1 directory with 4 updates
+- 19dae1a: chore(deps): bump the aws-sdk group across 1 directory with 24 updates
+
 ## 0.12.1
 
 ### Patch Changes
