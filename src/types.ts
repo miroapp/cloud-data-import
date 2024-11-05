@@ -213,3 +213,5 @@ export interface StandardOutputSchema {
 		finishedAt: string
 	}
 }
+
+export {AwsServices}
