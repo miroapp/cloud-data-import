@@ -4,7 +4,7 @@ import {createRateLimiter, getAllAwsScanners, getAwsScanner, getTagsScanner} fro
 export type {GetAwsScannerArguments, GetAllAwsScannersArguments, GetAwsTagsScannerArguments} from '@/scanners'
 export type * from '@/types'
 
-export {awsRegionIds} from '@/constants'
+export {awsRegionIds, AwsServices} from '@/constants'
 
 export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
 
