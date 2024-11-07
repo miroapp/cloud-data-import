@@ -206,9 +206,21 @@ interface AwsScanJobMetadata {
 	finishedAt: string
 }
 
+/**
+ * 💡
+ * The standard schema is what Miro expects from the discovered cloud data.
+ * This schema supports versioning, so any changes made to it should result in a version bump.
+ *
+ * A JSON schema generator creates the JSON schema based on this TypeScript type in schemas/* folder
+ * You can find it in `scripts/generate-json-schema.ts`.
+ */
+
+/**
+ * Miro's Standard Schema for AWS resources.
+ */
 export interface AwsStandardSchema {
 	provider: 'aws'
-	docVersion: '0.1.0'
+	docVersion: '0.1.0' // Version of the schema. Should be bumped when schema changes.
 	resources: AwsResourceDescriptionMap[keyof AwsResourceDescriptionMap]
 	tags: AwsTags
 	errors: AwsScannerError[]
