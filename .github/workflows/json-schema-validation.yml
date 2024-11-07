@@ -23,5 +23,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run schema test
-        run: npm run test-schema
+      - name: Run schema validate
+        run: npm run validate-json-schema
