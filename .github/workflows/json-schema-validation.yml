@@ -1,0 +1,27 @@
+name: JSON Schema Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-schema:
+    name: ci/validate-schema
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run schema test
+        run: npm run test-schema
