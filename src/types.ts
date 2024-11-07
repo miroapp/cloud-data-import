@@ -199,17 +199,22 @@ export interface AwsProcessedData {
 	tags: {[key: string]: string[]}
 }
 
-export interface StandardOutputSchema {
+interface AwsScanJobMetadata {
+	account: string
+	regions: string[]
+	startedAt: string
+	finishedAt: string
+}
+
+export interface AwsStandardSchema {
 	provider: 'aws'
-	docVersion: string
-	resources: AwsResources
-	processed?: AwsProcessedData
+	docVersion: '0.1.0'
+	resources: AwsResourceDescriptionMap[keyof AwsResourceDescriptionMap]
 	tags: AwsTags
 	errors: AwsScannerError[]
-	metadata: {
-		account: string
-		regions: string[]
-		startedAt: string
-		finishedAt: string
-	}
+	metadata?: AwsScanJobMetadata
+}
+
+export interface AwsCliAppOutput extends AwsStandardSchema {
+	processed?: AwsProcessedData
 }

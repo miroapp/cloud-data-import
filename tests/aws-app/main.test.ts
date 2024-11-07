@@ -1,7 +1,7 @@
 import path from 'path'
 import {Logger} from '@/aws-app/hooks/Logger'
 import {getAllAwsScanners, getTagsScanner} from '@/scanners'
-import {AwsProcessedData, AwsResources, StandardOutputSchema} from '@/types'
+import {AwsProcessedData, AwsResources, AwsCliAppOutput} from '@/types'
 import {saveAsJson} from '@/aws-app/utils/saveAsJson'
 import * as cliMessages from '@/aws-app/cliMessages'
 import {openDirectoryAndFocusFile} from '@/aws-app/utils/openDirectoryAndFocusFile'
@@ -183,7 +183,7 @@ describe('main function', () => {
 		const expectedStartedAt = mockedDate.getExpectedTimeISOString(dateCallsBeforeMeasure) // first Date.now() call
 		const expectedFinishedAt = mockedDate.getExpectedTimeISOString(dateCallsBeforeMeasure + 1) // second Date.now() call
 
-		const expectedOutput: StandardOutputSchema = {
+		const expectedOutput: AwsCliAppOutput = {
 			provider: 'aws',
 			docVersion: expect.any(String),
 			resources: {

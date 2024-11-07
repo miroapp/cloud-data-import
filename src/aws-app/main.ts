@@ -1,7 +1,7 @@
 import path from 'path'
 import {Logger} from './hooks/Logger'
 import {getAllAwsScanners, getTagsScanner} from '@/scanners'
-import {StandardOutputSchema, AwsScannerError} from '@/types'
+import {AwsCliAppOutput, AwsScannerError} from '@/types'
 import {saveAsJson} from './utils/saveAsJson'
 import * as cliMessages from './cliMessages'
 import {openDirectoryAndFocusFile} from './utils/openDirectoryAndFocusFile'
@@ -77,7 +77,7 @@ export default async () => {
 	}, [] as AwsScannerError[])
 
 	// create output
-	const output: StandardOutputSchema = {
+	const output: AwsCliAppOutput = {
 		provider: 'aws',
 		docVersion: '0.1.0',
 		resources: config.raw ? resources : {},
