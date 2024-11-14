@@ -21,7 +21,7 @@ try {
 
 	if (newSchemaHash !== existingSchemaHash) {
 		throw new Error(
-			'Error: The generated schema does not match the committed schema.\nPlease run "npm run generate-json-schema" and commit the changes.',
+			'Error: The generated schema does not match the committed schema.\nPlease run "npm run json-schema:generate" and commit the changes.',
 		)
 	}
 
