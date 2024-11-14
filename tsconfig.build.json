@@ -8,5 +8,5 @@
 		"declaration": true,
 		"declarationMap": true
 	},
-	"exclude": ["tests"]
+	"exclude": ["tests", "scripts", "node_modules"]
 }
