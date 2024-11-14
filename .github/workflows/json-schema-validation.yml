@@ -24,4 +24,4 @@ jobs:
         run: npm ci
 
       - name: Run schema validate
-        run: npm run validate-json-schema
+        run: npm run json-schema:validate

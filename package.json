@@ -47,8 +47,8 @@
 		"dev:setup": "npm install && npm run build && npm link",
 		"dev": "ts-node -r tsconfig-paths/register src/cli.ts",
 		"changeset": "changeset",
-		"generate-json-schema": "ts-node scripts/generate-json-schema.ts",
-		"validate-json-schema": "ts-node scripts/validate-json-schema.ts"
+		"json-schema:generate": "npm install && ts-node scripts/generate-json-schema.ts",
+		"json-schema:validate": "ts-node scripts/validate-json-schema.ts"
 	},
 	"license": "MIT",
 	"devDependencies": {
