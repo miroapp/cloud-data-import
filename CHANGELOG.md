@@ -1,5 +1,13 @@
 # @mirohq/cloud-data-import
 
+## 0.12.3
+
+### Patch Changes
+
+- 385b165: - chore(deps): bump the aws-sdk group across 1 directory with 24 updates
+  - chore: bumped json schema to 0.1.1
+- dad9a19: Included Cloud View's deep-link in outro message
+
 ## 0.12.2
 
 ### Patch Changes
