@@ -79,29 +79,24 @@ export function getExistingVersions(): string[] {
 
 // Function to save the schema
 export function saveSchema(schema: TJS.Definition, docVersion: string) {
-	const fileName = `miro-cloudview-aws-v${docVersion}.json`
-	const outputPath = path.resolve(schemasDir, fileName)
-
 	// Ensure schemas directory exists
 	if (!fs.existsSync(schemasDir)) {
 		fs.mkdirSync(schemasDir, {recursive: true})
 	}
 
+	const fileName = `miro-cloudview-aws-v${docVersion}.json`
+	const latestFileName = 'miro-cloudview-aws-latest.json'
+
+	const outputPath = path.resolve(schemasDir, fileName)
+	const latestPath = path.resolve(schemasDir, latestFileName)
+
+	// Write the schema to the file with the version
 	fs.writeFileSync(outputPath, JSON.stringify(schema, null, 2))
 
-	// Update the 'miro-cloudview-aws-latest.json' symlink
-	const latestLinkName = 'miro-cloudview-aws-latest.json'
-	const latestPath = path.resolve(schemasDir, latestLinkName)
+	// Write the latest schema to the 'latest' file
+	fs.writeFileSync(latestPath, JSON.stringify(schema, null, 2))
 
-	// Remove existing symlink if it exists
-	if (fs.existsSync(latestPath)) {
-		fs.unlinkSync(latestPath)
-	}
-
-	// Create a new symlink pointing to the latest versioned schema file
-	fs.symlinkSync(fileName, latestPath)
-
-	console.log(`Saved schema as ${fileName} and updated symlink ${latestLinkName}`)
+	console.log(`Saved schema as ${fileName} and updated ${latestFileName}`)
 }
 
 // Function to hash an object
