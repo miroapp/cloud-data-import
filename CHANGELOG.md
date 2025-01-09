@@ -1,5 +1,12 @@
 # @mirohq/cloud-data-import
 
+## 0.12.4
+
+### Patch Changes
+
+- 283159b: chore(deps): bump the aws-sdk group with 25 updates
+- c04e0f2: exported constansts to enable constants usage outside Node.js environments
+
 ## 0.12.3
 
 ### Patch Changes
