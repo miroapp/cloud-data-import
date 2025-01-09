@@ -16,6 +16,11 @@
 			"require": "./dist/index.js",
 			"import": "./dist/esm/index.js",
 			"types": "./dist/index.d.ts"
+		},
+		"./constants": {
+			"require": "./dist/constants.js",
+			"import": "./dist/esm/constants.js",
+			"types": "./dist/constants.d.ts"
 		}
 	},
 	"publishConfig": {
