@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.12.6
+
+### Patch Changes
+
+- d08a901: Subpath type definitions are now compatible with older TypeScript configs
+
 ## 0.12.4
 
 ### Patch Changes
