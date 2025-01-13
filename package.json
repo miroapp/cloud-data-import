@@ -1,6 +1,6 @@
 {
 	"name": "@mirohq/cloud-data-import",
-	"version": "0.12.4",
+	"version": "0.12.5",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"module": "dist/esm/index.js",
@@ -21,6 +21,16 @@
 			"require": "./dist/constants.js",
 			"import": "./dist/esm/constants.js",
 			"types": "./dist/constants.d.ts"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"constants": [
+				"dist/esm/constants.d.ts"
+			],
+			"*": [
+				"dist/esm/index.d.ts"
+			]
 		}
 	},
 	"publishConfig": {
