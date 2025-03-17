@@ -72,9 +72,13 @@ export default async () => {
 	const tags = discoveredTags.results
 
 	// aggregate errors
-	const errors = discoveredResources.reduce((acc, {errors}) => {
+	const resourceErrors = discoveredResources.reduce((acc, {errors}) => {
 		return [...acc, ...errors]
 	}, [] as AwsScannerError[])
+
+	const tagErrors = discoveredTags.errors
+
+	const errors = [...resourceErrors, ...tagErrors]
 
 	// create output
 	const output: AwsCliAppOutput = {

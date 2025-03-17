@@ -80,3 +80,25 @@ export enum AwsServices {
 	ROUTE53_HOSTED_ZONES = 'route53:hosted-zone',
 	CLOUDFRONT_DISTRIBUTIONS = 'cloudfront:distribution',
 }
+
+/**
+ * Maps AWS service enum values to their corresponding resource type filter strings.
+ * In most cases, the filter string is the same as the service enum value. However, some services have exceptions.
+ */
+export const awsServiceToFilterServiceCode: Record<AwsServices, string> = {
+	...Object.values(AwsServices).reduce(
+		(acc, service) => {
+			acc[service] = service
+			return acc
+		},
+		{} as Record<AwsServices, string>,
+	),
+	[AwsServices.ELBV1_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
+	[AwsServices.ELBV2_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
+	[AwsServices.ELBV2_TARGET_GROUPS]: 'elasticloadbalancing:targetgroup',
+	[AwsServices.S3_BUCKETS]: 's3',
+	[AwsServices.CLOUDWATCH_METRIC_ALARMS]: 'cloudwatch:alarm',
+	[AwsServices.EFS_FILE_SYSTEMS]: 'elasticfilesystem:filesystem',
+	[AwsServices.RDS_INSTANCES]: 'rds:db',
+	[AwsServices.ROUTE53_HOSTED_ZONES]: 'route53:hostedzone',
+}

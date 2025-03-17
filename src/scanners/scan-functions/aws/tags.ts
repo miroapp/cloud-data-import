@@ -1,6 +1,6 @@
 import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/client-resource-groups-tagging-api'
 import {AwsCredentials, AwsScannerError, AwsScannerResult, AwsTags, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsServices, awsServiceToFilterServiceCode} from '@/constants'
 
 export async function getAvailableTags(
 	services: AwsServices[],
@@ -14,12 +14,14 @@ export async function getAvailableTags(
 	const tags: AwsTags = {}
 	const errors: AwsScannerError[] = []
 
-	for (const service of services) {
+	const serviceCodes = [...new Set(services.map((service) => awsServiceToFilterServiceCode[service] ?? service))]
+
+	for (const serviceCode of serviceCodes) {
 		try {
 			let nextToken: string | undefined
 			do {
 				const command = new GetResourcesCommand({
-					ResourceTypeFilters: [service],
+					ResourceTypeFilters: [serviceCode],
 					PaginationToken: nextToken,
 				})
 
@@ -44,9 +46,9 @@ export async function getAvailableTags(
 				nextToken = response.PaginationToken
 			} while (nextToken)
 		} catch (error) {
-			if (error instanceof Error && error.message.includes('Unsupported service=')) {
+			if (error instanceof Error) {
 				errors.push({
-					service: `tags-${service}`,
+					service: `tags-${serviceCode}`,
 					message: error.message,
 				})
 			}
