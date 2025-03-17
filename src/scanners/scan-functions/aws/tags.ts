@@ -2,25 +2,6 @@ import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/clie
 import {AwsCredentials, AwsScannerError, AwsScannerResult, AwsTags, RateLimiter} from '@/types'
 import {AwsServices, awsServiceToFilterServiceCode} from '@/constants'
 
-/**
- * Maps AWS service enum values to their corresponding resource type filter strings
- * for services where the filter name differs from the service enum value.
- *
- * While most AWS services can use their enum values directly as resource type filters
- * in the Resource Groups Tagging API, some services require specific filter strings.
- * This mapping only contains those exceptions that need special handling.
- */
-const serviceFilterNameExceptions: Partial<Record<AwsServices, string>> = {
-	[AwsServices.ELBV1_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
-	[AwsServices.ELBV2_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
-	[AwsServices.ELBV2_TARGET_GROUPS]: 'elasticloadbalancing:targetgroup',
-	[AwsServices.S3_BUCKETS]: 's3',
-	[AwsServices.CLOUDWATCH_METRIC_ALARMS]: 'cloudwatch:alarm',
-	[AwsServices.EFS_FILE_SYSTEMS]: 'elasticfilesystem:filesystem',
-	[AwsServices.RDS_INSTANCES]: 'rds:db',
-	[AwsServices.ROUTE53_HOSTED_ZONES]: 'route53:hostedzone',
-}
-
 export async function getAvailableTags(
 	services: AwsServices[],
 	credentials: AwsCredentials,
