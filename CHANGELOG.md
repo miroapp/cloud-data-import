@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.12.7
+
+### Patch Changes
+
+- 879ceee: fix: correct AWS resource type filter mapping for tagging API
+
 ## 0.12.6
 
 ### Patch Changes

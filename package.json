@@ -1,6 +1,6 @@
 {
 	"name": "@mirohq/cloud-data-import",
-	"version": "0.12.6",
+	"version": "0.12.7",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"module": "dist/esm/index.js",
