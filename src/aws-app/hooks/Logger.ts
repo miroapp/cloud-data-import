@@ -1,14 +1,24 @@
 import Spinnies from 'spinnies'
 import {AwsResourcesList, AwsScannerLifecycleHook} from '@/types'
-import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
+import {
+	awsManagementServiceNames,
+	awsResourceNames,
+	AwsSupportedManagementServices,
+	AwsSupportedResources,
+} from '@/definitions/supported-services'
 
 export class Logger implements AwsScannerLifecycleHook<AwsSupportedResources | AwsSupportedManagementServices> {
 	private spinnies = new Spinnies()
 
 	getLegend(service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): string {
+		const isAwsResource = (svc: AwsSupportedResources | AwsSupportedManagementServices): svc is AwsSupportedResources =>
+			svc in AwsSupportedResources
+
+		const serviceName = isAwsResource(service) ? awsResourceNames[service] : awsManagementServiceNames[service]
+
 		const timestamp = new Date().toISOString()
 		const regionInfo = region ? ` in ${region}` : ''
-		return `[${timestamp}] [${service}${regionInfo}]`
+		return `[${timestamp}] [${serviceName}${regionInfo}]`
 	}
 
 	getSpinnerKey(service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): string {
