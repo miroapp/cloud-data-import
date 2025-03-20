@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
 import {Config} from '@/types'
-import {awsRegionIds} from '@/constants'
+import {awsRegionIds} from '@/definitions/supported-regions'
 import {getDefaultOutputName} from './getDefaultOutputName'
 import {SUPPORTED_ENV_VARS, getEnvConfig} from './getEnvConfig'
 

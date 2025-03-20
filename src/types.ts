@@ -1,5 +1,5 @@
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
-import {awsRegionIds} from './constants'
+import {awsRegionIds} from './definitions/supported-regions'
 import {
 	type AwsSupportedResources,
 	type AwsSupportedManagementServices,

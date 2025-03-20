@@ -8,7 +8,7 @@ export type {
 } from '@/scanners'
 export type * from '@/types'
 
-export {awsRegionIds} from '@/constants'
+export {awsRegionIds} from '@/definitions/supported-regions'
 
 export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
 
