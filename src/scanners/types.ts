@@ -1,4 +1,8 @@
-import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
+import {
+	AllSupportedAwsServices,
+	AwsSupportedManagementServices,
+	AwsSupportedResources,
+} from '@/definitions/supported-services'
 import {
 	AwsScanner,
 	AwsRegionalScanFunction,
@@ -10,10 +14,7 @@ import {
 import {AwsScannerLifecycleHook} from '../types'
 
 // get rate limiter function for global and regional scanners
-export type GetRateLimiterFunction = (
-	service: AwsSupportedResources | AwsSupportedManagementServices,
-	region?: string,
-) => RateLimiter
+export type GetRateLimiterFunction = (service: AllSupportedAwsServices, region?: string) => RateLimiter
 
 // every scanner needs to know the credentials, rate limiter, and hooks
 export interface CreateScannerOptions {
@@ -49,7 +50,7 @@ export type AwsResourceScannerConfig<T extends AwsSupportedResources> =
 	  }
 
 // Get the scanners for AWS services
-interface GetAwsScannerArgumentsBase<T extends AwsSupportedResources | AwsSupportedManagementServices> {
+interface GetAwsScannerArgumentsBase<T extends AllSupportedAwsServices> {
 	credentials?: AwsCredentials
 	getRateLimiter: GetRateLimiterFunction
 	hooks?: AwsScannerLifecycleHook<T>[]

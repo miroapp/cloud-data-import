@@ -2,7 +2,7 @@ import type {AwsCredentialIdentity} from '@aws-sdk/types'
 import {awsRegionIds} from './definitions/supported-regions'
 import {
 	type AwsSupportedResources,
-	type AwsSupportedManagementServices,
+	type AllSupportedAwsServices,
 	AwsResourceDescriptionMap,
 } from './definitions/supported-services'
 
@@ -61,7 +61,7 @@ export type AwsScannerResult<Results extends object> = {
  * The `onComplete` hook is called after the scanner has finished scanning resources in a service.
  * The `onError` hook is called if an error occurs during the scanner's operation.
  */
-export interface AwsScannerLifecycleHook<T extends AwsSupportedResources | AwsSupportedManagementServices> {
+export interface AwsScannerLifecycleHook<T extends AllSupportedAwsServices> {
 	onStart?: (service: T, region?: string) => void
 	onComplete?: (
 		resources: T extends AwsSupportedResources ? AwsResourcesList<AwsSupportedResources> : {},

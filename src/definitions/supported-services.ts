@@ -63,6 +63,8 @@ export enum AwsSupportedManagementServices {
 	RESOURCE_GROUP_TAGGING = 'RESOURCE_GROUP_TAGGING',
 }
 
+export type AllSupportedAwsServices = AwsSupportedResources | AwsSupportedManagementServices
+
 export const awsResourceNames: Record<AwsSupportedResources, string> = {
 	[AwsSupportedResources.ATHENA_NAMED_QUERIES]: 'Athena Named Queries',
 	[AwsSupportedResources.AUTOSCALING_GROUPS]: 'Auto Scaling Groups',

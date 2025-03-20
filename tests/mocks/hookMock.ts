@@ -1,9 +1,7 @@
-import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
+import {type AllSupportedAwsServices} from '@/definitions/supported-services'
 import {AwsScannerLifecycleHook} from '@/types'
 
-export const createMockedHook = (): AwsScannerLifecycleHook<
-	AwsSupportedResources | AwsSupportedManagementServices
-> => ({
+export const createMockedHook = (): AwsScannerLifecycleHook<AllSupportedAwsServices> => ({
 	onStart: jest.fn(),
 	onComplete: jest.fn(),
 	onError: jest.fn(),

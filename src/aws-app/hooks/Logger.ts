@@ -1,18 +1,17 @@
 import Spinnies from 'spinnies'
 import {AwsResourcesList, AwsScannerLifecycleHook} from '@/types'
 import {
+	type AllSupportedAwsServices,
 	awsManagementServiceNames,
 	awsResourceNames,
-	AwsSupportedManagementServices,
 	AwsSupportedResources,
 } from '@/definitions/supported-services'
 
-export class Logger implements AwsScannerLifecycleHook<AwsSupportedResources | AwsSupportedManagementServices> {
+export class Logger implements AwsScannerLifecycleHook<AllSupportedAwsServices> {
 	private spinnies = new Spinnies()
 
-	getLegend(service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): string {
-		const isAwsResource = (svc: AwsSupportedResources | AwsSupportedManagementServices): svc is AwsSupportedResources =>
-			svc in AwsSupportedResources
+	getLegend(service: AllSupportedAwsServices, region?: string): string {
+		const isAwsResource = (svc: AllSupportedAwsServices): svc is AwsSupportedResources => svc in AwsSupportedResources
 
 		const serviceName = isAwsResource(service) ? awsResourceNames[service] : awsManagementServiceNames[service]
 
@@ -21,27 +20,23 @@ export class Logger implements AwsScannerLifecycleHook<AwsSupportedResources | A
 		return `[${timestamp}] [${serviceName}${regionInfo}]`
 	}
 
-	getSpinnerKey(service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): string {
+	getSpinnerKey(service: AllSupportedAwsServices, region?: string): string {
 		return `${service}-${region || 'default'}`
 	}
 
-	onStart(service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): void {
+	onStart(service: AllSupportedAwsServices, region?: string): void {
 		const spinnerKey = this.getSpinnerKey(service, region)
 		const legend = this.getLegend(service, region)
 		this.spinnies.add(spinnerKey, {text: `${legend}: scanning...`})
 	}
 
-	onComplete(
-		resources: AwsResourcesList,
-		service: AwsSupportedResources | AwsSupportedManagementServices,
-		region?: string,
-	): void {
+	onComplete(resources: AwsResourcesList, service: AllSupportedAwsServices, region?: string): void {
 		const spinnerKey = this.getSpinnerKey(service, region)
 		const legend = this.getLegend(service, region)
 		this.spinnies.succeed(spinnerKey, {text: `${legend}: discovered ${Object.keys(resources).length} resources.`})
 	}
 
-	onError(error: Error, service: AwsSupportedResources | AwsSupportedManagementServices, region?: string): void {
+	onError(error: Error, service: AllSupportedAwsServices, region?: string): void {
 		const spinnerKey = this.getSpinnerKey(service, region)
 		const legend = this.getLegend(service, region)
 		this.spinnies.fail(spinnerKey, {text: `${legend}: ${error.message}`})

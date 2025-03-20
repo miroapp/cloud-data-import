@@ -1,4 +1,4 @@
-import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
+import {type AllSupportedAwsServices, AwsSupportedResources} from '@/definitions/supported-services'
 import {getAllAwsScanners, getAwsScanner} from '@/scanners'
 import {scannerConfigs} from '@/scanners/scanner-configs'
 import type {AwsCredentials, AwsScannerLifecycleHook} from '@/types'
@@ -52,7 +52,7 @@ jest.mock('@/scanners/scanner-configs', () => ({
 describe('AWS Scanner Factory', () => {
 	let mockCredentials: AwsCredentials
 	let mockGetRateLimiter: jest.Mock
-	let mockHooks: AwsScannerLifecycleHook<AwsSupportedResources | AwsSupportedManagementServices>[]
+	let mockHooks: AwsScannerLifecycleHook<AllSupportedAwsServices>[]
 	let regions: string[]
 	let createRegionalScannerSpy: jest.SpyInstance
 	let createGlobalScannerSpy: jest.SpyInstance
