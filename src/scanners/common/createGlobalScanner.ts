@@ -1,18 +1,18 @@
-import {AwsGlobalScanFunction, AwsCredentials, AwsScannerLifecycleHook, RateLimiter, AwsResources} from '@/types'
-import {CreateGlobalScannerFunction, CreateScannerOptions, GetRateLimiterFunction} from '@/scanners/types'
-import {AwsServices} from '@/constants'
+import {AwsGlobalScanFunction, AwsCredentials, AwsScannerLifecycleHook, RateLimiter, AwsResourcesList} from '@/types'
+import {CreateGlobalResourceScannerFunction, CreateScannerOptions} from '@/scanners/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
-type GlobalScanResult<T extends AwsServices> = {
-	resources: AwsResources<T>
+type GlobalScanResult<T extends AwsSupportedResources> = {
+	resources: AwsResourcesList<T>
 	error: Error | null
 }
 
-async function performGlobalScan<T extends AwsServices>(
+async function performGlobalScan<T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsGlobalScanFunction<T>,
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-	hooks: AwsScannerLifecycleHook[],
+	hooks: AwsScannerLifecycleHook<AwsSupportedResources>[],
 ): Promise<GlobalScanResult<T>> {
 	try {
 		// onStart hook
@@ -35,7 +35,7 @@ async function performGlobalScan<T extends AwsServices>(
 	}
 }
 
-export const createGlobalScanner: CreateGlobalScannerFunction = <T extends AwsServices>(
+export const createGlobalScanner: CreateGlobalResourceScannerFunction = <T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsGlobalScanFunction<T>,
 	options: CreateScannerOptions,

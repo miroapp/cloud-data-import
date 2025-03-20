@@ -1,14 +1,14 @@
 import {EC2Client, DescribeSubnetsCommand} from '@aws-sdk/client-ec2'
 import {buildARN} from './common/buildArn'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getEC2Subnets(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.EC2_SUBNETS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.EC2_SUBNETS>> {
 	const client = new EC2Client({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
@@ -17,7 +17,7 @@ export async function getEC2Subnets(
 	const describeSubnetsResponse = await rateLimiter.throttle(() => client.send(describeSubnetsCommand))
 	const subnets = describeSubnetsResponse.Subnets || []
 
-	const resources: AwsResources<AwsServices.EC2_SUBNETS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.EC2_SUBNETS> = {}
 	for (const subnet of subnets) {
 		if (subnet.SubnetId) {
 			const arn = buildARN({

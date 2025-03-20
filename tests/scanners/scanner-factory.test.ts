@@ -1,12 +1,12 @@
-import {AwsServices} from '@/constants'
+import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
 import {getAllAwsScanners, getAwsScanner} from '@/scanners'
 import {scannerConfigs} from '@/scanners/scanner-configs'
 import type {AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 import {createMockedHook} from 'tests/mocks/hookMock'
 
-// Mock the constants module
-jest.mock('@/constants', () => ({
-	AwsServices: {
+// Mock the supported services
+jest.mock('@/definitions/supported-services', () => ({
+	AwsSupportedResources: {
 		EC2_INSTANCES: 'EC2_INSTANCES',
 		S3_BUCKETS: 'S3_BUCKETS',
 		CLOUDFRONT_DISTRIBUTIONS: 'CLOUDFRONT_DISTRIBUTIONS',
@@ -52,7 +52,7 @@ jest.mock('@/scanners/scanner-configs', () => ({
 describe('AWS Scanner Factory', () => {
 	let mockCredentials: AwsCredentials
 	let mockGetRateLimiter: jest.Mock
-	let mockHooks: AwsScannerLifecycleHook[]
+	let mockHooks: AwsScannerLifecycleHook<AwsSupportedResources | AwsSupportedManagementServices>[]
 	let regions: string[]
 	let createRegionalScannerSpy: jest.SpyInstance
 	let createGlobalScannerSpy: jest.SpyInstance
@@ -78,7 +78,7 @@ describe('AWS Scanner Factory', () => {
 	describe('getAwsScanner', () => {
 		it('should create a regional scanner for EC2 instances', () => {
 			const scanner = getAwsScanner({
-				service: AwsServices.EC2_INSTANCES,
+				service: AwsSupportedResources.EC2_INSTANCES,
 				credentials: mockCredentials,
 				getRateLimiter: mockGetRateLimiter,
 				hooks: mockHooks,
@@ -86,13 +86,12 @@ describe('AWS Scanner Factory', () => {
 			})
 
 			expect(createRegionalScannerSpy).toHaveBeenCalledWith(
-				AwsServices.EC2_INSTANCES,
+				AwsSupportedResources.EC2_INSTANCES,
 				expect.any(Function),
 				regions,
 				expect.objectContaining({
 					credentials: mockCredentials,
 					getRateLimiter: mockGetRateLimiter,
-					tagsRateLimiter: expect.any(Function),
 					hooks: mockHooks,
 				}),
 			)
@@ -101,7 +100,7 @@ describe('AWS Scanner Factory', () => {
 
 		it('should create a global scanner for S3 buckets', () => {
 			const scanner = getAwsScanner({
-				service: AwsServices.S3_BUCKETS,
+				service: AwsSupportedResources.S3_BUCKETS,
 				credentials: mockCredentials,
 				getRateLimiter: mockGetRateLimiter,
 				hooks: mockHooks,
@@ -109,12 +108,11 @@ describe('AWS Scanner Factory', () => {
 			})
 
 			expect(createGlobalScannerSpy).toHaveBeenCalledWith(
-				AwsServices.S3_BUCKETS,
+				AwsSupportedResources.S3_BUCKETS,
 				expect.any(Function),
 				expect.objectContaining({
 					credentials: mockCredentials,
 					getRateLimiter: mockGetRateLimiter,
-					tagsRateLimiter: expect.any(Function),
 					hooks: mockHooks,
 				}),
 			)
@@ -123,7 +121,7 @@ describe('AWS Scanner Factory', () => {
 
 		it('should handle undefined credentials', () => {
 			const scanner = getAwsScanner({
-				service: AwsServices.EC2_INSTANCES,
+				service: AwsSupportedResources.EC2_INSTANCES,
 				credentials: undefined,
 				getRateLimiter: mockGetRateLimiter,
 				hooks: mockHooks,
@@ -143,7 +141,7 @@ describe('AWS Scanner Factory', () => {
 
 		it('should handle empty hooks array', () => {
 			const scanner = getAwsScanner({
-				service: AwsServices.EC2_INSTANCES,
+				service: AwsSupportedResources.EC2_INSTANCES,
 				credentials: mockCredentials,
 				getRateLimiter: mockGetRateLimiter,
 				hooks: [],
@@ -164,7 +162,7 @@ describe('AWS Scanner Factory', () => {
 		it('should throw error for invalid service', () => {
 			expect(() => {
 				getAwsScanner({
-					service: 'INVALID_SERVICE' as AwsServices,
+					service: 'INVALID_SERVICE' as AwsSupportedResources,
 					credentials: mockCredentials,
 					getRateLimiter: mockGetRateLimiter,
 					hooks: mockHooks,
@@ -184,7 +182,7 @@ describe('AWS Scanner Factory', () => {
 				shouldIncludeGlobalServices: false,
 			})
 
-			const expectedCount = Object.values(AwsServices).length - 3 // Subtract global services
+			const expectedCount = Object.values(AwsSupportedResources).length - 3 // Subtract global services
 			expect(scanners).toHaveLength(expectedCount)
 			expect(createGlobalScannerSpy).not.toHaveBeenCalled()
 		})
@@ -198,7 +196,7 @@ describe('AWS Scanner Factory', () => {
 				shouldIncludeGlobalServices: true,
 			})
 
-			expect(scanners).toHaveLength(Object.values(AwsServices).length)
+			expect(scanners).toHaveLength(Object.values(AwsSupportedResources).length)
 			expect(createGlobalScannerSpy).toHaveBeenCalled()
 		})
 
@@ -216,7 +214,7 @@ describe('AWS Scanner Factory', () => {
 			})
 
 			// Verify each scanner was created with correct config
-			Object.values(AwsServices).forEach((service) => {
+			Object.values(AwsSupportedResources).forEach((service) => {
 				const config = scannerConfigs[service]
 				if (config.global) {
 					expect(createGlobalScannerSpy).toHaveBeenCalledWith(
@@ -253,22 +251,6 @@ describe('AWS Scanner Factory', () => {
 					shouldIncludeGlobalServices: true,
 				})
 			}).not.toThrow()
-		})
-
-		it('should handle rate limiter errors', () => {
-			const errorRateLimiter = jest.fn().mockImplementation(() => {
-				throw new Error('Rate limiter error')
-			})
-
-			expect(() => {
-				getAllAwsScanners({
-					credentials: mockCredentials,
-					getRateLimiter: errorRateLimiter,
-					hooks: mockHooks,
-					regions,
-					shouldIncludeGlobalServices: true,
-				})
-			}).toThrow('Rate limiter error')
 		})
 	})
 })

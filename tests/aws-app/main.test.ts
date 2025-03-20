@@ -1,7 +1,7 @@
 import path from 'path'
 import {Logger} from '@/aws-app/hooks/Logger'
 import {getAllAwsScanners, getTagsScanner} from '@/scanners'
-import {AwsProcessedData, AwsResources, AwsCliAppOutput} from '@/types'
+import {AwsProcessedData, AwsResourcesList, AwsCliAppOutput} from '@/types'
 import {saveAsJson} from '@/aws-app/utils/saveAsJson'
 import * as cliMessages from '@/aws-app/cliMessages'
 import {openDirectoryAndFocusFile} from '@/aws-app/utils/openDirectoryAndFocusFile'
@@ -189,7 +189,7 @@ describe('main function', () => {
 			resources: {
 				'dummy:arn:1': 'dummy:raw:info',
 				'dummy:arn:2': 'dummy:raw:info',
-			} as unknown as AwsResources,
+			} as unknown as AwsResourcesList,
 			processed: mockedAwsProcessedData,
 			errors: [],
 			metadata: {
