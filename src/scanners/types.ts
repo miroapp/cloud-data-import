@@ -1,39 +1,42 @@
-import {AwsServices} from '@/constants'
+import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
 import {
 	AwsScanner,
 	AwsRegionalScanFunction,
 	AwsGlobalScanFunction,
 	AwsCredentials,
 	RateLimiter,
-	AwsResources,
+	AwsResourcesList,
 } from '../types'
 import {AwsScannerLifecycleHook} from '../types'
 
 // get rate limiter function for global and regional scanners
-export type GetRateLimiterFunction = (service: string, region?: string) => RateLimiter
+export type GetRateLimiterFunction = (
+	service: AwsSupportedResources | AwsSupportedManagementServices,
+	region?: string,
+) => RateLimiter
 
 // every scanner needs to know the credentials, rate limiter, and hooks
 export interface CreateScannerOptions {
 	credentials: AwsCredentials
-	hooks: AwsScannerLifecycleHook[]
+	hooks: AwsScannerLifecycleHook<AwsSupportedResources>[]
 	getRateLimiter: GetRateLimiterFunction
 }
 
-export type CreateRegionalScannerFunction = <T extends AwsServices>(
+export type CreateRegionalResourceScannerFunction = <T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsRegionalScanFunction<T>,
 	regions: string[],
 	options: CreateScannerOptions,
-) => AwsScanner<AwsResources<T>>
+) => AwsScanner<AwsResourcesList<T>>
 
-export type CreateGlobalScannerFunction = <T extends AwsServices>(
+export type CreateGlobalResourceScannerFunction = <T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsGlobalScanFunction<T>,
 	options: CreateScannerOptions,
-) => AwsScanner<AwsResources<T>>
+) => AwsScanner<AwsResourcesList<T>>
 
 // Scanner config
-export type AwsScannerConfig<T extends AwsServices> =
+export type AwsResourceScannerConfig<T extends AwsSupportedResources> =
 	| {
 			service: T
 			global: true
@@ -46,22 +49,23 @@ export type AwsScannerConfig<T extends AwsServices> =
 	  }
 
 // Get the scanners for AWS services
-interface GetAwsScannerArgumentsBase {
+interface GetAwsScannerArgumentsBase<T extends AwsSupportedResources | AwsSupportedManagementServices> {
 	credentials?: AwsCredentials
 	getRateLimiter: GetRateLimiterFunction
-	hooks?: AwsScannerLifecycleHook[]
+	hooks?: AwsScannerLifecycleHook<T>[]
 }
 
-export interface GetAwsScannerArguments<T extends AwsServices> extends GetAwsScannerArgumentsBase {
+export interface GetAwsResourceScannerArguments<T extends AwsSupportedResources> extends GetAwsScannerArgumentsBase<T> {
 	service: T
 	regions?: string[]
 }
 
-export interface GetAllAwsScannersArguments extends GetAwsScannerArgumentsBase {
+export interface GetAllAwsResourceScannersArguments extends GetAwsScannerArgumentsBase<AwsSupportedResources> {
 	shouldIncludeGlobalServices: boolean
 	regions: string[]
 }
 
-export interface GetAwsTagsScannerArguments extends GetAwsScannerArgumentsBase {
-	services: AwsServices[]
+export interface GetAwsTagsScannerArguments
+	extends GetAwsScannerArgumentsBase<AwsSupportedManagementServices.RESOURCE_GROUP_TAGGING> {
+	services: AwsSupportedResources[]
 }

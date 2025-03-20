@@ -1,10 +1,14 @@
 import {getAwsProcessedData} from '@/aws-app/process'
 import {createRateLimiter, getAllAwsScanners, getAwsScanner, getTagsScanner} from '@/scanners'
 
-export type {GetAwsScannerArguments, GetAllAwsScannersArguments, GetAwsTagsScannerArguments} from '@/scanners'
+export type {
+	GetAwsResourceScannerArguments,
+	GetAllAwsResourceScannersArguments,
+	GetAwsTagsScannerArguments,
+} from '@/scanners'
 export type * from '@/types'
 
-export {awsRegionIds, AwsServices} from '@/constants'
+export {awsRegionIds} from '@/constants'
 
 export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
 

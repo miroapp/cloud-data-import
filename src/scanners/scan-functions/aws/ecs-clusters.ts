@@ -1,14 +1,14 @@
 import {ECSClient, ListClustersCommand, DescribeClustersCommand, Cluster} from '@aws-sdk/client-ecs'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getECSClusters(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.ECS_CLUSTERS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.ECS_CLUSTERS>> {
 	const client = new ECSClient({credentials, region})
-	const resources: AwsResources<AwsServices.ECS_CLUSTERS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.ECS_CLUSTERS> = {}
 
 	let nextToken: string | undefined
 

@@ -1,15 +1,15 @@
 import {LambdaClient, ListFunctionsCommand} from '@aws-sdk/client-lambda'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getLambdaFunctions(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.LAMBDA_FUNCTIONS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.LAMBDA_FUNCTIONS>> {
 	const client = new LambdaClient({credentials, region})
 
-	const resources: AwsResources<AwsServices.LAMBDA_FUNCTIONS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.LAMBDA_FUNCTIONS> = {}
 
 	let marker: string | undefined
 	do {

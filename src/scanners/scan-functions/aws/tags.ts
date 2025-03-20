@@ -1,9 +1,9 @@
 import {GetResourcesCommand, ResourceGroupsTaggingAPIClient} from '@aws-sdk/client-resource-groups-tagging-api'
 import {AwsCredentials, AwsScannerError, AwsScannerResult, AwsTags, RateLimiter} from '@/types'
-import {AwsServices, awsServiceToFilterServiceCode} from '@/constants'
+import {AwsSupportedResources, awsTaggingFilterResourceTypes} from '@/definitions/supported-services'
 
 export async function getAvailableTags(
-	services: AwsServices[],
+	services: AwsSupportedResources[],
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 ): Promise<AwsScannerResult<AwsTags>> {
@@ -14,7 +14,7 @@ export async function getAvailableTags(
 	const tags: AwsTags = {}
 	const errors: AwsScannerError[] = []
 
-	const serviceCodes = [...new Set(services.map((service) => awsServiceToFilterServiceCode[service] ?? service))]
+	const serviceCodes = [...new Set(services.map((service) => awsTaggingFilterResourceTypes[service] ?? service))]
 
 	for (const serviceCode of serviceCodes) {
 		try {

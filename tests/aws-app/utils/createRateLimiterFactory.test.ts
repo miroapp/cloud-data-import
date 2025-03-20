@@ -1,4 +1,5 @@
 import {createRateLimiterFactory} from '@/aws-app/utils/createRateLimiterFactory'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 import {AWSRateLimitExhaustionRetryStrategy} from '@/lib'
 import {createRateLimiter} from '@/scanners'
 
@@ -21,7 +22,7 @@ describe('createRateLimiterFactory', () => {
 	})
 
 	it('should create and return a RateLimiter for a given service and region', () => {
-		const service = 'ec2/instances'
+		const service = AwsSupportedResources.EC2_INSTANCES
 		const region = 'us-east-1'
 		const rateLimiter = getRateLimiter(service, region)
 
@@ -30,7 +31,7 @@ describe('createRateLimiterFactory', () => {
 	})
 
 	it('should reuse the RateLimiter for the same service and region', () => {
-		const service = 'ec2/instances'
+		const service = AwsSupportedResources.EC2_INSTANCES
 		const region = 'us-east-1'
 
 		const rateLimiter1 = getRateLimiter(service, region)
@@ -41,7 +42,7 @@ describe('createRateLimiterFactory', () => {
 	})
 
 	it('should create separate RateLimiters for different regions', () => {
-		const service = 'ec2/instances'
+		const service = AwsSupportedResources.EC2_INSTANCES
 		const region1 = 'us-east-1'
 		const region2 = 'eu-west-1'
 
@@ -53,8 +54,8 @@ describe('createRateLimiterFactory', () => {
 	})
 
 	it('should create and return a RateLimiter for a shared service name without region', () => {
-		const service1 = 'ec2/instances'
-		const service2 = 'ec2/volumes'
+		const service1 = AwsSupportedResources.EC2_INSTANCES
+		const service2 = AwsSupportedResources.EC2_INSTANCES
 
 		const rateLimiter1 = getRateLimiter(service1)
 		const rateLimiter2 = getRateLimiter(service2)
@@ -64,8 +65,8 @@ describe('createRateLimiterFactory', () => {
 	})
 
 	it('should create separate RateLimiters for different services without region', () => {
-		const service1 = 'ec2/instances'
-		const service2 = 'rds/clusters'
+		const service1 = AwsSupportedResources.EC2_INSTANCES
+		const service2 = AwsSupportedResources.RDS_CLUSTERS
 
 		const rateLimiter1 = getRateLimiter(service1)
 		const rateLimiter2 = getRateLimiter(service2)

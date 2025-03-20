@@ -1,17 +1,17 @@
 import {S3Client, ListBucketsCommand, Bucket, GetBucketLocationCommand} from '@aws-sdk/client-s3'
-import {AwsCredentials, AwsResourceDescriptionMap, AwsResources, RateLimiter} from '@/types'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
 import {getAwsAccountId} from './common/getAwsAccountId'
 import {getResourceExplorerClient} from './common/getResourceExplorerClient'
 import {SearchCommand, SearchCommandOutput} from '@aws-sdk/client-resource-explorer-2'
 import {parse as parseArn} from '@aws-sdk/util-arn-parser'
-import {AwsServices} from '@/constants'
+import {AwsResourceDescriptionMap, AwsSupportedResources} from '@/definitions/supported-services'
 
-type EnrichedBucket = AwsResourceDescriptionMap[AwsServices.S3_BUCKETS]
+type EnrichedBucket = AwsResourceDescriptionMap[AwsSupportedResources.S3_BUCKETS]
 
 export async function getS3Buckets(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-): Promise<AwsResources<AwsServices.S3_BUCKETS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.S3_BUCKETS>> {
 	const client = new S3Client({credentials})
 	const accountId = await getAwsAccountId(credentials)
 
@@ -35,7 +35,7 @@ export async function getS3Buckets(
 		resources[arn] = bucket
 
 		return resources
-	}, {} as AwsResources<AwsServices.S3_BUCKETS>)
+	}, {} as AwsResourcesList<AwsSupportedResources.S3_BUCKETS>)
 }
 
 /**
