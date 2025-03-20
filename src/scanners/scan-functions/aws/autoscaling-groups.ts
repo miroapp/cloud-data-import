@@ -1,6 +1,6 @@
 import {AutoScalingClient, DescribeAutoScalingGroupsCommand, AutoScalingGroup} from '@aws-sdk/client-auto-scaling'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 async function getAutoScalingGroups(
 	credentials: AwsCredentials,
@@ -36,7 +36,7 @@ export async function getAutoScalingResources(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.AUTOSCALING_GROUPS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS>> {
 	const autoScalingGroups = await getAutoScalingGroups(credentials, rateLimiter, region)
 
 	return autoScalingGroups.reduce((acc, autoScalingGroup) => {
@@ -46,5 +46,5 @@ export async function getAutoScalingResources(
 
 		acc[autoScalingGroup.AutoScalingGroupARN] = autoScalingGroup
 		return acc
-	}, {} as AwsResources<AwsServices.AUTOSCALING_GROUPS>)
+	}, {} as AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS>)
 }

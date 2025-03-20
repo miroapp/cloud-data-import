@@ -1,75 +1,14 @@
-import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
-import type * as CloudTrail from '@aws-sdk/client-cloudtrail'
-import type * as DynamoDB from '@aws-sdk/client-dynamodb'
-import type * as EC2 from '@aws-sdk/client-ec2'
-import type * as Lambda from '@aws-sdk/client-lambda'
-import type * as RDS from '@aws-sdk/client-rds'
-import type * as S3 from '@aws-sdk/client-s3'
-import type * as ECS from '@aws-sdk/client-ecs'
-import type * as EKS from '@aws-sdk/client-eks'
-import type * as SNS from '@aws-sdk/client-sns'
-import type * as Route53 from '@aws-sdk/client-route-53'
-import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
-import type * as ELBv1 from '@aws-sdk/client-elastic-load-balancing'
-import type * as CloudFront from '@aws-sdk/client-cloudfront'
-import type * as EFS from '@aws-sdk/client-efs'
-import type * as SQS from '@aws-sdk/client-sqs'
-import type * as ElastiCache from '@aws-sdk/client-elasticache'
-import type * as Redshift from '@aws-sdk/client-redshift'
-import type * as CloudWatch from '@aws-sdk/client-cloudwatch'
-import type * as Athena from '@aws-sdk/client-athena'
-
 import type {AwsCredentialIdentity} from '@aws-sdk/types'
-import {awsRegionIds, AwsServices} from './constants'
+import {awsRegionIds} from './definitions/supported-regions'
+import {
+	type AwsSupportedResources,
+	type AllSupportedAwsServices,
+	AwsResourceDescriptionMap,
+} from './definitions/supported-services'
 
 export type AwsRegionId = (typeof awsRegionIds)[number]
 
-export type AwsResourceDescriptionMap = {
-	[AwsServices.ATHENA_NAMED_QUERIES]: Athena.NamedQuery
-	[AwsServices.AUTOSCALING_GROUPS]: AutoScaling.AutoScalingGroup
-	[AwsServices.CLOUDFRONT_DISTRIBUTIONS]: CloudFront.DistributionSummary
-	[AwsServices.CLOUDTRAIL_TRAILS]: CloudTrail.TrailInfo
-	[AwsServices.CLOUDWATCH_METRIC_ALARMS]: CloudWatch.MetricAlarm
-	[AwsServices.CLOUDWATCH_METRIC_STREAMS]: CloudWatch.MetricStreamEntry
-	[AwsServices.DYNAMODB_TABLES]: DynamoDB.TableDescription
-	[AwsServices.EC2_INSTANCES]: EC2.Instance
-	[AwsServices.EC2_INTERNET_GATEWAYS]: EC2.InternetGateway
-	[AwsServices.EC2_NAT_GATEWAYS]: EC2.NatGateway
-	[AwsServices.EC2_NETWORK_ACLS]: EC2.NetworkAcl
-	[AwsServices.EC2_NETWORK_INTERFACES]: EC2.NetworkInterface
-	[AwsServices.EC2_ROUTE_TABLES]: EC2.RouteTable
-	[AwsServices.EC2_SUBNETS]: EC2.Subnet
-	[AwsServices.EC2_TRANSIT_GATEWAYS]: EC2.TransitGateway
-	[AwsServices.EC2_VOLUMES]: EC2.Volume
-	[AwsServices.EC2_VPC_ENDPOINTS]: EC2.VpcEndpoint
-	[AwsServices.EC2_VPCS]: EC2.Vpc
-	[AwsServices.EC2_VPN_GATEWAYS]: EC2.VpnGateway
-	[AwsServices.ECS_CLUSTERS]: ECS.Cluster
-	[AwsServices.ECS_SERVICES]: ECS.Service
-	[AwsServices.ECS_TASKS]: ECS.Task
-	[AwsServices.EFS_FILE_SYSTEMS]: EFS.FileSystemDescription
-	[AwsServices.EKS_CLUSTERS]: EKS.Cluster
-	[AwsServices.ELASTICACHE_CLUSTERS]: ElastiCache.CacheCluster
-	[AwsServices.ELBV1_LOAD_BALANCERS]: ELBv1.LoadBalancerDescription
-	[AwsServices.ELBV2_LOAD_BALANCERS]: ELBv2.LoadBalancer
-	[AwsServices.ELBV2_TARGET_GROUPS]: ELBv2.TargetGroup
-	[AwsServices.LAMBDA_FUNCTIONS]: Lambda.FunctionConfiguration
-	[AwsServices.RDS_CLUSTERS]: RDS.DBCluster
-	[AwsServices.RDS_INSTANCES]: RDS.DBInstance
-	[AwsServices.RDS_PROXIES]: RDS.DBProxy
-	[AwsServices.REDSHIFT_CLUSTERS]: Redshift.Cluster
-	[AwsServices.ROUTE53_HOSTED_ZONES]: Route53.HostedZone & {
-		Account: string
-	}
-	[AwsServices.S3_BUCKETS]: S3.Bucket & {
-		Account: string
-		Location: string
-	}
-	[AwsServices.SNS_TOPICS]: SNS.Topic
-	[AwsServices.SQS_QUEUES]: NonNullable<SQS.GetQueueAttributesResult['Attributes']>
-}
-
-export type AwsResources<T extends AwsServices = AwsServices> = {
+export type AwsResourcesList<T extends AwsSupportedResources = AwsSupportedResources> = {
 	[arn: string]: T extends keyof AwsResourceDescriptionMap
 		? AwsResourceDescriptionMap[T]
 		: AwsResourceDescriptionMap[keyof AwsResourceDescriptionMap]
@@ -91,18 +30,18 @@ export interface RateLimiter {
 	readonly rate: number
 }
 
-export type AwsRegionalScanFunction<T extends AwsServices> = (
+export type AwsRegionalScanFunction<T extends AwsSupportedResources> = (
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-) => Promise<AwsResources<T>>
+) => Promise<AwsResourcesList<T>>
 
-export type AwsGlobalScanFunction<T extends AwsServices> = (
+export type AwsGlobalScanFunction<T extends AwsSupportedResources> = (
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-) => Promise<AwsResources<T>>
+) => Promise<AwsResourcesList<T>>
 
-export type AwsScannerFunction<T extends AwsServices> = AwsRegionalScanFunction<T> | AwsGlobalScanFunction<T>
+export type AwsScannerFunction<T extends AwsSupportedResources> = AwsRegionalScanFunction<T> | AwsGlobalScanFunction<T>
 
 export type AwsScannerError = {
 	service: string
@@ -122,9 +61,13 @@ export type AwsScannerResult<Results extends object> = {
  * The `onComplete` hook is called after the scanner has finished scanning resources in a service.
  * The `onError` hook is called if an error occurs during the scanner's operation.
  */
-export interface AwsScannerLifecycleHook<T extends AwsServices = AwsServices> {
+export interface AwsScannerLifecycleHook<T extends AllSupportedAwsServices> {
 	onStart?: (service: T, region?: string) => void
-	onComplete?: (resources: AwsResources<T>, service: T, region?: string) => void
+	onComplete?: (
+		resources: T extends AwsSupportedResources ? AwsResourcesList<AwsSupportedResources> : {},
+		service: T,
+		region?: string,
+	) => void
 	onError?: (error: Error, service: T, region?: string) => void
 }
 

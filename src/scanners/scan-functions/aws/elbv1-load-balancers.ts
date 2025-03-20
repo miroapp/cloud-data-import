@@ -1,13 +1,13 @@
 import {ElasticLoadBalancingClient, DescribeLoadBalancersCommand} from '@aws-sdk/client-elastic-load-balancing'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
 export async function getELBv1LoadBalancers(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.ELBV1_LOAD_BALANCERS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.ELBV1_LOAD_BALANCERS>> {
 	const client = new ElasticLoadBalancingClient({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
@@ -15,7 +15,7 @@ export async function getELBv1LoadBalancers(
 	const describeLoadBalancersCommand = new DescribeLoadBalancersCommand({})
 	const describeLoadBalancersResponse = await rateLimiter.throttle(() => client.send(describeLoadBalancersCommand))
 
-	const resources: AwsResources<AwsServices.ELBV1_LOAD_BALANCERS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.ELBV1_LOAD_BALANCERS> = {}
 
 	for (const loadBalancer of describeLoadBalancersResponse.LoadBalancerDescriptions || []) {
 		if (loadBalancer.LoadBalancerName) {

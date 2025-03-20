@@ -1,5 +1,5 @@
 import {AwsRegionId, Config} from '@/types'
-import {awsRegionIds} from '@/constants'
+import {awsRegionIds} from '@/definitions/supported-regions'
 import {getDefaultOutputName} from './getDefaultOutputName'
 import {SUPPORTED_ENV_VARS, getEnvConfig} from './getEnvConfig'
 import {program} from './program'

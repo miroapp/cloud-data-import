@@ -1,6 +1,6 @@
 import {EC2Client, DescribeNetworkInterfacesCommand} from '@aws-sdk/client-ec2'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
 
@@ -8,12 +8,12 @@ export async function getEC2NetworkInterfaces(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.EC2_NETWORK_INTERFACES>> {
+): Promise<AwsResourcesList<AwsSupportedResources.EC2_NETWORK_INTERFACES>> {
 	const client = new EC2Client({credentials, region})
 
 	const accountId = await getAwsAccountId(credentials)
 
-	const resources: AwsResources<AwsServices.EC2_NETWORK_INTERFACES> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.EC2_NETWORK_INTERFACES> = {}
 
 	let nextToken: string | undefined
 

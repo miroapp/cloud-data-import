@@ -1,14 +1,14 @@
 import {CloudFrontClient, ListDistributionsCommand} from '@aws-sdk/client-cloudfront'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getCloudFrontDistributions(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-): Promise<AwsResources<AwsServices.CLOUDFRONT_DISTRIBUTIONS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS>> {
 	const client = new CloudFrontClient({credentials})
 
-	const distributions: AwsResources<AwsServices.CLOUDFRONT_DISTRIBUTIONS> = {}
+	const distributions: AwsResourcesList<AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS> = {}
 
 	let marker: string | undefined
 	do {

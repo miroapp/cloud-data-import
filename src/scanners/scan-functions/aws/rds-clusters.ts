@@ -1,15 +1,15 @@
 import {RDSClient, DescribeDBClustersCommand} from '@aws-sdk/client-rds'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getRDSClusters(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.RDS_CLUSTERS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.RDS_CLUSTERS>> {
 	const client = new RDSClient({credentials, region})
 
-	const dbClusters: AwsResources<AwsServices.RDS_CLUSTERS> = {}
+	const dbClusters: AwsResourcesList<AwsSupportedResources.RDS_CLUSTERS> = {}
 
 	let marker: string | undefined
 	do {

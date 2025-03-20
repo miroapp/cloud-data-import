@@ -1,4 +1,4 @@
-import type {AwsResourceDescriptionMap, AwsResources} from '@/types'
+import type {AwsResourcesList} from '@/types'
 import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
 import type * as EC2 from '@aws-sdk/client-ec2'
 import type * as EFS from '@aws-sdk/client-efs'
@@ -12,11 +12,11 @@ import type * as ECS from '@aws-sdk/client-ecs'
 
 import {PlacementData, ResourcePlacementData} from './types'
 import {ARNInfo, getArnInfo} from './utils/getArnInfo'
-import {AwsServices} from '@/constants'
+import {AwsResourceDescriptionMap, AwsSupportedResources} from '@/definitions/supported-services'
 
 export const getResourcePlacementData = (
 	arnInfo: ARNInfo,
-	resource: AwsResourceDescriptionMap[AwsServices],
+	resource: AwsResourceDescriptionMap[AwsSupportedResources],
 ): ResourcePlacementData => {
 	const {name, region, service, type, account} = arnInfo
 
@@ -291,7 +291,7 @@ export const getResourcePlacementData = (
 
 	// Hosted Zones
 	if (service === 'route53' && type === 'hostedzone') {
-		const hostedZone = resource as AwsResourceDescriptionMap[AwsServices.ROUTE53_HOSTED_ZONES]
+		const hostedZone = resource as AwsResourceDescriptionMap[AwsSupportedResources.ROUTE53_HOSTED_ZONES]
 		return {
 			...baseOutput,
 			account: hostedZone.Account,
@@ -301,7 +301,7 @@ export const getResourcePlacementData = (
 
 	// S3 Buckets
 	if (service === 's3') {
-		const s3Bucket = resource as AwsResourceDescriptionMap[AwsServices.S3_BUCKETS]
+		const s3Bucket = resource as AwsResourceDescriptionMap[AwsSupportedResources.S3_BUCKETS]
 		return {
 			...baseOutput,
 			type: 'bucket',
@@ -323,7 +323,7 @@ export const isContainerAndShouldBeIgnored = (service: string, type: string): bo
 	return isVPC || isSubnet || isSecurityGroup || isAvailabilityZone
 }
 
-export const getPlacementData = (resources: AwsResources): PlacementData => {
+export const getPlacementData = (resources: AwsResourcesList): PlacementData => {
 	const placementData: PlacementData = {}
 
 	for (const [arn, resource] of Object.entries(resources)) {

@@ -5,16 +5,16 @@ import {
 	DescribeServicesCommand,
 	Service,
 } from '@aws-sdk/client-ecs'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getECSServices(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.ECS_SERVICES>> {
+): Promise<AwsResourcesList<AwsSupportedResources.ECS_SERVICES>> {
 	const client = new ECSClient({credentials, region})
-	const resources: AwsResources<AwsServices.ECS_SERVICES> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.ECS_SERVICES> = {}
 
 	let clusterNextToken: string | undefined
 

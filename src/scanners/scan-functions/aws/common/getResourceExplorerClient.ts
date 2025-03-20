@@ -1,6 +1,6 @@
 import {ResourceExplorer2Client, ListIndexesCommand, ListViewsCommand} from '@aws-sdk/client-resource-explorer-2'
 import {AwsCredentials} from '@/types'
-import {awsRegionIds} from '@/constants'
+import {awsRegionIds} from '@/definitions/supported-regions'
 
 const memoizedClients = new Map<AwsCredentials, ResourceExplorer2Client>()
 

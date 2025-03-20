@@ -1,32 +1,30 @@
-import {AwsServices} from '@/constants'
-import {AwsResources, AwsScanner, AwsTags} from '@/types'
-import {GetAllAwsScannersArguments, GetAwsScannerArguments, GetAwsTagsScannerArguments} from './types'
+import {AwsSupportedManagementServices, AwsSupportedResources} from '@/definitions/supported-services'
+import {AwsResourcesList, AwsScanner, AwsScannerLifecycleHook, AwsTags} from '@/types'
+import {GetAwsResourceScannerArguments, GetAllAwsResourceScannersArguments, GetAwsTagsScannerArguments} from './types'
 import {createGlobalScanner} from './common/createGlobalScanner'
 import {createRegionalScanner} from './common/createRegionalScanner'
 import {scannerConfigs} from './scanner-configs'
 import {getAvailableTags} from './scan-functions/aws/tags'
 
-// Get scanner functions
-const GLOBAL_SERVICES = [
-	AwsServices.ROUTE53_HOSTED_ZONES,
-	AwsServices.CLOUDFRONT_DISTRIBUTIONS,
-	AwsServices.S3_BUCKETS,
+// @todo take this list to supported-services.ts
+const GLOBAL_SERVICES: AwsSupportedResources[] = [
+	AwsSupportedResources.ROUTE53_HOSTED_ZONES,
+	AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS,
+	AwsSupportedResources.S3_BUCKETS,
 ] as const
 
-export const getAwsScanner = <T extends AwsServices>({
+// Get scanner functions
+export const getAwsScanner = <T extends AwsSupportedResources>({
 	service,
 	credentials,
 	getRateLimiter,
-	hooks = [],
+	hooks,
 	regions,
-}: GetAwsScannerArguments<T>): AwsScanner<AwsResources<T>> => {
-	const tagsRateLimiter = getRateLimiter('resource-groups-tagging')
-
+}: GetAwsResourceScannerArguments<T>): AwsScanner<AwsResourcesList<T>> => {
 	const options = {
 		credentials,
 		getRateLimiter,
-		tagsRateLimiter,
-		hooks,
+		hooks: (hooks || []) as AwsScannerLifecycleHook<AwsSupportedResources>[],
 	}
 
 	const config = scannerConfigs[service]
@@ -48,9 +46,9 @@ export const getAllAwsScanners = ({
 	hooks = [],
 	regions,
 	shouldIncludeGlobalServices,
-}: GetAllAwsScannersArguments): AwsScanner<AwsResources<AwsServices>>[] => {
-	const services = Object.values(AwsServices).filter(
-		(service) => shouldIncludeGlobalServices || !GLOBAL_SERVICES.includes(service as (typeof GLOBAL_SERVICES)[number]),
+}: GetAllAwsResourceScannersArguments): AwsScanner<AwsResourcesList>[] => {
+	const services = Object.values(AwsSupportedResources).filter(
+		(service) => shouldIncludeGlobalServices || !GLOBAL_SERVICES.includes(service),
 	)
 
 	return services.map((service) =>
@@ -68,7 +66,7 @@ export const getAllAwsScanners = ({
 export const getTagsScanner =
 	({credentials, getRateLimiter, hooks = [], services}: GetAwsTagsScannerArguments): AwsScanner<AwsTags> =>
 	async () => {
-		const service = 'resource-groups-tagging' as AwsServices
+		const service = AwsSupportedManagementServices.RESOURCE_GROUP_TAGGING
 		const tagsRateLimiter = getRateLimiter(service)
 
 		try {

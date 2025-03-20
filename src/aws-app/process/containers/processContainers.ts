@@ -1,11 +1,11 @@
-import {AwsResources} from '@/types'
+import {AwsResourcesList} from '@/types'
 import {ErrorManager, PlacementData, ProcessedContainers} from '../types'
 import {assignResourcesToContainers} from './assignResourcesToContainers'
 import {createContainerScaffolding} from './createContainerScaffolding'
 
 export const getProcessedContainers = (
 	placementData: PlacementData,
-	resources: AwsResources,
+	resources: AwsResourcesList,
 	errorManager: ErrorManager,
 ): ProcessedContainers => {
 	// Create the empty container scaffolding

@@ -1,19 +1,14 @@
-import {DBInstance} from '@aws-sdk/client-rds'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 /**
- * 0️⃣ I put DBInstance just as an example of a real aws type.
- *
- * You may need to add this type to the `ResourceDescription` type located in src/types.ts
+ * 0️⃣ Define your new resource type in src/definitions/supported-services.ts
  */
-type SampleInstance = DBInstance
-
 export async function getSampleInstances(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.DYNAMODB_TABLES>> {
+): Promise<AwsResourcesList<AwsSupportedResources.DYNAMODB_TABLES>> {
 	/**
 	 * 1️⃣ Create an client via the given credentials and region
 	 *

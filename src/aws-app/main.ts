@@ -10,7 +10,7 @@ import {getConfig} from './config'
 import {createRateLimiterFactory} from './utils/createRateLimiterFactory'
 import {getAwsAccountId} from '@/scanners/scan-functions/aws/common/getAwsAccountId'
 import {AWSRateLimitExhaustionRetryStrategy} from './utils/AWSRateLimitExhaustionRetryStrategy'
-import {AwsServices} from '@/constants'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export default async () => {
 	console.log(cliMessages.getIntro())
@@ -49,7 +49,7 @@ export default async () => {
 	const scanResources = () => Promise.all(resourceScanners.map((scanner) => scanner()))
 	const scanTags = getTagsScanner({
 		...commonScannerOptions,
-		services: Object.values(AwsServices),
+		services: Object.values(AwsSupportedResources),
 	})
 
 	// run scanners

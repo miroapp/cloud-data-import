@@ -1,5 +1,5 @@
-import {AwsServices} from '@/constants'
-import {AwsScannerConfig} from './types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
+import {AwsResourceScannerConfig} from './types'
 
 import {getAutoScalingResources} from './scan-functions/aws/autoscaling-groups'
 import {getCloudFrontDistributions} from './scan-functions/aws/cloudfront-distributions'
@@ -40,157 +40,157 @@ import {getEC2NetworkInterfaces} from './scan-functions/aws/ec2-network-interfac
 import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 
 export const scannerConfigs: {
-	[K in AwsServices]: AwsScannerConfig<K>
+	[K in AwsSupportedResources]: AwsResourceScannerConfig<K>
 } = {
-	[AwsServices.ATHENA_NAMED_QUERIES]: {
-		service: AwsServices.ATHENA_NAMED_QUERIES,
+	[AwsSupportedResources.ATHENA_NAMED_QUERIES]: {
+		service: AwsSupportedResources.ATHENA_NAMED_QUERIES,
 		handler: getAthenaNamedQueries,
 	},
-	[AwsServices.AUTOSCALING_GROUPS]: {
-		service: AwsServices.AUTOSCALING_GROUPS,
+	[AwsSupportedResources.AUTOSCALING_GROUPS]: {
+		service: AwsSupportedResources.AUTOSCALING_GROUPS,
 		handler: getAutoScalingResources,
 	},
-	[AwsServices.CLOUDFRONT_DISTRIBUTIONS]: {
-		service: AwsServices.CLOUDFRONT_DISTRIBUTIONS,
+	[AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS]: {
+		service: AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS,
 		handler: getCloudFrontDistributions,
 		global: true,
 	},
-	[AwsServices.CLOUDTRAIL_TRAILS]: {
-		service: AwsServices.CLOUDTRAIL_TRAILS,
+	[AwsSupportedResources.CLOUDTRAIL_TRAILS]: {
+		service: AwsSupportedResources.CLOUDTRAIL_TRAILS,
 		handler: getCloudTrailTrails,
 	},
-	[AwsServices.CLOUDWATCH_METRIC_ALARMS]: {
-		service: AwsServices.CLOUDWATCH_METRIC_ALARMS,
+	[AwsSupportedResources.CLOUDWATCH_METRIC_ALARMS]: {
+		service: AwsSupportedResources.CLOUDWATCH_METRIC_ALARMS,
 		handler: getCloudWatchMetricAlarms,
 	},
-	[AwsServices.CLOUDWATCH_METRIC_STREAMS]: {
-		service: AwsServices.CLOUDWATCH_METRIC_STREAMS,
+	[AwsSupportedResources.CLOUDWATCH_METRIC_STREAMS]: {
+		service: AwsSupportedResources.CLOUDWATCH_METRIC_STREAMS,
 		handler: getCloudWatchMetricStreams,
 	},
-	[AwsServices.DYNAMODB_TABLES]: {
-		service: AwsServices.DYNAMODB_TABLES,
+	[AwsSupportedResources.DYNAMODB_TABLES]: {
+		service: AwsSupportedResources.DYNAMODB_TABLES,
 		handler: getDynamoDBTables,
 	},
-	[AwsServices.EC2_INSTANCES]: {
-		service: AwsServices.EC2_INSTANCES,
+	[AwsSupportedResources.EC2_INSTANCES]: {
+		service: AwsSupportedResources.EC2_INSTANCES,
 		handler: getEC2Instances,
 	},
-	[AwsServices.EC2_VPCS]: {
-		service: AwsServices.EC2_VPCS,
+	[AwsSupportedResources.EC2_VPCS]: {
+		service: AwsSupportedResources.EC2_VPCS,
 		handler: getEC2Vpcs,
 	},
-	[AwsServices.EC2_VPC_ENDPOINTS]: {
-		service: AwsServices.EC2_VPC_ENDPOINTS,
+	[AwsSupportedResources.EC2_VPC_ENDPOINTS]: {
+		service: AwsSupportedResources.EC2_VPC_ENDPOINTS,
 		handler: getEC2VpcEndpoints,
 	},
-	[AwsServices.EC2_SUBNETS]: {
-		service: AwsServices.EC2_SUBNETS,
+	[AwsSupportedResources.EC2_SUBNETS]: {
+		service: AwsSupportedResources.EC2_SUBNETS,
 		handler: getEC2Subnets,
 	},
-	[AwsServices.EC2_ROUTE_TABLES]: {
-		service: AwsServices.EC2_ROUTE_TABLES,
+	[AwsSupportedResources.EC2_ROUTE_TABLES]: {
+		service: AwsSupportedResources.EC2_ROUTE_TABLES,
 		handler: getEC2RouteTables,
 	},
-	[AwsServices.EC2_INTERNET_GATEWAYS]: {
-		service: AwsServices.EC2_INTERNET_GATEWAYS,
+	[AwsSupportedResources.EC2_INTERNET_GATEWAYS]: {
+		service: AwsSupportedResources.EC2_INTERNET_GATEWAYS,
 		handler: getEC2InternetGateways,
 	},
-	[AwsServices.EC2_NAT_GATEWAYS]: {
-		service: AwsServices.EC2_NAT_GATEWAYS,
+	[AwsSupportedResources.EC2_NAT_GATEWAYS]: {
+		service: AwsSupportedResources.EC2_NAT_GATEWAYS,
 		handler: getEC2NatGateways,
 	},
-	[AwsServices.EC2_NETWORK_ACLS]: {
-		service: AwsServices.EC2_NETWORK_ACLS,
+	[AwsSupportedResources.EC2_NETWORK_ACLS]: {
+		service: AwsSupportedResources.EC2_NETWORK_ACLS,
 		handler: getEC2NetworkAcls,
 	},
-	[AwsServices.EC2_TRANSIT_GATEWAYS]: {
-		service: AwsServices.EC2_TRANSIT_GATEWAYS,
+	[AwsSupportedResources.EC2_TRANSIT_GATEWAYS]: {
+		service: AwsSupportedResources.EC2_TRANSIT_GATEWAYS,
 		handler: getEC2TransitGateways,
 	},
-	[AwsServices.EC2_VOLUMES]: {
-		service: AwsServices.EC2_VOLUMES,
+	[AwsSupportedResources.EC2_VOLUMES]: {
+		service: AwsSupportedResources.EC2_VOLUMES,
 		handler: getEC2Volumes,
 	},
-	[AwsServices.EC2_VPN_GATEWAYS]: {
-		service: AwsServices.EC2_VPN_GATEWAYS,
+	[AwsSupportedResources.EC2_VPN_GATEWAYS]: {
+		service: AwsSupportedResources.EC2_VPN_GATEWAYS,
 		handler: getEC2VpnGateways,
 	},
-	[AwsServices.EC2_NETWORK_INTERFACES]: {
-		service: AwsServices.EC2_NETWORK_INTERFACES,
+	[AwsSupportedResources.EC2_NETWORK_INTERFACES]: {
+		service: AwsSupportedResources.EC2_NETWORK_INTERFACES,
 		handler: getEC2NetworkInterfaces,
 	},
-	[AwsServices.ECS_CLUSTERS]: {
-		service: AwsServices.ECS_CLUSTERS,
+	[AwsSupportedResources.ECS_CLUSTERS]: {
+		service: AwsSupportedResources.ECS_CLUSTERS,
 		handler: getECSClusters,
 	},
-	[AwsServices.ECS_SERVICES]: {
-		service: AwsServices.ECS_SERVICES,
+	[AwsSupportedResources.ECS_SERVICES]: {
+		service: AwsSupportedResources.ECS_SERVICES,
 		handler: getECSServices,
 	},
-	[AwsServices.ECS_TASKS]: {
-		service: AwsServices.ECS_TASKS,
+	[AwsSupportedResources.ECS_TASKS]: {
+		service: AwsSupportedResources.ECS_TASKS,
 		handler: getECSTasks,
 	},
-	[AwsServices.EFS_FILE_SYSTEMS]: {
-		service: AwsServices.EFS_FILE_SYSTEMS,
+	[AwsSupportedResources.EFS_FILE_SYSTEMS]: {
+		service: AwsSupportedResources.EFS_FILE_SYSTEMS,
 		handler: getEFSFileSystems,
 	},
-	[AwsServices.EKS_CLUSTERS]: {
-		service: AwsServices.EKS_CLUSTERS,
+	[AwsSupportedResources.EKS_CLUSTERS]: {
+		service: AwsSupportedResources.EKS_CLUSTERS,
 		handler: getEKSClusters,
 	},
-	[AwsServices.ELASTICACHE_CLUSTERS]: {
-		service: AwsServices.ELASTICACHE_CLUSTERS,
+	[AwsSupportedResources.ELASTICACHE_CLUSTERS]: {
+		service: AwsSupportedResources.ELASTICACHE_CLUSTERS,
 		handler: getElastiCacheClusters,
 	},
-	[AwsServices.ELBV2_LOAD_BALANCERS]: {
-		service: AwsServices.ELBV2_LOAD_BALANCERS,
+	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: {
+		service: AwsSupportedResources.ELBV2_LOAD_BALANCERS,
 		handler: getELBv2LoadBalancers,
 	},
-	[AwsServices.ELBV2_TARGET_GROUPS]: {
-		service: AwsServices.ELBV2_TARGET_GROUPS,
+	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: {
+		service: AwsSupportedResources.ELBV2_TARGET_GROUPS,
 		handler: getELBv2TargetGroups,
 	},
-	[AwsServices.ELBV1_LOAD_BALANCERS]: {
-		service: AwsServices.ELBV1_LOAD_BALANCERS,
+	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: {
+		service: AwsSupportedResources.ELBV1_LOAD_BALANCERS,
 		handler: getELBv1LoadBalancers,
 	},
-	[AwsServices.LAMBDA_FUNCTIONS]: {
-		service: AwsServices.LAMBDA_FUNCTIONS,
+	[AwsSupportedResources.LAMBDA_FUNCTIONS]: {
+		service: AwsSupportedResources.LAMBDA_FUNCTIONS,
 		handler: getLambdaFunctions,
 	},
-	[AwsServices.RDS_INSTANCES]: {
-		service: AwsServices.RDS_INSTANCES,
+	[AwsSupportedResources.RDS_INSTANCES]: {
+		service: AwsSupportedResources.RDS_INSTANCES,
 		handler: getRDSInstances,
 	},
-	[AwsServices.RDS_CLUSTERS]: {
-		service: AwsServices.RDS_CLUSTERS,
+	[AwsSupportedResources.RDS_CLUSTERS]: {
+		service: AwsSupportedResources.RDS_CLUSTERS,
 		handler: getRDSClusters,
 	},
-	[AwsServices.RDS_PROXIES]: {
-		service: AwsServices.RDS_PROXIES,
+	[AwsSupportedResources.RDS_PROXIES]: {
+		service: AwsSupportedResources.RDS_PROXIES,
 		handler: getRDSProxies,
 	},
-	[AwsServices.REDSHIFT_CLUSTERS]: {
-		service: AwsServices.REDSHIFT_CLUSTERS,
+	[AwsSupportedResources.REDSHIFT_CLUSTERS]: {
+		service: AwsSupportedResources.REDSHIFT_CLUSTERS,
 		handler: getRedshiftClusters,
 	},
-	[AwsServices.ROUTE53_HOSTED_ZONES]: {
-		service: AwsServices.ROUTE53_HOSTED_ZONES,
+	[AwsSupportedResources.ROUTE53_HOSTED_ZONES]: {
+		service: AwsSupportedResources.ROUTE53_HOSTED_ZONES,
 		handler: getHostedZones,
 		global: true,
 	},
-	[AwsServices.S3_BUCKETS]: {
-		service: AwsServices.S3_BUCKETS,
+	[AwsSupportedResources.S3_BUCKETS]: {
+		service: AwsSupportedResources.S3_BUCKETS,
 		handler: getS3Buckets,
 		global: true,
 	},
-	[AwsServices.SNS_TOPICS]: {
-		service: AwsServices.SNS_TOPICS,
+	[AwsSupportedResources.SNS_TOPICS]: {
+		service: AwsSupportedResources.SNS_TOPICS,
 		handler: getSNSTopics,
 	},
-	[AwsServices.SQS_QUEUES]: {
-		service: AwsServices.SQS_QUEUES,
+	[AwsSupportedResources.SQS_QUEUES]: {
+		service: AwsSupportedResources.SQS_QUEUES,
 		handler: getSQSQueues,
 	},
 }

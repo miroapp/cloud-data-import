@@ -1,14 +1,14 @@
 import {createGlobalScanner} from '@/scanners'
-import {AwsResources, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
+import {AwsResourcesList, AwsCredentials, AwsScannerLifecycleHook} from '@/types'
 
 import {RateLimiterMockImpl} from 'tests/mocks/RateLimiterMock'
 import {createMockedHook} from 'tests/mocks/hookMock'
-import {AwsServices} from '@/constants'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 describe('createGlobalScanner', () => {
 	let mockRateLimiter: RateLimiterMockImpl
 	let mockGetRateLimiter: jest.Mock
-	let mockHooks: AwsScannerLifecycleHook[]
+	let mockHooks: AwsScannerLifecycleHook<AwsSupportedResources>[]
 	let mockCredentials: AwsCredentials
 	let mockScanFunction: jest.Mock
 
@@ -17,13 +17,13 @@ describe('createGlobalScanner', () => {
 		mockGetRateLimiter = jest.fn().mockReturnValue(mockRateLimiter)
 		mockHooks = [createMockedHook(), createMockedHook()]
 		mockCredentials = undefined
-		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResources<never>)
+		mockScanFunction = jest.fn().mockResolvedValue({} as AwsResourcesList<never>)
 
 		jest.clearAllMocks()
 	})
 
 	it('should return a function', () => {
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -33,7 +33,7 @@ describe('createGlobalScanner', () => {
 	})
 
 	it('should get rate limiter with the correct service name', () => {
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -41,11 +41,11 @@ describe('createGlobalScanner', () => {
 
 		scanner()
 
-		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
+		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsSupportedResources.ATHENA_NAMED_QUERIES)
 	})
 
 	it('should return resources and no errors when scan is successful', async () => {
-		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+		const mockResources: AwsResourcesList<AwsSupportedResources.ATHENA_NAMED_QUERIES> = {
 			resource1: {
 				Name: 'Resource 1',
 				Description: 'Resource 1 Description',
@@ -56,7 +56,7 @@ describe('createGlobalScanner', () => {
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -72,7 +72,7 @@ describe('createGlobalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -80,16 +80,16 @@ describe('createGlobalScanner', () => {
 
 		const result = await scanner()
 
-		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
+		expect(mockGetRateLimiter).toHaveBeenCalledWith(AwsSupportedResources.ATHENA_NAMED_QUERIES)
 		expect(mockScanFunction).toHaveBeenCalledWith(mockCredentials, mockRateLimiter)
 		expect(result).toEqual({
-			results: {} as AwsResources<never>,
-			errors: [{service: AwsServices.ATHENA_NAMED_QUERIES, message: mockError.message}],
+			results: {} as AwsResourcesList<never>,
+			errors: [{service: AwsSupportedResources.ATHENA_NAMED_QUERIES, message: mockError.message}],
 		})
 	})
 
 	it('should call hooks appropriately during the scan', async () => {
-		const mockResources: AwsResources<AwsServices.ATHENA_NAMED_QUERIES> = {
+		const mockResources: AwsResourcesList<AwsSupportedResources.ATHENA_NAMED_QUERIES> = {
 			resource1: {
 				Name: 'Resource 1',
 				Description: 'Resource 1 Description',
@@ -107,7 +107,7 @@ describe('createGlobalScanner', () => {
 		}
 		mockScanFunction.mockResolvedValue(mockResources)
 
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -120,8 +120,8 @@ describe('createGlobalScanner', () => {
 			expect(hook.onComplete).toHaveBeenCalledTimes(1)
 			expect(hook.onError).not.toHaveBeenCalled()
 
-			expect(hook.onStart).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
-			expect(hook.onComplete).toHaveBeenCalledWith(mockResources, AwsServices.ATHENA_NAMED_QUERIES)
+			expect(hook.onStart).toHaveBeenCalledWith(AwsSupportedResources.ATHENA_NAMED_QUERIES)
+			expect(hook.onComplete).toHaveBeenCalledWith(mockResources, AwsSupportedResources.ATHENA_NAMED_QUERIES)
 		})
 	})
 
@@ -129,7 +129,7 @@ describe('createGlobalScanner', () => {
 		const mockError = new Error('Mock error')
 		mockScanFunction.mockRejectedValue(mockError)
 
-		const scanner = createGlobalScanner(AwsServices.ATHENA_NAMED_QUERIES, mockScanFunction, {
+		const scanner = createGlobalScanner(AwsSupportedResources.ATHENA_NAMED_QUERIES, mockScanFunction, {
 			credentials: mockCredentials,
 			getRateLimiter: mockGetRateLimiter,
 			hooks: mockHooks,
@@ -142,8 +142,8 @@ describe('createGlobalScanner', () => {
 			expect(hook.onComplete).not.toHaveBeenCalled()
 			expect(hook.onError).toHaveBeenCalledTimes(1)
 
-			expect(hook.onStart).toHaveBeenCalledWith(AwsServices.ATHENA_NAMED_QUERIES)
-			expect(hook.onError).toHaveBeenCalledWith(mockError, AwsServices.ATHENA_NAMED_QUERIES)
+			expect(hook.onStart).toHaveBeenCalledWith(AwsSupportedResources.ATHENA_NAMED_QUERIES)
+			expect(hook.onError).toHaveBeenCalledWith(mockError, AwsSupportedResources.ATHENA_NAMED_QUERIES)
 		})
 	})
 })

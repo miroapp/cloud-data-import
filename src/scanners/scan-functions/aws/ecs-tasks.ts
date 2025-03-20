@@ -1,14 +1,14 @@
 import {ECSClient, ListClustersCommand, ListTasksCommand, DescribeTasksCommand} from '@aws-sdk/client-ecs'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getECSTasks(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.ECS_TASKS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.ECS_TASKS>> {
 	const client = new ECSClient({credentials, region})
-	const resources: AwsResources<AwsServices.ECS_TASKS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.ECS_TASKS> = {}
 
 	let clusterNextToken: string | undefined
 

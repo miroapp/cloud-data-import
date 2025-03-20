@@ -1,5 +1,5 @@
 import type {ErrorManager, PlacementData, ProcessedContainers} from '../types'
-import type {AwsResources} from '@/types'
+import type {AwsResourcesList} from '@/types'
 import type {Subnet} from '@aws-sdk/client-ec2'
 import {
 	createAccountContainer,
@@ -12,7 +12,7 @@ import {
 import {generateContainerIdentifier} from '../utils/generateContainerIdentifier'
 
 // Find the ARN of a subnet by its ID
-const findSubnetArnById = (resources: AwsResources, subnetId: string): string | undefined => {
+const findSubnetArnById = (resources: AwsResourcesList, subnetId: string): string | undefined => {
 	return Object.keys(resources).find((arn) => arn.includes(subnetId))
 }
 
@@ -22,7 +22,7 @@ const findSubnetArnById = (resources: AwsResources, subnetId: string): string | 
  */
 export const createContainerScaffolding = (
 	placementData: PlacementData,
-	resources: AwsResources,
+	resources: AwsResourcesList,
 	errorManager: ErrorManager,
 ): ProcessedContainers => {
 	const containers: ProcessedContainers = {

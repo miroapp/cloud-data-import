@@ -4,24 +4,24 @@ import {
 	AwsCredentials,
 	AwsScannerLifecycleHook,
 	RateLimiter,
-	AwsResources,
+	AwsResourcesList,
 } from '@/types'
-import {CreateRegionalScannerFunction, CreateScannerOptions} from '@/scanners/types'
-import {AwsServices} from '@/constants'
+import {CreateRegionalResourceScannerFunction, CreateScannerOptions} from '@/scanners/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
-type RegionalScanResult<T extends AwsServices> = {
+type RegionalScanResult<T extends AwsSupportedResources> = {
 	region: string
-	resources: AwsResources<T>
+	resources: AwsResourcesList<T>
 	error: Error | null
 }
 
-async function scanRegion<T extends AwsServices>(
+async function scanRegion<T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsRegionalScanFunction<T>,
 	region: string,
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-	hooks: AwsScannerLifecycleHook[],
+	hooks: AwsScannerLifecycleHook<T>[],
 ): Promise<RegionalScanResult<T>> {
 	try {
 		// onStart hook
@@ -44,7 +44,7 @@ async function scanRegion<T extends AwsServices>(
 	}
 }
 
-export const createRegionalScanner: CreateRegionalScannerFunction = <T extends AwsServices>(
+export const createRegionalScanner: CreateRegionalResourceScannerFunction = <T extends AwsSupportedResources>(
 	service: T,
 	scanFunction: AwsRegionalScanFunction<T>,
 	regions: string[],
@@ -67,7 +67,7 @@ export const createRegionalScanner: CreateRegionalScannerFunction = <T extends A
 				Object.assign(acc, resources)
 			}
 			return acc
-		}, {} as AwsResources<T>)
+		}, {} as AwsResourcesList<T>)
 
 		// Extract errors
 		const errors: AwsScannerError[] = scanResults

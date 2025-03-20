@@ -1,18 +1,18 @@
 import {Route53Client, ListHostedZonesCommand, GetHostedZoneCommand} from '@aws-sdk/client-route-53'
-import {AwsCredentials, RateLimiter, AwsResources} from '@/types'
+import {AwsCredentials, RateLimiter, AwsResourcesList} from '@/types'
 import {buildARN} from './common/buildArn'
 import {getAwsAccountId} from './common/getAwsAccountId'
-import {AwsServices} from '@/constants'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getHostedZones(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
-): Promise<AwsResources<AwsServices.ROUTE53_HOSTED_ZONES>> {
+): Promise<AwsResourcesList<AwsSupportedResources.ROUTE53_HOSTED_ZONES>> {
 	const client = new Route53Client({credentials})
 
 	const accountId = await getAwsAccountId(credentials)
 
-	const hostedZones: AwsResources<AwsServices.ROUTE53_HOSTED_ZONES> = {}
+	const hostedZones: AwsResourcesList<AwsSupportedResources.ROUTE53_HOSTED_ZONES> = {}
 
 	let marker: string | undefined
 	do {
