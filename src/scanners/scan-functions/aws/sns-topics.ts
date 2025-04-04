@@ -1,14 +1,14 @@
 import {ListTopicsCommand, SNSClient} from '@aws-sdk/client-sns'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getSNSTopics(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.SNS_TOPICS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.SNS_TOPICS>> {
 	const client = new SNSClient({credentials, region})
-	const topics: AwsResources<AwsServices.SNS_TOPICS> = {}
+	const topics: AwsResourcesList<AwsSupportedResources.SNS_TOPICS> = {}
 
 	let nextToken: string | undefined
 	do {

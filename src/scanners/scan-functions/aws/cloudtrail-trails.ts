@@ -1,15 +1,15 @@
 import {CloudTrailClient, ListTrailsCommand, ListTrailsCommandOutput} from '@aws-sdk/client-cloudtrail'
-import {AwsCredentials, AwsResources, RateLimiter} from '@/types'
-import {AwsServices} from '@/constants'
+import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
+import {AwsSupportedResources} from '@/definitions/supported-services'
 
 export async function getCloudTrailTrails(
 	credentials: AwsCredentials,
 	rateLimiter: RateLimiter,
 	region: string,
-): Promise<AwsResources<AwsServices.CLOUDTRAIL_TRAILS>> {
+): Promise<AwsResourcesList<AwsSupportedResources.CLOUDTRAIL_TRAILS>> {
 	const client = new CloudTrailClient({credentials, region})
 
-	const resources: AwsResources<AwsServices.CLOUDTRAIL_TRAILS> = {}
+	const resources: AwsResourcesList<AwsSupportedResources.CLOUDTRAIL_TRAILS> = {}
 
 	let nextToken: string | undefined
 	do {
