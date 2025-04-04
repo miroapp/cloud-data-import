@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.12.8
+
+### Patch Changes
+
+- 9712e07: Logger will use service name instead of service id for logging
+
 ## 0.12.7
 
 ### Patch Changes
