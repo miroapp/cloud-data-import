@@ -116,7 +116,12 @@ export type SubnetContainer = BaseContainer & {
 	type: 'public' | 'private'
 }
 
-export type ConnectionType = 'TBD'
+export type ConnectionType = 'ALB_TO_ASG'
+export type Connection = {
+	from: string // resource arn
+	to: string // resource arn
+	type: ConnectionType
+}
 
 export interface AwsProcessedData {
 	resources: {
@@ -126,11 +131,7 @@ export interface AwsProcessedData {
 			tags: {[key: string]: string | undefined}
 		}
 	}
-	connections: {
-		from: string // resource arn
-		to: string // resource arn
-		type: ConnectionType
-	}[]
+	connections: Connection[]
 	containers: {
 		accounts: {[accountId: string]: AccountContainer}
 		regions: {[regionId: string]: RegionContainer}

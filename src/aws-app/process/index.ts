@@ -4,6 +4,7 @@ import {getPlacementData} from './getPlacementData'
 import {getProcessedResources} from './resources'
 import {getProcessedContainers} from './containers'
 import {ProcessingErrorManager} from './utils/ProcessingErrorManager'
+import {getProcessedConnections} from './connections/processConnections'
 
 export const getAwsProcessedData = (resources: AwsResourcesList, resourceTags: AwsTags): AwsProcessedData => {
 	const processingErrorsManager = new ProcessingErrorManager()
@@ -13,7 +14,8 @@ export const getAwsProcessedData = (resources: AwsResourcesList, resourceTags: A
 
 	// Calculate the containers, connections and resources
 	const processedResources = getProcessedResources(placementData, resourceTags)
-	const containers = getProcessedContainers(placementData, resources, processingErrorsManager)
+	const processedContainers = getProcessedContainers(placementData, resources, processingErrorsManager)
+	const processedConnections = getProcessedConnections(placementData, resources, processingErrorsManager)
 
 	// Log all collected errors
 	processingErrorsManager.render()
@@ -35,8 +37,8 @@ export const getAwsProcessedData = (resources: AwsResourcesList, resourceTags: A
 	// Return the processed data
 	return {
 		resources: processedResources,
-		connections: [],
-		containers,
+		connections: processedConnections,
+		containers: processedContainers,
 		tags: possibleTagValues,
 	}
 }
