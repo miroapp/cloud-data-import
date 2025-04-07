@@ -8,10 +8,10 @@ export const getCloudFrontToS3Connections = (
 	resources: AwsResourcesList,
 ): ProcessedConnections => {
 	const connections: ProcessedConnections = []
-	const dists = getCloudFrontDistributions(groupedArns, resources)
+	const distribution = getCloudFrontDistributions(groupedArns, resources)
 	const buckets = getS3Buckets(groupedArns, resources)
 	// For each distribution, check its Origins for a DomainName that includes a bucket name.
-	Object.entries(dists).forEach(([distArn, dist]) => {
+	Object.entries(distribution).forEach(([distArn, dist]) => {
 		const origins = dist.Origins?.Items || []
 		origins.forEach((origin) => {
 			const domainName = origin.DomainName

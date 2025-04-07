@@ -116,7 +116,13 @@ export type SubnetContainer = BaseContainer & {
 	type: 'public' | 'private'
 }
 
-export type ConnectionType = 'ELB_TO_ASG' | 'CLOUDFRONT_TO_S3'
+export type ConnectionType =
+	| 'ELB_TO_ASG'
+	| 'CLOUDFRONT_TO_S3'
+	| 'ALB_TO_EC2'
+	| 'ROUTE53_TO_ELB'
+	| 'ROUTE53_TO_S3'
+	| 'ROUTE53_TO_CLOUDFRONT'
 export type Connection = {
 	from: string // resource arn
 	to: string // resource arn

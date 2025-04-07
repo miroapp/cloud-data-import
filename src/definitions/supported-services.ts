@@ -191,6 +191,7 @@ export type AwsResourceDescriptionMap = {
 	[AwsSupportedResources.REDSHIFT_CLUSTERS]: Redshift.Cluster
 	[AwsSupportedResources.ROUTE53_HOSTED_ZONES]: Route53.HostedZone & {
 		Account: string
+		RecordSets: Route53.ResourceRecordSet[]
 	}
 	[AwsSupportedResources.S3_BUCKETS]: S3.Bucket & {
 		Account: string

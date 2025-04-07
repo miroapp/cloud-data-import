@@ -1,41 +1,7 @@
 import {AwsResourcesList} from '@/types'
 import {ProcessedConnections} from '../types'
 import {GroupedArns} from './groupArnsBasedOnType'
-import {AwsSupportedResources} from '@/definitions/supported-services'
-import type * as ELBv2 from '@aws-sdk/client-elastic-load-balancing-v2'
-import type * as AutoScaling from '@aws-sdk/client-auto-scaling'
-
-const getAutoScalingGroups = (
-	groupedArns: GroupedArns,
-	resources: AwsResourcesList,
-): AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS> => {
-	const arns = groupedArns['autoScalingGroup']
-
-	const autoScalingGroups: AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS> = {}
-
-	for (const arn of arns) {
-		if (resources[arn]) {
-			autoScalingGroups[arn] = resources[arn] as AutoScaling.AutoScalingGroup
-		}
-	}
-
-	return autoScalingGroups
-}
-
-const getTargetGroups = (
-	groupedArns: GroupedArns,
-	resources: AwsResourcesList,
-): AwsResourcesList<AwsSupportedResources.ELBV2_TARGET_GROUPS> => {
-	const arns = groupedArns['targetgroup']
-	const targetGroups: AwsResourcesList<AwsSupportedResources.ELBV2_TARGET_GROUPS> = {}
-
-	for (const arn of arns) {
-		if (resources[arn]) {
-			targetGroups[arn] = resources[arn] as ELBv2.TargetGroup
-		}
-	}
-	return targetGroups
-}
+import {getAutoScalingGroups, getTargetGroups} from './utils'
 
 export const getElbToAutoScalingConnections = (
 	groupedArns: GroupedArns,
