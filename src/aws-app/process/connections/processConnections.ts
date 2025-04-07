@@ -1,6 +1,6 @@
 import {AwsResourcesList} from '@/types'
 import {ErrorManager, PlacementData, ProcessedConnections} from '../types'
-import {getAlbToAutoScalingConnections} from './getAlbToAutoScalingConnections'
+import {getElbToAutoScalingConnections} from './getElbToAutoScalingConnections'
 import {groupArnsBasedOnType} from './groupArnsBasedOnType'
 
 export const getProcessedConnections = (
@@ -10,7 +10,7 @@ export const getProcessedConnections = (
 ): ProcessedConnections => {
 	const groupedArns = groupArnsBasedOnType(placementData)
 
-	const albToAsgConnections = getAlbToAutoScalingConnections(groupedArns, resources)
+	const elbToAsgConnections = getElbToAutoScalingConnections(groupedArns, resources)
 
-	return [...albToAsgConnections]
+	return [...elbToAsgConnections]
 }

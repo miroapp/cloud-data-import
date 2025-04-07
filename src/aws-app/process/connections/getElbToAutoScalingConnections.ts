@@ -1,4 +1,4 @@
-import {AwsResourcesList, Connection} from '@/types'
+import {AwsResourcesList} from '@/types'
 import {ProcessedConnections} from '../types'
 import {GroupedArns} from './groupArnsBasedOnType'
 import {AwsSupportedResources} from '@/definitions/supported-services'
@@ -37,7 +37,7 @@ const getTargetGroups = (
 	return targetGroups
 }
 
-export const getAlbToAutoScalingConnections = (
+export const getElbToAutoScalingConnections = (
 	groupedArns: GroupedArns,
 	resources: AwsResourcesList,
 ): ProcessedConnections => {
@@ -72,7 +72,7 @@ export const getAlbToAutoScalingConnections = (
 					connections.push({
 						from: lbArn,
 						to: asgArn,
-						type: 'ALB_TO_ASG',
+						type: 'ELB_TO_ASG',
 					})
 				})
 			})
