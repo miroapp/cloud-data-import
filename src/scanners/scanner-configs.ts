@@ -38,6 +38,7 @@ import {getCloudWatchMetricStreams} from './scan-functions/aws/cloudwatch-metric
 import {getEC2VpnGateways} from './scan-functions/aws/ec2-vpn-gateways'
 import {getEC2NetworkInterfaces} from './scan-functions/aws/ec2-network-interfaces'
 import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
+import {getOpenSearchDomains} from './scan-functions/aws/opensearch-domains'
 
 export const scannerConfigs: {
 	[K in AwsSupportedResources]: AwsResourceScannerConfig<K>
@@ -158,6 +159,10 @@ export const scannerConfigs: {
 	[AwsSupportedResources.LAMBDA_FUNCTIONS]: {
 		service: AwsSupportedResources.LAMBDA_FUNCTIONS,
 		handler: getLambdaFunctions,
+	},
+	[AwsSupportedResources.OPENSEARCH_DOMAINS]: {
+		service: AwsSupportedResources.OPENSEARCH_DOMAINS,
+		handler: getOpenSearchDomains,
 	},
 	[AwsSupportedResources.RDS_INSTANCES]: {
 		service: AwsSupportedResources.RDS_INSTANCES,
