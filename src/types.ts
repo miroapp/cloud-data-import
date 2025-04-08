@@ -119,7 +119,6 @@ export type SubnetContainer = BaseContainer & {
 export type ConnectionType =
 	| 'ELB_TO_ASG'
 	| 'CLOUDFRONT_TO_S3'
-	| 'ALB_TO_EC2'
 	| 'ROUTE53_TO_ELB'
 	| 'ROUTE53_TO_S3'
 	| 'ROUTE53_TO_CLOUDFRONT'
