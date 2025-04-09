@@ -45,6 +45,7 @@ export enum AwsSupportedResources {
 	ECS_TASKS = 'ECS_TASKS',
 	EFS_FILE_SYSTEMS = 'EFS_FILE_SYSTEMS',
 	ELASTICACHE_CLUSTERS = 'ELASTICACHE_CLUSTERS',
+	ELASTICACHE_REPLICATION_GROUPS = 'ELASTICACHE_REPLICATION_GROUPS',
 	ELBV2_LOAD_BALANCERS = 'ELBV2_LOAD_BALANCERS',
 	ELBV2_TARGET_GROUPS = 'ELBV2_TARGET_GROUPS',
 	ELBV1_LOAD_BALANCERS = 'ELBV1_LOAD_BALANCERS',
@@ -92,6 +93,7 @@ export const awsResourceNames: Record<AwsSupportedResources, string> = {
 	[AwsSupportedResources.ECS_TASKS]: 'ECS Tasks',
 	[AwsSupportedResources.EFS_FILE_SYSTEMS]: 'EFS File Systems',
 	[AwsSupportedResources.ELASTICACHE_CLUSTERS]: 'ElastiCache Clusters',
+	[AwsSupportedResources.ELASTICACHE_REPLICATION_GROUPS]: 'ElastiCache Replication Groups',
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: 'ELBv2 Load Balancers',
 	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: 'ELBv2 Target Groups',
 	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: 'ELBv1 Load Balancers',
@@ -139,6 +141,7 @@ export const awsTaggingFilterResourceTypes: Record<AwsSupportedResources, string
 	[AwsSupportedResources.ECS_TASKS]: 'ecs:task',
 	[AwsSupportedResources.EFS_FILE_SYSTEMS]: 'elasticfilesystem:file-system',
 	[AwsSupportedResources.ELASTICACHE_CLUSTERS]: 'elasticache:cluster',
+	[AwsSupportedResources.ELASTICACHE_REPLICATION_GROUPS]: 'elasticache:replicationgroup',
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
 	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: 'elasticloadbalancing:targetgroup',
 	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
@@ -185,6 +188,7 @@ export type AwsResourceDescriptionMap = {
 	[AwsSupportedResources.EFS_FILE_SYSTEMS]: EFS.FileSystemDescription
 	[AwsSupportedResources.EKS_CLUSTERS]: EKS.Cluster
 	[AwsSupportedResources.ELASTICACHE_CLUSTERS]: ElastiCache.CacheCluster
+	[AwsSupportedResources.ELASTICACHE_REPLICATION_GROUPS]: ElastiCache.ReplicationGroup
 	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: ELBv1.LoadBalancerDescription
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: ELBv2.LoadBalancer
 	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: ELBv2.TargetGroup
