@@ -163,7 +163,7 @@ interface AwsScanJobMetadata {
  */
 export interface AwsStandardSchema {
 	provider: 'aws'
-	docVersion: '0.1.2' // Version of the schema. Should be bumped when schema changes.
+	docVersion: '0.1.3' // Version of the schema. Should be bumped when schema changes.
 	resources: AwsResourceDescriptionMap[keyof AwsResourceDescriptionMap]
 	tags: AwsTags
 	errors: AwsScannerError[]
