@@ -39,6 +39,7 @@ import {getEC2VpnGateways} from './scan-functions/aws/ec2-vpn-gateways'
 import {getEC2NetworkInterfaces} from './scan-functions/aws/ec2-network-interfaces'
 import {getAthenaNamedQueries} from './scan-functions/aws/athena-named-queries'
 import {getOpenSearchDomains} from './scan-functions/aws/opensearch-domains'
+import {getElastiCacheReplicationGroups} from './scan-functions/aws/elasticache-replication-groups'
 
 export const scannerConfigs: {
 	[K in AwsSupportedResources]: AwsResourceScannerConfig<K>
@@ -143,6 +144,10 @@ export const scannerConfigs: {
 	[AwsSupportedResources.ELASTICACHE_CLUSTERS]: {
 		service: AwsSupportedResources.ELASTICACHE_CLUSTERS,
 		handler: getElastiCacheClusters,
+	},
+	[AwsSupportedResources.ELASTICACHE_REPLICATION_GROUPS]: {
+		service: AwsSupportedResources.ELASTICACHE_REPLICATION_GROUPS,
+		handler: getElastiCacheReplicationGroups,
 	},
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: {
 		service: AwsSupportedResources.ELBV2_LOAD_BALANCERS,
