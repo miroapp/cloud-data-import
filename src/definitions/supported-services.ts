@@ -18,6 +18,7 @@ import type * as ElastiCache from '@aws-sdk/client-elasticache'
 import type * as Redshift from '@aws-sdk/client-redshift'
 import type * as CloudWatch from '@aws-sdk/client-cloudwatch'
 import type * as Athena from '@aws-sdk/client-athena'
+import type * as OpenSearch from '@aws-sdk/client-opensearch'
 
 export enum AwsSupportedResources {
 	ATHENA_NAMED_QUERIES = 'ATHENA_NAMED_QUERIES',
@@ -49,6 +50,7 @@ export enum AwsSupportedResources {
 	ELBV1_LOAD_BALANCERS = 'ELBV1_LOAD_BALANCERS',
 	EKS_CLUSTERS = 'EKS_CLUSTERS',
 	LAMBDA_FUNCTIONS = 'LAMBDA_FUNCTIONS',
+	OPENSEARCH_DOMAINS = 'OPENSEARCH_DOMAINS',
 	REDSHIFT_CLUSTERS = 'REDSHIFT_CLUSTERS',
 	RDS_INSTANCES = 'RDS_INSTANCES',
 	RDS_CLUSTERS = 'RDS_CLUSTERS',
@@ -95,6 +97,7 @@ export const awsResourceNames: Record<AwsSupportedResources, string> = {
 	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: 'ELBv1 Load Balancers',
 	[AwsSupportedResources.EKS_CLUSTERS]: 'EKS Clusters',
 	[AwsSupportedResources.LAMBDA_FUNCTIONS]: 'Lambda Functions',
+	[AwsSupportedResources.OPENSEARCH_DOMAINS]: 'OpenSearch Domains',
 	[AwsSupportedResources.REDSHIFT_CLUSTERS]: 'Redshift Clusters',
 	[AwsSupportedResources.RDS_INSTANCES]: 'RDS Instances',
 	[AwsSupportedResources.RDS_CLUSTERS]: 'RDS Clusters',
@@ -141,6 +144,7 @@ export const awsTaggingFilterResourceTypes: Record<AwsSupportedResources, string
 	[AwsSupportedResources.ELBV1_LOAD_BALANCERS]: 'elasticloadbalancing:loadbalancer',
 	[AwsSupportedResources.EKS_CLUSTERS]: 'eks:cluster',
 	[AwsSupportedResources.LAMBDA_FUNCTIONS]: 'lambda:function',
+	[AwsSupportedResources.OPENSEARCH_DOMAINS]: 'es:domain',
 	[AwsSupportedResources.REDSHIFT_CLUSTERS]: 'redshift:cluster',
 	[AwsSupportedResources.RDS_INSTANCES]: 'rds:db',
 	[AwsSupportedResources.RDS_CLUSTERS]: 'rds:cluster',
@@ -185,6 +189,7 @@ export type AwsResourceDescriptionMap = {
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: ELBv2.LoadBalancer
 	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: ELBv2.TargetGroup
 	[AwsSupportedResources.LAMBDA_FUNCTIONS]: Lambda.FunctionConfiguration
+	[AwsSupportedResources.OPENSEARCH_DOMAINS]: OpenSearch.DomainStatus
 	[AwsSupportedResources.RDS_CLUSTERS]: RDS.DBCluster
 	[AwsSupportedResources.RDS_INSTANCES]: RDS.DBInstance
 	[AwsSupportedResources.RDS_PROXIES]: RDS.DBProxy

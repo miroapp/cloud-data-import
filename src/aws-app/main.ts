@@ -83,7 +83,7 @@ export default async () => {
 	// create output
 	const output: AwsCliAppOutput = {
 		provider: 'aws',
-		docVersion: '0.1.2',
+		docVersion: '0.1.3',
 		resources: config.raw ? resources : {},
 		tags: config.raw ? tags : {},
 		processed: await getAwsProcessedData(resources, tags),

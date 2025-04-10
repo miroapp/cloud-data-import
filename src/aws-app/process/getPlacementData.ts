@@ -311,6 +311,18 @@ export const getResourcePlacementData = (
 		}
 	}
 
+	// OpenSearch Domains
+	if (service === 'es' && type === 'domain') {
+		const openSearchDomain = resource as AwsResourceDescriptionMap[AwsSupportedResources.OPENSEARCH_DOMAINS]
+		return {
+			...baseOutput,
+			name: openSearchDomain.DomainName ?? baseOutput.name,
+			availabilityZones: openSearchDomain.VPCOptions?.AvailabilityZones ?? [],
+			vpc: openSearchDomain.VPCOptions?.VPCId ?? null,
+			subnets: openSearchDomain.VPCOptions?.SubnetIds ?? [],
+		}
+	}
+
 	return baseOutput
 }
 
