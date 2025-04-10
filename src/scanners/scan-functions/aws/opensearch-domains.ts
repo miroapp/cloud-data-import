@@ -7,6 +7,8 @@ import {
 import {AwsCredentials, AwsResourcesList, RateLimiter} from '@/types'
 import {AwsSupportedResources} from '@/definitions/supported-services'
 
+// This value is not well documented in the AWS SDK. It is the maximum number of domains
+// that can be passed to DescribeDomainsCommand, based on the error message from AWS API
 const MAX_DOMAINS_PER_REQUEST = 5
 
 export async function getOpenSearchDomains(
