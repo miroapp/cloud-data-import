@@ -189,7 +189,7 @@ export type AwsResourceDescriptionMap = {
 	[AwsSupportedResources.ELBV2_LOAD_BALANCERS]: ELBv2.LoadBalancer
 	[AwsSupportedResources.ELBV2_TARGET_GROUPS]: ELBv2.TargetGroup
 	[AwsSupportedResources.LAMBDA_FUNCTIONS]: Lambda.FunctionConfiguration
-	[AwsSupportedResources.OPENSEARCH_DOMAINS]: OpenSearch.DomainInfo
+	[AwsSupportedResources.OPENSEARCH_DOMAINS]: OpenSearch.DomainStatus
 	[AwsSupportedResources.RDS_CLUSTERS]: RDS.DBCluster
 	[AwsSupportedResources.RDS_INSTANCES]: RDS.DBInstance
 	[AwsSupportedResources.RDS_PROXIES]: RDS.DBProxy
