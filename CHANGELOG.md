@@ -1,5 +1,16 @@
 # @mirohq/cloud-data-import
 
+## 0.13.0
+
+### Minor Changes
+
+- 55929bb: feat: added ElastiCache Replication Groups scanner
+- caa9520: feat: added OpenSearch Domains scanner
+
+### Patch Changes
+
+- 9712e07: Logger will use service name instead of service id for logging
+
 ## 0.12.7
 
 ### Patch Changes
