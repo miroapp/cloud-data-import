@@ -4,6 +4,7 @@ import {getPlacementData} from './getPlacementData'
 import {getProcessedResources} from './resources'
 import {getProcessedContainers} from './containers'
 import {ProcessingErrorManager} from './utils/ProcessingErrorManager'
+import {extractUniqueTagKeysAndValues} from './utils/extractUniqueTagKeysAndValues'
 
 export const getAwsProcessedData = (resources: AwsResourcesList, resourceTags: AwsTags): AwsProcessedData => {
 	const processingErrorsManager = new ProcessingErrorManager()
@@ -19,24 +20,13 @@ export const getAwsProcessedData = (resources: AwsResourcesList, resourceTags: A
 	processingErrorsManager.render()
 
 	// Tag values
-	let possibleTagValues: {[key: string]: string[]} = {}
-	for (const [_arn, tags] of Object.entries(resourceTags)) {
-		for (const [key, value] of Object.entries(tags)) {
-			if (!possibleTagValues[key]) {
-				possibleTagValues[key] = []
-			}
-
-			if (value && !possibleTagValues[key].includes(value)) {
-				possibleTagValues[key].push(value)
-			}
-		}
-	}
+	const uniqueTagKeysAndValues = extractUniqueTagKeysAndValues(resourceTags)
 
 	// Return the processed data
 	return {
 		resources: processedResources,
 		connections: [],
 		containers,
-		tags: possibleTagValues,
+		tags: uniqueTagKeysAndValues,
 	}
 }
