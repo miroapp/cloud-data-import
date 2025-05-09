@@ -1,5 +1,12 @@
 # @mirohq/cloud-data-import
 
+## 0.13.1
+
+### Patch Changes
+
+- 0244b82: refactor: Decoupled and exported the tag key-value extraction util (`extractUniqueTagKeysAndValues` util exported)
+- 4c3444f: feat: Exported supported services types and enums
+
 ## 0.13.0
 
 ### Minor Changes
