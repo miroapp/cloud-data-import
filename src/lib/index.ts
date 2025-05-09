@@ -17,9 +17,12 @@ export {
 	awsTaggingFilterResourceTypes,
 	AwsResourceDescriptionMap,
 } from '@/definitions/supported-services'
+
 export {awsRegionIds} from '@/definitions/supported-regions'
 
 export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
+
+export {extractUniqueTagKeysAndValues} from '@/aws-app/process/utils/extractUniqueTagKeysAndValues'
 
 /**
  * @public
