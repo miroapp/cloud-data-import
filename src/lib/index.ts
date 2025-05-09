@@ -8,6 +8,15 @@ export type {
 } from '@/scanners'
 export type * from '@/types'
 
+export {
+	AwsSupportedResources,
+	AwsSupportedManagementServices,
+	AllSupportedAwsServices,
+	awsResourceNames,
+	awsManagementServiceNames,
+	awsTaggingFilterResourceTypes,
+	AwsResourceDescriptionMap,
+} from '@/definitions/supported-services'
 export {awsRegionIds} from '@/definitions/supported-regions'
 
 export {AWSRateLimitExhaustionRetryStrategy} from '@/aws-app/utils/AWSRateLimitExhaustionRetryStrategy'
