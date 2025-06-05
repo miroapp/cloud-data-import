@@ -5,6 +5,9 @@ updates:
     schedule:
       interval: 'daily'
     groups:
+      security-updates:
+        applies-to: security-updates
+        patterns: ['*']
       aws-sdk:
         patterns:
           - '@aws-sdk/*'
