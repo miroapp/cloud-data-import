@@ -1,5 +1,11 @@
 # @mirohq/cloud-data-import
 
+## 0.13.2
+
+### Patch Changes
+
+- 48cefc7: chore(deps): bump the aws-sdk group across 1 directory with 26 updates
+
 ## 0.13.1
 
 ### Patch Changes
