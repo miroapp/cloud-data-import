@@ -13,6 +13,10 @@ export const getAutoScalingGroups = (
 ): AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS> => {
 	const arns = groupedArns['autoScalingGroup']
 
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const autoScalingGroups: AwsResourcesList<AwsSupportedResources.AUTOSCALING_GROUPS> = {}
 
 	for (const arn of arns) {
@@ -29,6 +33,11 @@ export const getTargetGroups = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.ELBV2_TARGET_GROUPS> => {
 	const arns = groupedArns['targetgroup']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const targetGroups: AwsResourcesList<AwsSupportedResources.ELBV2_TARGET_GROUPS> = {}
 
 	for (const arn of arns) {
@@ -44,6 +53,11 @@ export const getCloudFrontDistributions = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS> => {
 	const arns = groupedArns['distribution']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const dists: AwsResourcesList<AwsSupportedResources.CLOUDFRONT_DISTRIBUTIONS> = {}
 	for (const arn of arns) {
 		if (resources[arn]) {
@@ -58,6 +72,11 @@ export const getS3Buckets = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.S3_BUCKETS> => {
 	const arns = groupedArns['bucket']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const buckets: AwsResourcesList<AwsSupportedResources.S3_BUCKETS> = {}
 	for (const arn of arns) {
 		if (resources[arn]) {
@@ -72,6 +91,11 @@ export const getALBs = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.ELBV2_LOAD_BALANCERS> => {
 	const arns = groupedArns['loadbalancer']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const albs: AwsResourcesList<AwsSupportedResources.ELBV2_LOAD_BALANCERS> = {}
 	for (const arn of arns) {
 		if (resources[arn]) {
@@ -86,6 +110,11 @@ export const getEC2Instances = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.EC2_INSTANCES> => {
 	const arns = groupedArns['instance']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const instances: AwsResourcesList<AwsSupportedResources.EC2_INSTANCES> = {}
 	for (const arn of arns) {
 		if (resources[arn]) {
@@ -100,6 +129,11 @@ export const getHostedZones = (
 	resources: AwsResourcesList,
 ): AwsResourcesList<AwsSupportedResources.ROUTE53_HOSTED_ZONES> => {
 	const arns = groupedArns['hostedzone']
+
+	if (!arns || !arns.length) {
+		return {}
+	}
+
 	const zones: AwsResourcesList<AwsSupportedResources.ROUTE53_HOSTED_ZONES> = {}
 	for (const arn of arns) {
 		if (resources[arn]) {
