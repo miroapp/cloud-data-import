@@ -68,7 +68,7 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"@changesets/cli": "^2.27.11",
+		"@changesets/cli": "^2.29.7",
 		"@types/inquirer": "^9.0.7",
 		"@types/jest": "^29.5.14",
 		"@types/node": "^22.10.5",
@@ -117,7 +117,7 @@
 		"@mirohq/prettier-config": "^2.0.0",
 		"colorette": "^2.0.20",
 		"dotenv": "^16.5.0",
-		"inquirer": "^8.2.6",
+		"inquirer": "^8.2.7",
 		"spinnies": "^0.5.1",
 		"yargs": "^17.7.2"
 	},
